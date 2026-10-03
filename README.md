@@ -102,7 +102,7 @@ CareMate BD is built with an **Admin-Mediated Quality Control Architecture**, en
 
 | Role | Email | Password |
 |---|---|---|
-| **Admin** | `admin@caremate.com` | `password123` |
+| 
 | **Caregiver** | `rabeya@caremate.com` | `password123` |
 | **Client / Family** | `fatima@example.com` | `password123` |
 
