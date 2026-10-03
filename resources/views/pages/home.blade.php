@@ -1,0 +1,482 @@
+<x-layouts.guest>
+    <x-slot:title>CareMate BD — Trusted Caregivers for Elderly, Child, & Nursing Care in Bangladesh</x-slot:title>
+    <x-slot:description>Find background-verified caregivers in Dhaka and across Bangladesh. Admin-coordinated care for your loved ones with total safety, privacy, and peace of mind.</x-slot:description>
+
+    <!-- Hero Section -->
+    <section style="padding: 3.5rem 0 4rem 0; position: relative; overflow: hidden;">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 3.5rem; align-items: center;" class="hero-grid">
+                <div>
+                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(10, 57, 74, 0.08); border: 1px solid rgba(10, 57, 74, 0.2); padding: 0.4rem 0.9rem; border-radius: var(--radius-pill); font-size: 0.82rem; font-weight: 700; color: #0a394a; margin-bottom: 1.25rem;">
+                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
+                        Bangladesh's #1 Verified Caregiver Marketplace
+                    </div>
+
+                    <h1 style="font-size: 3.25rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 1.25rem; color: #092632;">
+                        Care that feels like <span style="background: linear-gradient(135deg, #0a394a 0%, #15798e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">family</span>, found in minutes.
+                    </h1>
+
+                    <p style="font-size: 1.15rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 2rem;">
+                        Compassionate, government NID & background-checked caregivers for your parents, children, and patients. Safe, verified, and coordinated end-to-end by CareMate Care Managers.
+                    </p>
+
+                    <!-- Quick Search Glass Card -->
+                    <div class="glass-card" style="padding: 1.25rem; margin-bottom: 2rem; border-radius: var(--radius-lg); box-shadow: var(--glass-shadow-lg);">
+                        <form action="{{ route('marketplace.index') }}" method="GET" style="display: grid; grid-template-columns: 1.5fr 1fr auto; gap: 0.75rem; align-items: center;" class="hero-search-form">
+                            <div>
+                                <label style="display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem;">Service Needed</label>
+                                <select name="service" class="glass-input" style="padding: 0.6rem 0.85rem; font-size: 0.9rem;">
+                                    <option value="">All Caregiver Specialties</option>
+                                    @foreach ($services as $service)
+                                        <option value="{{ $service->slug }}">{{ $service->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem;">Care Location</label>
+                                <input type="text" name="search" placeholder="e.g. Dhanmondi, Uttara" class="glass-input" style="padding: 0.6rem 0.85rem; font-size: 0.9rem;">
+                            </div>
+                            <div style="align-self: flex-end;">
+                                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.7rem 1.4rem;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                    <span>Find Care</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Trust Points -->
+                    <div style="display: flex; align-items: center; gap: 1.75rem; font-size: 0.88rem; color: var(--text-secondary); flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                            <span style="color: #059669; font-weight: 800;">✓</span> NID & Police Verified
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                            <span style="color: #059669; font-weight: 800;">✓</span> Zero Phone Leaks (Privacy)
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                            <span style="color: #059669; font-weight: 800;">✓</span> bKash / Nagad Escrow
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Visual -->
+                <div style="position: relative;">
+                    <div style="border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 25px 50px -12px rgba(2, 132, 199, 0.25); border: 2px solid rgba(255, 255, 255, 0.9); position: relative;">
+                        <img src="{{ asset('images/hero_caregiver.jpg') }}" alt="Compassionate Caregiver helping senior in Bangladesh" style="width: 100%; height: 460px; object-fit: cover;">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 65%, rgba(15, 23, 42, 0.7) 100%);"></div>
+                        <div style="position: absolute; bottom: 1.5rem; left: 1.5rem; right: 1.5rem; color: #fff;">
+                            <div style="font-weight: 700; font-size: 1.1rem; font-family: var(--font-heading);">Care Coordinator Verified</div>
+                            <div style="font-size: 0.85rem; opacity: 0.9;">Professional in-home assistance with genuine empathy & medical training.</div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Badge Card 1 -->
+                    <div class="glass-card" style="position: absolute; top: -15px; right: -15px; padding: 0.85rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; border-radius: var(--radius-md); box-shadow: var(--glass-shadow-lg);">
+                        <div style="width: 38px; height: 38px; border-radius: 50%; background: #dcfce7; display: flex; align-items: center; justify-content: center; color: #15803d; font-size: 1.2rem;">
+                            🛡️
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85rem; font-weight: 800; color: #0f172a;">100% Verified</div>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">CareMate Safety Stamp</div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Badge Card 2 -->
+                    <div class="glass-card" style="position: absolute; bottom: -20px; left: -20px; padding: 0.85rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; border-radius: var(--radius-md); box-shadow: var(--glass-shadow-lg);">
+                        <div style="display: flex; gap: 2px;">
+                            @for ($i = 0; $i < 5; $i++)
+                                <span style="color: #f59e0b; font-size: 0.9rem;">★</span>
+                            @endfor
+                        </div>
+                        <div style="font-size: 0.85rem; font-weight: 800; color: #0f172a;">
+                            {{ $stats['satisfaction_rate'] }}/5.0 <span style="font-weight: 500; font-size: 0.75rem; color: var(--text-muted);">Family Rating</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section style="margin-bottom: 4rem;">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;" class="stats-grid">
+                <div class="glass-card" style="text-align: center; padding: 1.5rem;">
+                    <div style="font-family: var(--font-heading); font-size: 2.3rem; font-weight: 800; color: #0a394a; line-height: 1;">
+                        {{ $stats['caregivers_count'] }}+
+                    </div>
+                    <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.35rem;">
+                        Verified Caregivers
+                    </div>
+                </div>
+
+                <div class="glass-card" style="text-align: center; padding: 1.5rem;">
+                    <div style="font-family: var(--font-heading); font-size: 2.3rem; font-weight: 800; color: #059669; line-height: 1;">
+                        {{ $stats['clients_count'] }}+
+                    </div>
+                    <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.35rem;">
+                        Happy Families
+                    </div>
+                </div>
+
+                <div class="glass-card" style="text-align: center; padding: 1.5rem;">
+                    <div style="font-family: var(--font-heading); font-size: 2.3rem; font-weight: 800; color: #0d9488; line-height: 1;">
+                        {{ $stats['completed_bookings'] }}+
+                    </div>
+                    <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.35rem;">
+                        Care Days Delivered
+                    </div>
+                </div>
+
+                <div class="glass-card" style="text-align: center; padding: 1.5rem;">
+                    <div style="font-family: var(--font-heading); font-size: 2.3rem; font-weight: 800; color: #e11d48; line-height: 1;">
+                        100%
+                    </div>
+                    <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.35rem;">
+                        Admin Mediated
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Services -->
+    <section style="margin-bottom: 5rem;" id="services">
+        <div class="container">
+            <div style="text-align: center; max-width: 680px; margin: 0 auto 3rem auto;">
+                <div style="display: inline-block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-primary); margin-bottom: 0.5rem;">
+                    Specialized Care Options
+                </div>
+                <h2 style="font-size: 2.4rem; font-weight: 800; color: #0f172a; margin-bottom: 0.75rem;">
+                    Tailored care for every stage of life.
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 1.05rem;">
+                    Whether continuous companionship, post-operative nursing, or attentive child supervision, our vetted professionals are here for your family.
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.75rem;" class="services-grid">
+                @foreach ($services as $service)
+                    <div class="glass-card glass-card-hover" style="display: flex; flex-direction: column; overflow: hidden; padding: 0;">
+                        <div style="height: 180px; overflow: hidden; position: relative;">
+                            <img src="{{ $service->imageUrl() }}" alt="{{ $service->name }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+                            <div style="position: absolute; top: 0.75rem; right: 0.75rem;">
+                                <x-badge tone="primary">From ৳{{ number_format($service->base_rate_daily) }}/day</x-badge>
+                            </div>
+                        </div>
+                        <div style="padding: 1.5rem; flex: 1; display: flex; flex-direction: column;">
+                            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: #0f172a;">
+                                {{ $service->name }}
+                            </h3>
+                            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 1.25rem; flex: 1;">
+                                {{ Str::limit($service->description, 100) }}
+                            </p>
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(226, 232, 240, 0.7); padding-top: 1rem;">
+                                <a href="{{ route('services.show', $service->slug) }}" style="font-size: 0.88rem; font-weight: 700; color: var(--brand-primary); display: flex; align-items: center; gap: 0.25rem;">
+                                    <span>Learn Details</span>
+                                    <span>→</span>
+                                </a>
+                                <a href="{{ route('marketplace.index', ['service' => $service->slug]) }}" class="btn btn-secondary btn-sm" style="font-size: 0.8rem;">
+                                    View Staff
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- Why CareMate / The Admin-Mediated Difference -->
+    <section style="margin-bottom: 5rem;">
+        <div class="container">
+            <div class="glass-card" style="padding: 3rem; border-radius: var(--radius-xl); background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(240, 253, 250, 0.88) 100%);">
+                <div style="text-align: center; max-width: 720px; margin: 0 auto 3rem auto;">
+                    <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #059669;">
+                        The Safe Choice for Bangladesh
+                    </span>
+                    <h2 style="font-size: 2.3rem; font-weight: 800; margin-top: 0.5rem; color: #0f172a;">
+                        Why CareMate BD is unlike traditional classifieds.
+                    </h2>
+                    <p style="color: var(--text-secondary); font-size: 1.05rem; margin-top: 0.5rem;">
+                        Direct open contact leaves families vulnerable to scams, no-shows, and privacy loss. CareMate mediates the entire journey so your safety is never compromised.
+                    </p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;" class="why-grid">
+                    <div style="background: rgba(255, 255, 255, 0.75); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: var(--radius-lg); padding: 1.75rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 14px; background: rgba(10, 57, 74, 0.12); display: flex; align-items: center; justify-content: center; color: #0a394a; margin-bottom: 1.25rem;">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <h4 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">
+                            Strict Identity Verification
+                        </h4>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                            Every caregiver submits national NID, verified police clearance record, and clinical certifications inspected manually by CareMate Admin before going live.
+                        </p>
+                    </div>
+
+                    <div style="background: rgba(255, 255, 255, 0.75); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: var(--radius-lg); padding: 1.75rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 14px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #059669; margin-bottom: 1.25rem;">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </div>
+                        <h4 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">
+                            Zero Contact Harassment
+                        </h4>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                            Clients and caregivers never see each other's phone numbers or personal emails. CareMate Support oversees all scheduling, dispatch, and communication.
+                        </p>
+                    </div>
+
+                    <div style="background: rgba(255, 255, 255, 0.75); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: var(--radius-lg); padding: 1.75rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 14px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; color: #d97706; margin-bottom: 1.25rem;">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/></svg>
+                        </div>
+                        <h4 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">
+                            Escrow Protection
+                        </h4>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                            Payments are held in platform escrow via bKash, Nagad, or Bank deposit. Caregivers are paid only after care hours have been verified and validated.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Verified Caregivers -->
+    <section style="margin-bottom: 5rem;">
+        <div class="container">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-primary);">
+                        Available In Dhaka & Nationwide
+                    </span>
+                    <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-top: 0.35rem;">
+                        Meet Top-Rated Verified Caregivers
+                    </h2>
+                </div>
+                <a href="{{ route('marketplace.index') }}" class="btn btn-secondary" style="font-size: 0.92rem;">
+                    <span>View All Caregivers</span>
+                    <span>→</span>
+                </a>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;" class="caregivers-grid">
+                @forelse ($featuredCaregivers as $caregiver)
+                    <div class="glass-card glass-card-hover" style="display: flex; flex-direction: column;">
+                        <div style="display: flex; align-items: flex-start; gap: 1.25rem; margin-bottom: 1.25rem;">
+                            <div style="position: relative;">
+                                <img src="{{ $caregiver->avatarUrl() }}" alt="{{ $caregiver->user->name }}" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
+                                <div style="position: absolute; bottom: 0; right: 0; width: 22px; height: 22px; border-radius: 50%; background: #10b981; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px;" title="Verified Caregiver">
+                                    ✓
+                                </div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <h4 style="font-size: 1.15rem; font-weight: 700; color: #0f172a;">{{ $caregiver->user->name }}</h4>
+                                    <x-badge tone="success">Verified</x-badge>
+                                </div>
+                                <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">
+                                    📍 {{ $caregiver->area?->name ?? $caregiver->city }}, {{ $caregiver->district?->name }}
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem;">
+                                    <x-star-rating :rating="$caregiver->rating_avg" />
+                                    <span style="font-size: 0.8rem; font-weight: 700; color: #0f172a;">{{ number_format($caregiver->rating_avg, 1) }}</span>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">({{ $caregiver->rating_count }} reviews)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Services & Experience Tags -->
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem;">
+                            @foreach ($caregiver->services->take(2) as $s)
+                                <span style="font-size: 0.75rem; background: rgba(10, 57, 74, 0.07); color: #0a394a; padding: 0.2rem 0.55rem; border-radius: var(--radius-sm); font-weight: 600;">
+                                    {{ $s->name }}
+                                </span>
+                            @endforeach
+                            <span style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.08); color: #065f46; padding: 0.2rem 0.55rem; border-radius: var(--radius-sm); font-weight: 600;">
+                                {{ $caregiver->years_experience }} Yrs Experience
+                            </span>
+                        </div>
+
+                        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.5rem; flex: 1;">
+                            {{ Str::limit($caregiver->about, 90) }}
+                        </p>
+
+                        <!-- Rates & Action -->
+                        <div style="border-top: 1px solid rgba(226, 232, 240, 0.7); padding-top: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Daily Rate</div>
+                                <div style="font-size: 1.15rem; font-weight: 800; color: #0f172a;">
+                                    ৳{{ number_format($caregiver->daily_rate) }}<span style="font-size: 0.75rem; font-weight: 500; color: var(--text-muted);">/day</span>
+                                </div>
+                            </div>
+                            <a href="{{ route('marketplace.show', $caregiver->slug) }}" class="btn btn-primary btn-sm">
+                                View Profile
+                            </a>
+                        </div>
+                    </div>
+                @empty
+                    <div style="grid-column: span 3; text-align: center; padding: 3rem;">
+                        <p style="color: var(--text-muted);">No verified caregivers available currently.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works 4-Step -->
+    <section style="margin-bottom: 5rem; background: rgba(255, 255, 255, 0.5); padding: 4rem 0; border-top: 1px solid rgba(226, 232, 240, 0.6); border-bottom: 1px solid rgba(226, 232, 240, 0.6);">
+        <div class="container">
+            <div style="text-align: center; max-width: 650px; margin: 0 auto 3.5rem auto;">
+                <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-primary);">
+                    Effortless Process
+                </span>
+                <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-top: 0.35rem;">
+                    How CareMate Protects Your Family
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 1rem; margin-top: 0.5rem;">
+                    Four simple steps to match, book, and enjoy peace of mind with 24/7 care coordination.
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;" class="steps-grid">
+                <div class="glass-card" style="position: relative;">
+                    <div style="font-size: 2rem; font-weight: 800; color: rgba(10, 57, 74, 0.25); font-family: var(--font-heading); margin-bottom: 0.5rem;">01</div>
+                    <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: #0f172a;">Request Care Online</h4>
+                    <p style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.55;">
+                        Browse verified caregiver profiles and submit your service requirements, schedule, and patient details.
+                    </p>
+                </div>
+
+                <div class="glass-card" style="position: relative;">
+                    <div style="font-size: 2rem; font-weight: 800; color: rgba(16, 185, 129, 0.25); font-family: var(--font-heading); margin-bottom: 0.5rem;">02</div>
+                    <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: #0f172a;">Admin Triage & Review</h4>
+                    <p style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.55;">
+                        CareMate Care Manager validates schedules, confirms caregiver availability, and ensures safety matching.
+                    </p>
+                </div>
+
+                <div class="glass-card" style="position: relative;">
+                    <div style="font-size: 2rem; font-weight: 800; color: rgba(245, 158, 11, 0.25); font-family: var(--font-heading); margin-bottom: 0.5rem;">03</div>
+                    <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: #0f172a;">Escrow Payment</h4>
+                    <p style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.55;">
+                        Lock the booking with secure bKash, Nagad, or Bank deposit held safely until service is completed.
+                    </p>
+                </div>
+
+                <div class="glass-card" style="position: relative;">
+                    <div style="font-size: 2rem; font-weight: 800; color: rgba(13, 148, 136, 0.25); font-family: var(--font-heading); margin-bottom: 0.5rem;">04</div>
+                    <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: #0f172a;">Supervised Care</h4>
+                    <p style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.55;">
+                        The verified caregiver reports on time. CareMate Support stays on standby 24/7 for regular check-ins.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    @if ($testimonials->isNotEmpty())
+        <section style="margin-bottom: 5rem;">
+            <div class="container">
+                <div style="text-align: center; max-width: 600px; margin: 0 auto 3rem auto;">
+                    <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-primary);">
+                        Real Stories
+                    </span>
+                    <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-top: 0.35rem;">
+                        Trusted by Bangladeshi Families
+                    </h2>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;" class="testimonials-grid">
+                    @foreach ($testimonials->take(3) as $review)
+                        <div class="glass-card" style="display: flex; flex-direction: column;">
+                            <div style="display: flex; align-items: center; gap: 0.25rem; margin-bottom: 1rem;">
+                                <x-star-rating :rating="$review->rating" />
+                            </div>
+                            <p style="font-size: 0.95rem; color: var(--text-secondary); font-style: italic; line-height: 1.6; margin-bottom: 1.5rem; flex: 1;">
+                                "{{ $review->comment }}"
+                            </p>
+                            <div style="border-top: 1px solid rgba(226, 232, 240, 0.7); padding-top: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a;">{{ $review->client->user->name ?? 'Verified Family' }}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Care recipient family</div>
+                                </div>
+                                <span style="font-size: 0.75rem; color: #059669; font-weight: 700; background: rgba(16, 185, 129, 0.1); padding: 0.25rem 0.5rem; border-radius: var(--radius-pill);">
+                                    ✓ Verified Care
+                                </span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
+    <!-- Become a Caregiver CTA Banner -->
+    <section style="margin-bottom: 5rem;">
+        <div class="container">
+            <div class="glass-card" style="padding: 0; overflow: hidden; border-radius: var(--radius-xl); background: linear-gradient(135deg, #0a394a 0%, #15798e 100%); color: #fff; box-shadow: var(--glass-shadow-lg);">
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: center;" class="cta-grid">
+                    <div style="padding: 3.5rem;">
+                        <span style="display: inline-block; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); padding: 0.35rem 0.85rem; border-radius: var(--radius-pill); font-size: 0.82rem; font-weight: 700; margin-bottom: 1.25rem;">
+                            Caregiver Careers
+                        </span>
+                        <h2 style="font-size: 2.4rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem; color: #fff;">
+                            Are you a professional nurse, nanny, or caregiver?
+                        </h2>
+                        <p style="font-size: 1.05rem; opacity: 0.95; line-height: 1.6; margin-bottom: 2rem;">
+                            Join Bangladesh's premier verified care network. Guaranteed timely payouts via bKash, dignity, fair compensation, and full mediation protection.
+                        </p>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <a href="{{ route('caregiver.register') }}" class="btn" style="background: #fff; color: #0a394a !important; font-weight: 700; padding: 0.85rem 1.8rem;">
+                                Apply as Caregiver →
+                            </a>
+                            <a href="{{ route('how-it-works') }}" class="btn btn-secondary" style="background: rgba(255, 255, 255, 0.15); color: #fff !important; border-color: rgba(255, 255, 255, 0.3);">
+                                Learn How It Works
+                            </a>
+                        </div>
+                    </div>
+                    <div style="height: 100%; min-height: 380px;">
+                        <img src="{{ asset('images/become_caregiver.jpg') }}" alt="Professional Bangladeshi female nurse" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Preview Section -->
+    <section style="margin-bottom: 5rem;">
+        <div class="container container-narrow">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-primary);">
+                    Questions & Answers
+                </span>
+                <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-top: 0.35rem;">
+                    Frequently Asked Questions
+                </h2>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                @foreach ($faqs as $faq)
+                    <div class="glass-card" style="padding: 1.5rem;">
+                        <h4 style="font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">
+                            {{ $faq->question }}
+                        </h4>
+                        <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                            {{ $faq->answer }}
+                        </p>
+                    </div>
+                @endforeach
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="{{ route('faq') }}" class="btn btn-secondary btn-sm">
+                    View All Frequently Asked Questions →
+                </a>
+            </div>
+        </div>
+    </section>
+</x-layouts.guest>
