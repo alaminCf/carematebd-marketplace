@@ -12,11 +12,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.6.0">
+    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.7.0">
     <style>
         @media (max-width: 900px) {
             .dashboard-layout { display: block !important; }
-            .dashboard-grid-2, .booking-layout, .booking-admin-layout, .earnings-layout, .request-grid, .support-layout, .ticket-layout, .job-layout, .schedule-layout, .edit-layout {
+            .dashboard-grid-2, .booking-layout, .booking-admin-layout, .earnings-layout, .request-grid, .support-layout, .ticket-layout, .job-layout, .schedule-layout, .edit-layout, .documents-layout {
                 grid-template-columns: 1fr !important;
                 gap: 1.25rem !important;
             }
@@ -34,8 +34,32 @@
             }
             .dashboard-sidebar.mobile-open { left: 0 !important; }
             .dashboard-mobile-topbar { display: flex !important; }
-            .dashboard-main { padding: 1rem 0.85rem calc(75px + env(safe-area-inset-bottom)) 0.85rem !important; }
+            .dashboard-main { padding: 1rem 0.85rem calc(95px + env(safe-area-inset-bottom)) 0.85rem !important; }
             .dashboard-header-actions { display: none !important; }
+
+            /* Responsive Form Cards & Action Buttons */
+            .profile-form-card { padding: 1.25rem 0.85rem !important; }
+            .form-row-2col, .form-row-3col, .form-row-4col, .services-checkbox-grid {
+                grid-template-columns: 1fr !important;
+                gap: 0.85rem !important;
+            }
+            .form-actions-footer,
+            .dashboard-main form [style*="justify-content: flex-end"],
+            .dashboard-main form [style*="justify-content:flex-end"] {
+                flex-direction: column-reverse !important;
+                align-items: stretch !important;
+                gap: 0.75rem !important;
+                width: 100% !important;
+            }
+            .form-actions-footer .btn,
+            .dashboard-main form [style*="justify-content: flex-end"] .btn,
+            .dashboard-main form [style*="justify-content:flex-end"] .btn {
+                width: 100% !important;
+                justify-content: center !important;
+                text-align: center !important;
+                padding: 0.85rem 1rem !important;
+                box-sizing: border-box !important;
+            }
             
             /* Native App 2x2 Compact Stats Grid */
             .stats-grid {

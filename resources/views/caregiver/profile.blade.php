@@ -19,7 +19,7 @@
             </div>
         @endif
 
-        <div class="glass-card" style="padding: 2.5rem; border-radius: var(--radius-xl);">
+        <div class="glass-card profile-form-card" style="border-radius: var(--radius-xl);">
             <form method="POST" action="{{ route('caregiver.profile.update') }}" enctype="multipart/form-data">
                 @csrf
 
@@ -30,16 +30,16 @@
                         <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Public Caregiver Identity</span>
                     </h3>
 
-                    <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="profile-avatar-row" style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
                         <img src="{{ $caregiver->avatarUrl() }}" alt="{{ $caregiver->user->name }}" style="width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(10, 57, 74, 0.15);">
-                        <div style="flex: 1;">
+                        <div style="flex: 1; min-width: 220px;">
                             <label class="form-label" style="font-weight: 700; color: #0f172a;">Update Headshot Photo</label>
                             <input type="file" name="profile_photo" accept="image/*" class="glass-input" style="font-size: 0.82rem;">
                             <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 0.25rem;">Supported: JPG, PNG, WebP (Max 5MB). Professional portraits build family trust.</span>
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1rem;">
+                    <div class="form-row-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1rem;">
                         <div>
                             <label class="form-label">Full Name <span style="color: #ef4444;">*</span></label>
                             <input type="text" name="name" value="{{ old('name', $caregiver->user->name) }}" required class="glass-input">
@@ -50,7 +50,7 @@
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                    <div class="form-row-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
                         <div>
                             <label class="form-label">Email (Account Login — Read-only)</label>
                             <input type="email" value="{{ $caregiver->user->email }}" disabled class="glass-input" style="opacity: 0.7; cursor: not-allowed; background: rgba(0,0,0,0.02);">
@@ -69,7 +69,7 @@
                         <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Deployment Division & District</span>
                     </h3>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+                    <div class="form-row-3col" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
                         <div>
                             <label class="form-label">Division</label>
                             <select name="division_id" id="cgDivSelect" class="glass-input">
@@ -107,7 +107,7 @@
                         <span style="font-size: 0.75rem; font-weight: 600; color: var(--brand-accent);">All Rates in BDT (৳)</span>
                     </h3>
 
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem;" class="rates-grid">
+                    <div class="form-row-4col rates-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
                         <div>
                             <label class="form-label">Daily Rate (৳) <span style="color: #ef4444;">*</span></label>
                             <input type="number" name="daily_rate" value="{{ old('daily_rate', $caregiver->daily_rate) }}" required min="100" class="glass-input" placeholder="e.g. 1500" style="font-weight: 700; color: var(--brand-primary);">
@@ -130,7 +130,7 @@
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                    <div class="form-row-3col" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
                         <div>
                             <label class="form-label">Employment Type</label>
                             <select name="employment_type" class="glass-input">
@@ -165,7 +165,7 @@
                         <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Clinical & Care Credentials</span>
                     </h3>
 
-                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                    <div class="form-row-2col" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
                         <div>
                             <label class="form-label">Professional Title / Designation <span style="color: #ef4444;">*</span></label>
                             <input type="text" name="caregiver_type" value="{{ old('caregiver_type', $caregiver->caregiver_type) }}" required class="glass-input" placeholder="e.g. Senior Registered Nurse, Certified Elderly Care Aide">
@@ -186,7 +186,7 @@
                         <textarea name="bio" rows="5" class="glass-input" placeholder="Detail your background, patient care history, certifications, and caring philosophy...">{{ old('bio', $caregiver->bio) }}</textarea>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                    <div class="form-row-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
                         <div>
                             <label class="form-label">Skills (Comma-separated)</label>
                             <input type="text" name="skills" value="{{ old('skills', is_array($caregiver->skills) ? implode(', ', $caregiver->skills) : $caregiver->skills) }}" class="glass-input" placeholder="e.g. Wound Dressing, Vital Monitoring, Dementia Care">
@@ -209,7 +209,7 @@
                         <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 0.75rem;">Select all categories where you are qualified and ready to take duty shifts:</span>
                         
                         @php $activeSvcIds = $caregiver->services->pluck('id')->toArray(); @endphp
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;">
+                        <div class="form-row-2col services-checkbox-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;">
                             @foreach ($services as $s)
                                 <label style="display: flex; align-items: center; gap: 0.65rem; padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(226, 232, 240, 0.9); border-radius: var(--radius-md); cursor: pointer; font-size: 0.9rem; transition: all 0.2s ease;">
                                     <input type="checkbox" name="service_ids[]" value="{{ $s->id }}" {{ in_array($s->id, old('service_ids', $activeSvcIds)) ? 'checked' : '' }} style="accent-color: var(--brand-primary); width: 18px; height: 18px;">
@@ -223,14 +223,16 @@
                     </div>
                 </div>
 
-                <div style="border-top: 1px solid rgba(226, 232, 240, 0.8); padding-top: 1.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
-                    <a href="{{ route('caregiver.dashboard') }}" class="btn btn-secondary" style="padding: 0.75rem 1.75rem;">
+                <div class="form-actions-footer">
+                    <a href="{{ route('caregiver.dashboard') }}" class="btn btn-secondary">
                         Cancel
                     </a>
-                    <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2.5rem; font-size: 1.05rem;">
+                    <button type="submit" class="btn btn-primary">
                         Save Profile & Rates Changes
                     </button>
                 </div>
+            </form>
+        </div>
             </form>
         </div>
     </div>
