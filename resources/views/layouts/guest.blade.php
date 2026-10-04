@@ -19,7 +19,72 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.9.0">
+    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v={{ file_exists(public_path('css/caremate.css')) ? filemtime(public_path('css/caremate.css')) : '3.0.1' }}">
+    <style>
+        .header-container {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            max-width: 1400px !important;
+            margin: 0 auto !important;
+            width: 100% !important;
+            padding: 0.65rem 1.25rem !important;
+        }
+        .header-brand-logo {
+            display: flex !important;
+            align-items: center !important;
+            flex-shrink: 0 !important;
+        }
+        .header-brand-logo img, .brand-logo-img {
+            height: 40px !important;
+            max-height: 40px !important;
+            width: auto !important;
+            object-fit: contain !important;
+        }
+        .desktop-nav {
+            display: flex !important;
+            align-items: center !important;
+            gap: clamp(0.75rem, 1.2vw, 1.35rem) !important;
+            flex-shrink: 0 !important;
+        }
+        .desktop-nav a {
+            white-space: nowrap !important;
+            font-weight: 600 !important;
+            color: var(--text-secondary, #475569) !important;
+            font-size: 0.92rem !important;
+            text-decoration: none !important;
+            padding: 0.35rem 0.2rem !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+        .desktop-nav a:hover {
+            color: var(--primary, #0a394a) !important;
+        }
+        .header-actions {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.6rem !important;
+            flex-shrink: 0 !important;
+        }
+        .desktop-actions {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.45rem !important;
+            flex-shrink: 0 !important;
+        }
+        .desktop-actions .btn, .header-whatsapp-btn {
+            white-space: nowrap !important;
+            font-size: 0.83rem !important;
+        }
+        @media (max-width: 1180px) {
+            .desktop-nav, .desktop-actions {
+                display: none !important;
+            }
+            .mobile-menu-btn {
+                display: inline-flex !important;
+            }
+        }
+    </style>
     @stack('styles')
 </head>
 <body>
@@ -30,24 +95,24 @@
 
     <!-- Navigation Bar -->
     <header class="glass-header">
-        <div class="container header-container">
+        <div class="container header-container" style="display: flex; align-items: center; justify-content: space-between; max-width: 1400px; width: 100%; margin: 0 auto; padding: 0.65rem 1.25rem;">
             <!-- Brand Logo -->
-            <a href="{{ route('home') }}" class="header-brand-logo">
-                <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" class="brand-logo-img">
+            <a href="{{ route('home') }}" class="header-brand-logo" style="display: flex; align-items: center; text-decoration: none; flex-shrink: 0;">
+                <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" class="brand-logo-img" style="height: 40px; max-height: 40px; width: auto; object-fit: contain;">
             </a>
 
             <!-- Desktop Nav Links -->
-            <nav class="desktop-nav">
-                <a href="{{ route('services.index') }}">{{ __('Services') }}</a>
-                <a href="{{ route('marketplace.index') }}">{{ __('Caregivers') }}</a>
-                <a href="{{ route('how-it-works') }}">{{ __('How It Works') }}</a>
-                <a href="{{ route('about') }}">{{ __('About') }}</a>
-                <a href="{{ route('faq') }}">{{ __('FAQ') }}</a>
-                <a href="{{ route('contact') }}">{{ __('Contact') }}</a>
+            <nav class="desktop-nav" style="display: flex; align-items: center; gap: clamp(0.75rem, 1.2vw, 1.35rem); flex-shrink: 0;">
+                <a href="{{ route('services.index') }}" style="white-space: nowrap; font-weight: 600; color: var(--text-secondary); font-size: 0.92rem; text-decoration: none; padding: 0.35rem 0.2rem;">{{ __('Services') }}</a>
+                <a href="{{ route('marketplace.index') }}" style="white-space: nowrap; font-weight: 600; color: var(--text-secondary); font-size: 0.92rem; text-decoration: none; padding: 0.35rem 0.2rem;">{{ __('Caregivers') }}</a>
+                <a href="{{ route('how-it-works') }}" style="white-space: nowrap; font-weight: 600; color: var(--text-secondary); font-size: 0.92rem; text-decoration: none; padding: 0.35rem 0.2rem;">{{ __('How It Works') }}</a>
+                <a href="{{ route('about') }}" style="white-space: nowrap; font-weight: 600; color: var(--text-secondary); font-size: 0.92rem; text-decoration: none; padding: 0.35rem 0.2rem;">{{ __('About') }}</a>
+                <a href="{{ route('faq') }}" style="white-space: nowrap; font-weight: 600; color: var(--text-secondary); font-size: 0.92rem; text-decoration: none; padding: 0.35rem 0.2rem;">{{ __('FAQ') }}</a>
+                <a href="{{ route('contact') }}" style="white-space: nowrap; font-weight: 600; color: var(--text-secondary); font-size: 0.92rem; text-decoration: none; padding: 0.35rem 0.2rem;">{{ __('Contact') }}</a>
             </nav>
 
             <!-- Actions -->
-            <div class="header-actions">
+            <div class="header-actions" style="display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0;">
                 <!-- Language Switcher Capsule Toggle (Matching user reference design) -->
                 <div class="lang-switch-toggle" title="Switch Language / ভাষা পরিবর্তন করুন">
                     <a href="{{ route('locale.switch', 'en') }}" class="lang-switch-pill {{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
@@ -55,7 +120,7 @@
                 </div>
 
                 <!-- Desktop-only Action buttons -->
-                <div class="desktop-actions">
+                <div class="desktop-actions" style="display: flex; align-items: center; gap: 0.45rem; flex-shrink: 0;">
                     @auth
                         <a href="{{ route(auth()->user()->role->dashboardRoute()) }}" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 0.4rem;">
                             <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" style="width: 24px; height: 24px; border-radius: 50%;">
