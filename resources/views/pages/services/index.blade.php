@@ -5,13 +5,13 @@
     <div class="container" style="padding: 3rem 1.25rem 5rem 1.25rem;">
         <div style="text-align: center; max-width: 720px; margin: 0 auto 3.5rem auto;">
             <div style="display: inline-block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-primary); margin-bottom: 0.5rem;">
-                Professional Care Catalog
+                {{ __('Professional Care Catalog') }}
             </div>
             <h1 style="font-size: 2.8rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
-                Specialized In-Home Care Services
+                {{ __('Specialized In-Home Care Services') }}
             </h1>
             <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.6;">
-                Every service is backed by background-checked caregivers, managed shift scheduling, and dedicated CareMate Care Managers.
+                {{ __('Every service is backed by background-checked caregivers, managed shift scheduling, and dedicated CareMate Care Managers.') }}
             </p>
         </div>
 
@@ -31,7 +31,7 @@
                                 {{ $service->name }}
                             </h2>
                             <div style="font-size: 1.15rem; font-weight: 800; color: #0a394a;">
-                                Starting ৳{{ number_format($service->base_rate_daily) }}<span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">/day</span>
+                                {{ __('Starting') }} ৳{{ number_format($service->base_rate_daily) }}<span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">{{ __('/day') }}</span>
                             </div>
                         </div>
 
@@ -41,26 +41,26 @@
 
                         <div class="service-card-features" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 2rem; font-size: 0.88rem; color: var(--text-primary);">
                             <div style="display: flex; align-items: center; gap: 0.4rem;">
-                                <span style="color: #059669; font-weight: 700;">✓</span> Day, Night & 24/7 Live-in Options
+                                <span style="color: #059669; font-weight: 700;">✓</span> {{ __('Day, Night & 24/7 Live-in Options') }}
                             </div>
                             <div style="display: flex; align-items: center; gap: 0.4rem;">
-                                <span style="color: #059669; font-weight: 700;">✓</span> Care Plan Customized per Patient
+                                <span style="color: #059669; font-weight: 700;">✓</span> {{ __('Care Plan Customized per Patient') }}
                             </div>
                             <div style="display: flex; align-items: center; gap: 0.4rem;">
-                                <span style="color: #059669; font-weight: 700;">✓</span> Replacement Guarantee within 4h
+                                <span style="color: #059669; font-weight: 700;">✓</span> {{ __('Replacement Guarantee within 4h') }}
                             </div>
                             <div style="display: flex; align-items: center; gap: 0.4rem;">
-                                <span style="color: #059669; font-weight: 700;">✓</span> Daily Duty Logs for Families
+                                <span style="color: #059669; font-weight: 700;">✓</span> {{ __('Daily Duty Logs for Families') }}
                             </div>
                         </div>
 
                         <div class="service-card-actions" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
                             <a href="{{ route('services.show', $service->slug) }}" class="btn btn-primary">
-                                <span>Service Details & Pricing</span>
+                                <span>{{ __('Service Details & Pricing') }}</span>
                                 <span>→</span>
                             </a>
                             <a href="{{ route('marketplace.index', ['service' => $service->slug]) }}" class="btn btn-secondary">
-                                Browse {{ $service->name }} Caregivers
+                                {{ __('Browse :service Caregivers', ['service' => $service->name]) }}
                             </a>
                         </div>
                     </div>

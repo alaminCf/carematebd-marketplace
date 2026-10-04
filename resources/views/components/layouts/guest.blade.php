@@ -97,27 +97,27 @@
         <div id="mobileNavDrawer" class="mobile-nav-drawer">
             <div style="display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1.25rem;">
                 <a href="{{ route('services.index') }}" class="mobile-nav-link">
-                    <span>🏥 Care Services</span>
+                    <span>🏥 {{ __('Care Services') }}</span>
                     <span>→</span>
                 </a>
                 <a href="{{ route('marketplace.index') }}" class="mobile-nav-link">
-                    <span>👩‍⚕️ Browse Caregivers</span>
+                    <span>👩‍⚕️ {{ __('Browse Caregivers') }}</span>
                     <span>→</span>
                 </a>
                 <a href="{{ route('how-it-works') }}" class="mobile-nav-link">
-                    <span>🔍 How It Works</span>
+                    <span>🔍 {{ __('How It Works') }}</span>
                     <span>→</span>
                 </a>
                 <a href="{{ route('about') }}" class="mobile-nav-link">
-                    <span>🛡️ Safety & Verification</span>
+                    <span>🛡️ {{ __('Safety & Verification') }}</span>
                     <span>→</span>
                 </a>
                 <a href="{{ route('faq') }}" class="mobile-nav-link">
-                    <span>❓ Frequently Asked Questions</span>
+                    <span>❓ {{ __('Frequently Asked Questions') }}</span>
                     <span>→</span>
                 </a>
                 <a href="{{ route('contact') }}" class="mobile-nav-link">
-                    <span>📞 Contact & Support</span>
+                    <span>📞 {{ __('Contact & Support') }}</span>
                     <span>→</span>
                 </a>
             </div>
@@ -126,25 +126,25 @@
             <div style="display: flex; flex-direction: column; gap: 0.65rem; padding-top: 1rem; border-top: 1px solid rgba(226, 232, 240, 0.8);">
                 @auth
                     <a href="{{ route(auth()->user()->role->dashboardRoute()) }}" class="btn btn-primary" style="width: 100%;">
-                        <span>Go to Dashboard ({{ ucfirst(auth()->user()->role->value) }})</span>
+                        <span>{{ __('Go to Dashboard') }} ({{ ucfirst(auth()->user()->role->value) }})</span>
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="btn btn-secondary" style="width: 100%;">Logout</button>
+                        <button type="submit" class="btn btn-secondary" style="width: 100%;">{{ __('Logout') }}</button>
                     </form>
                 @else
                     <a href="{{ route('marketplace.index') }}" class="btn btn-primary" style="width: 100%; font-weight: 700;">
-                        <span>Find a Verified Caregiver</span>
+                        <span>{{ __('Find a Verified Caregiver') }}</span>
                     </a>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-                        <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 600; text-align: center;">Become Caregiver</a>
-                        <a href="{{ route('login') }}" class="btn btn-secondary btn-sm" style="font-weight: 600; text-align: center;">Login</a>
+                        <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 600; text-align: center;">{{ __('Become Caregiver') }}</a>
+                        <a href="{{ route('login') }}" class="btn btn-secondary btn-sm" style="font-weight: 600; text-align: center;">{{ __('Login') }}</a>
                     </div>
                 @endauth
 
                 <!-- 24/7 Helpline Card -->
                 <div style="background: rgba(10, 57, 74, 0.05); border: 1px solid rgba(10, 57, 74, 0.12); border-radius: var(--radius-md); padding: 0.85rem; margin-top: 0.5rem; text-align: center;">
-                    <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">24/7 Care Coordinator Hotline</div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">{{ __('24/7 Care Coordinator Hotline') }}</div>
                     <a href="tel:+8801610296460" style="font-size: 1.05rem; font-weight: 800; color: #0a394a; text-decoration: none; display: block; margin-top: 0.2rem;">📞 +880 1610-296460</a>
                 </div>
             </div>
@@ -194,48 +194,48 @@
                         <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" style="height: 42px; width: auto; object-fit: contain;">
                     </a>
                     <div style="font-size: 0.82rem; font-weight: 700; color: #15798e; margin-bottom: 0.85rem; letter-spacing: 0.03em;">
-                        A Concern of Techboloy
+                        {{ __('A Concern of Techboloy') }}
                     </div>
                     <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.25rem;">
-                        Care that feels like family, found in minutes. Bangladesh's premier verified caregiver marketplace protecting family dignity and providing verified care.
+                        {{ __('Care that feels like family, found in minutes. Bangladesh\'s premier verified caregiver marketplace protecting family dignity and providing verified care.') }}
                     </p>
                     <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(10, 57, 74, 0.08); border: 1px solid rgba(10, 57, 74, 0.15); padding: 0.4rem 0.8rem; border-radius: var(--radius-pill); font-size: 0.78rem; font-weight: 700; color: #0a394a;">
-                        <span>✓ Government NID & Police Background Checked</span>
+                        <span>{{ __('✓ Government NID & Police Background Checked') }}</span>
                     </div>
                 </div>
 
                 <!-- Column 2: Care Services -->
                 <div>
-                    <h4 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 1.25rem;">Care Services</h4>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 1.25rem;">{{ __('Care Services') }}</h4>
                     <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.92rem;">
-                        <li><a href="{{ route('services.show', 'elderly-care') }}" style="color: var(--text-secondary);">Elderly Care</a></li>
-                        <li><a href="{{ route('services.show', 'child-care') }}" style="color: var(--text-secondary);">Child Care & Nanny</a></li>
-                        <li><a href="{{ route('services.show', 'nursing-care') }}" style="color: var(--text-secondary);">Clinical Nursing Care</a></li>
-                        <li><a href="{{ route('services.show', 'medical-transportation') }}" style="color: var(--text-secondary);">Medical Transportation</a></li>
-                        <li><a href="{{ route('marketplace.index') }}" style="color: var(--brand-primary); font-weight: 600;">Browse All Caregivers →</a></li>
+                        <li><a href="{{ route('services.show', 'elderly-care') }}" style="color: var(--text-secondary);">{{ __('Elderly Care') }}</a></li>
+                        <li><a href="{{ route('services.show', 'child-care') }}" style="color: var(--text-secondary);">{{ __('Child Care & Nanny') }}</a></li>
+                        <li><a href="{{ route('services.show', 'nursing-care') }}" style="color: var(--text-secondary);">{{ __('Clinical Nursing Care') }}</a></li>
+                        <li><a href="{{ route('services.show', 'medical-transportation') }}" style="color: var(--text-secondary);">{{ __('Medical Transportation') }}</a></li>
+                        <li><a href="{{ route('marketplace.index') }}" style="color: var(--brand-primary); font-weight: 600;">{{ __('Browse All Caregivers →') }}</a></li>
                     </ul>
                 </div>
 
                 <!-- Column 3: Platform -->
                 <div>
-                    <h4 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 1.25rem;">Platform</h4>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 1.25rem;">{{ __('Platform') }}</h4>
                     <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.92rem;">
-                        <li><a href="{{ route('how-it-works') }}" style="color: var(--text-secondary);">How CareMate Works</a></li>
-                        <li><a href="{{ route('about') }}" style="color: var(--text-secondary);">Safety & Verification</a></li>
-                        <li><a href="{{ route('caregiver.register') }}" style="color: var(--text-secondary);">Apply as a Caregiver</a></li>
-                        <li><a href="{{ route('faq') }}" style="color: var(--text-secondary);">Frequently Asked Questions</a></li>
-                        <li><a href="{{ route('contact') }}" style="color: var(--text-secondary);">Care Coordination Desk</a></li>
+                        <li><a href="{{ route('how-it-works') }}" style="color: var(--text-secondary);">{{ __('How CareMate Works') }}</a></li>
+                        <li><a href="{{ route('about') }}" style="color: var(--text-secondary);">{{ __('Safety & Verification') }}</a></li>
+                        <li><a href="{{ route('caregiver.register') }}" style="color: var(--text-secondary);">{{ __('Apply as a Caregiver') }}</a></li>
+                        <li><a href="{{ route('faq') }}" style="color: var(--text-secondary);">{{ __('Frequently Asked Questions') }}</a></li>
+                        <li><a href="{{ route('contact') }}" style="color: var(--text-secondary);">{{ __('Care Coordination Desk') }}</a></li>
                     </ul>
                 </div>
 
                 <!-- Column 4: Contact & Support -->
                 <div>
-                    <h4 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 1.25rem;">CareDesk Bangladesh</h4>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 1.25rem;">{{ __('CareDesk Bangladesh') }}</h4>
                     <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">
-                        📍 E-14/X, ICT Tower (14th Floor), Agargaon, Dhaka-1207, Bangladesh
+                        📍 {{ __('E-14/X, ICT Tower (14th Floor), Agargaon, Dhaka-1207, Bangladesh') }}
                     </p>
                     <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
-                        📞 <strong>Contact:</strong> <a href="tel:+8801610296460" style="color: inherit; text-decoration: none;">+880 1610-296460</a>
+                        📞 <strong>{{ __('Contact') }}:</strong> <a href="tel:+8801610296460" style="color: inherit; text-decoration: none;">+880 1610-296460</a>
                     </p>
                     <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
                         💬 <strong>WhatsApp:</strong> <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" style="color: #075E54; font-weight: 700; text-decoration: none;">+880 1610-296460</a>
@@ -244,7 +244,7 @@
                         ✉️ <strong>Email:</strong> <a href="mailto:contact@carematebd.com" style="color: inherit; text-decoration: none;">contact@carematebd.com</a>
                     </p>
                     <div style="font-size: 0.8rem; color: var(--text-muted);">
-                        Operating hours: 24/7 Care Coordination
+                        {{ __('Operating hours: 24/7 Care Coordination') }}
                     </div>
                 </div>
             </div>
@@ -252,12 +252,12 @@
             <!-- Bottom Copyright -->
             <div style="border-top: 1px solid rgba(226, 232, 240, 0.7); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted); flex-wrap: wrap; gap: 1rem;">
                 <div>
-                    © {{ date('Y') }} CareMate BD — A Concern of Techboloy. All rights reserved.
+                    © {{ date('Y') }} CareMate BD — {{ __('A Concern of Techboloy') }}. {{ __('All rights reserved.') }}
                 </div>
                 <div style="display: flex; gap: 1.5rem;">
-                    <span>Privacy Policy</span>
-                    <span>Terms of Service</span>
-                    <span>Safety Standard</span>
+                    <span>{{ __('Privacy Policy') }}</span>
+                    <span>{{ __('Terms of Service') }}</span>
+                    <span>{{ __('Safety Standard') }}</span>
                 </div>
             </div>
         </div>
