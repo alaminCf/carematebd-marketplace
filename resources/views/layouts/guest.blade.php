@@ -97,6 +97,23 @@
                 display: inline-flex !important;
             }
         }
+
+        /* Auto-hide bottom dock when typing or keyboard is open */
+        .mobile-app-dock.dock-keyboard-hidden,
+        body:has(input:focus):not(:has(input[type="checkbox"]:focus)):not(:has(input[type="radio"]:focus)) .mobile-app-dock,
+        body:has(textarea:focus) .mobile-app-dock,
+        body:has(select:focus) .mobile-app-dock {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: translateY(100%) !important;
+        }
+        @media (max-height: 480px) {
+            .mobile-app-dock {
+                display: none !important;
+            }
+        }
     </style>
     @stack('styles')
 </head>
@@ -382,7 +399,7 @@
             <span>{{ __('Caregivers') }}</span>
         </a>
         <a href="{{ route('services.index') }}" class="mobile-app-dock-item {{ request()->routeIs('services.*') ? 'active' : '' }}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/></svg>
             <span>{{ __('Services') }}</span>
         </a>
         <a href="{{ route('how-it-works') }}" class="mobile-app-dock-item {{ request()->routeIs('how-it-works') ? 'active' : '' }}">
@@ -402,6 +419,56 @@
             </a>
         @endauth
     </nav>
+
+    <!-- Auto-hide mobile dock when keyboard opens -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dock = document.querySelector('.mobile-app-dock');
+            if (!dock) return;
+
+            const isTextInput = function(el) {
+                if (!el) return false;
+                const tag = el.tagName;
+                if (tag === 'TEXTAREA' || tag === 'SELECT') return true;
+                if (tag === 'INPUT') {
+                    const type = (el.type || 'text').toLowerCase();
+                    return !['checkbox', 'radio', 'button', 'submit', 'reset', 'file'].includes(type);
+                }
+                return false;
+            };
+
+            document.addEventListener('focusin', function(e) {
+                if (isTextInput(e.target)) {
+                    dock.classList.add('dock-keyboard-hidden');
+                    dock.style.setProperty('display', 'none', 'important');
+                }
+            });
+
+            document.addEventListener('focusout', function(e) {
+                if (isTextInput(e.target)) {
+                    setTimeout(function() {
+                        if (!isTextInput(document.activeElement)) {
+                            dock.classList.remove('dock-keyboard-hidden');
+                            dock.style.removeProperty('display');
+                        }
+                    }, 120);
+                }
+            });
+
+            if (window.visualViewport) {
+                var initialH = window.visualViewport.height;
+                window.visualViewport.addEventListener('resize', function() {
+                    if (window.visualViewport.height < initialH - 120) {
+                        dock.classList.add('dock-keyboard-hidden');
+                        dock.style.setProperty('display', 'none', 'important');
+                    } else if (!isTextInput(document.activeElement)) {
+                        dock.classList.remove('dock-keyboard-hidden');
+                        dock.style.removeProperty('display');
+                    }
+                });
+            }
+        });
+    </script>
 
     @stack('scripts')
 </body>

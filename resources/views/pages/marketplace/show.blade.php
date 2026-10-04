@@ -16,52 +16,54 @@
             <!-- Left Main Column -->
             <div>
                 <!-- Top Profile Card -->
-                <div class="glass-card" style="padding: 2.5rem; margin-bottom: 2rem; border-radius: var(--radius-xl);">
-                    <div style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
-                        <div style="position: relative;">
-                            <img src="{{ $profile['avatar_url'] }}" alt="{{ $profile['name'] }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
-                            <div style="position: absolute; bottom: 4px; right: 4px; width: 32px; height: 32px; border-radius: 50%; background: #10b981; border: 3px solid #fff; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 800;" title="{{ __('Verified') }}">
-                                ✓
+                <div class="glass-card caregiver-profile-card">
+                    <div class="caregiver-header-flex">
+                        <div class="caregiver-avatar-col">
+                            <div class="caregiver-avatar-wrapper">
+                                <img src="{{ $profile['avatar_url'] }}" alt="{{ $profile['name'] }}" class="caregiver-avatar-img">
+                                <div class="caregiver-verified-badge" title="{{ __('Verified') }}">
+                                    ✓
+                                </div>
                             </div>
                         </div>
 
-                        <div style="flex: 1;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.5rem;">
-                                <h1 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; line-height: 1.1;">
+                        <div class="caregiver-info-col">
+                            <div class="caregiver-title-row">
+                                <h1 class="caregiver-name">
                                     {{ $profile['name'] }}
                                 </h1>
                                 <x-badge tone="success">{{ __('Verified Caregiver') }}</x-badge>
                             </div>
 
-                            <div style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                            <div class="caregiver-serving-location">
                                 📍 {{ __('Serving:') }} <strong>{{ $profile['location']['area'] ?? $profile['location']['city'] }}, {{ $profile['location']['district'] }}</strong>
                             </div>
 
-                            <div style="display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
-                                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                            <div class="caregiver-stats-badges">
+                                <div class="caregiver-stat-pill">
                                     <x-star-rating :rating="$profile['ratings']['average']" />
-                                    <span style="font-weight: 800; font-size: 1rem; color: #0f172a;">{{ number_format($profile['ratings']['average'], 1) }}</span>
-                                    <span style="font-size: 0.85rem; color: var(--text-muted);">({{ $profile['ratings']['count'] }} {{ __('reviews') }})</span>
+                                    <span class="stat-highlight">{{ number_format($profile['ratings']['average'], 1) }}</span>
+                                    <span class="stat-sub">({{ $profile['ratings']['count'] }} {{ __('reviews') }})</span>
                                 </div>
-                                <div style="color: var(--text-muted);">•</div>
-                                <div style="font-size: 0.9rem; color: var(--text-secondary);">
-                                    <strong>{{ $profile['years_experience'] }} {{ __('years') }}</strong> {{ __('Experience') }}
+                                <div class="caregiver-stat-pill">
+                                    <span class="stat-highlight">{{ $profile['years_experience'] }} {{ __('years') }}</span>
+                                    <span class="stat-sub">{{ __('Experience') }}</span>
                                 </div>
-                                <div style="color: var(--text-muted);">•</div>
-                                <div style="font-size: 0.9rem; color: var(--text-secondary);">
-                                    <strong>{{ $profile['completed_jobs_count'] }}</strong> {{ __('Completed Bookings') }}
+                                <div class="caregiver-stat-pill">
+                                    <span class="stat-highlight">{{ $profile['completed_jobs_count'] }}</span>
+                                    <span class="stat-sub">{{ __('Bookings') }}</span>
                                 </div>
                             </div>
 
                             <!-- Trust Checks -->
-                            <div style="display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.82rem; color: #065f46;">
-                                <div style="background: rgba(16, 185, 129, 0.12); padding: 0.3rem 0.75rem; border-radius: var(--radius-pill); font-weight: 700;">
+                            <div class="caregiver-trust-badges">
+                                <div class="trust-badge">
                                     ✓ {{ __('NID Checked') }}
                                 </div>
-                                <div style="background: rgba(16, 185, 129, 0.12); padding: 0.3rem 0.75rem; border-radius: var(--radius-pill); font-weight: 700;">
+                                <div class="trust-badge">
                                     ✓ {{ __('Police Verification Cleared') }}
                                 </div>
-                                <div style="background: rgba(16, 185, 129, 0.12); padding: 0.3rem 0.75rem; border-radius: var(--radius-pill); font-weight: 700;">
+                                <div class="trust-badge">
                                     ✓ {{ __('Health Screened') }}
                                 </div>
                             </div>

@@ -511,6 +511,56 @@
             @endif
         </nav>
 
+    <!-- Auto-hide mobile dock when keyboard opens -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dock = document.querySelector('.mobile-app-dock');
+            if (!dock) return;
+
+            const isTextInput = function(el) {
+                if (!el) return false;
+                const tag = el.tagName;
+                if (tag === 'TEXTAREA' || tag === 'SELECT') return true;
+                if (tag === 'INPUT') {
+                    const type = (el.type || 'text').toLowerCase();
+                    return !['checkbox', 'radio', 'button', 'submit', 'reset', 'file'].includes(type);
+                }
+                return false;
+            };
+
+            document.addEventListener('focusin', function(e) {
+                if (isTextInput(e.target)) {
+                    dock.classList.add('dock-keyboard-hidden');
+                    dock.style.setProperty('display', 'none', 'important');
+                }
+            });
+
+            document.addEventListener('focusout', function(e) {
+                if (isTextInput(e.target)) {
+                    setTimeout(function() {
+                        if (!isTextInput(document.activeElement)) {
+                            dock.classList.remove('dock-keyboard-hidden');
+                            dock.style.removeProperty('display');
+                        }
+                    }, 120);
+                }
+            });
+
+            if (window.visualViewport) {
+                var initialH = window.visualViewport.height;
+                window.visualViewport.addEventListener('resize', function() {
+                    if (window.visualViewport.height < initialH - 120) {
+                        dock.classList.add('dock-keyboard-hidden');
+                        dock.style.setProperty('display', 'none', 'important');
+                    } else if (!isTextInput(document.activeElement)) {
+                        dock.classList.remove('dock-keyboard-hidden');
+                        dock.style.removeProperty('display');
+                    }
+                });
+            }
+        });
+    </script>
+
     @stack('scripts')
 </body>
 </html>
