@@ -33,10 +33,10 @@
         <div class="container" style="display: flex; align-items: center; justify-content: space-between; padding-top: 0.75rem; padding-bottom: 0.75rem;">
             <!-- Brand Logo -->
             <a href="{{ route('home') }}" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" style="height: 44px; width: auto; object-fit: contain;">
+                <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" class="brand-logo-img" style="height: 44px; width: auto; object-fit: contain;">
             </a>
 
-            <!-- Nav Links -->
+            <!-- Desktop Nav Links -->
             <nav style="display: flex; align-items: center; gap: 1.75rem;" class="desktop-nav">
                 <a href="{{ route('services.index') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">Services</a>
                 <a href="{{ route('marketplace.index') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">Caregivers</a>
@@ -47,25 +47,100 @@
             </nav>
 
             <!-- Actions -->
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                <!-- Desktop-only Action buttons -->
+                <div class="desktop-actions" style="display: flex; align-items: center; gap: 0.6rem;">
+                    @auth
+                        <a href="{{ route(auth()->user()->role->dashboardRoute()) }}" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 0.4rem;">
+                            <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" style="width: 24px; height: 24px; border-radius: 50%;">
+                            <span>Dashboard</span>
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-sm" style="background: transparent; color: var(--text-muted); border: none; cursor: pointer;">Logout</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-secondary btn-sm" style="font-weight: 600;">Login</a>
+                        <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 600;">Become Caregiver</a>
+                        <a href="{{ route('marketplace.index') }}" class="btn btn-primary btn-sm" style="font-weight: 700;">Find Caregiver</a>
+                    @endauth
+                </div>
+
+                <!-- Quick WhatsApp Header Button (Both Mobile & Desktop) -->
+                <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" class="btn btn-sm header-whatsapp-btn" style="background: rgba(37, 211, 102, 0.14); color: #0d873d; border: 1px solid rgba(37, 211, 102, 0.35); font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.45rem 0.75rem;" title="Quick WhatsApp Chat">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.516 2 2.031 6.484 2.031 12C2.031 13.805 2.508 15.5 3.336 16.969L2 22L7.172 20.688C8.594 21.461 10.258 21.906 12.031 21.906C17.547 21.906 22.031 17.422 22.031 12C22.031 6.484 17.547 2 12.031 2ZM12.031 20.156C10.453 20.156 8.969 19.719 7.688 18.969L7.375 18.781L4.312 19.562L5.125 16.578L4.922 16.25C4.109 14.953 3.672 13.5 3.672 12C3.672 7.391 7.422 3.641 12.031 3.641C16.641 3.641 20.391 7.391 20.391 12C20.391 16.609 16.641 20.156 12.031 20.156ZM16.609 14.547C16.359 14.422 15.125 13.812 14.891 13.734C14.656 13.656 14.484 13.609 14.312 13.859C14.141 14.109 13.656 14.688 13.5 14.859C13.344 15.031 13.188 15.047 12.938 14.922C12.688 14.797 11.875 14.531 10.922 13.68C10.172 13.008 9.672 12.18 9.516 11.93C9.359 11.68 9.5 11.539 9.625 11.414C9.734 11.305 9.875 11.125 10 10.984C10.125 10.844 10.172 10.734 10.25 10.578C10.328 10.422 10.281 10.281 10.219 10.156C10.156 10.031 9.656 8.812 9.453 8.312C9.25 7.828 9.047 7.891 8.891 7.891C8.75 7.891 8.578 7.875 8.406 7.875C8.234 7.875 7.953 7.938 7.719 8.188C7.484 8.438 6.828 9.047 6.828 10.281C6.828 11.516 7.734 12.703 7.859 12.875C7.984 13.047 9.641 15.609 12.188 16.703C12.797 16.969 13.266 17.125 13.641 17.25C14.25 17.438 14.812 17.406 15.25 17.344C15.75 17.266 16.781 16.719 17 16.109C17.219 15.5 17.219 14.984 17.156 14.859C17.094 14.734 16.859 14.672 16.609 14.547Z"/></svg>
+                    <span class="header-whatsapp-text">WhatsApp</span>
+                </a>
+
+                <!-- Mobile Hamburger Toggle Button -->
+                <button type="button" class="mobile-menu-btn" id="mobileMenuToggleBtn" aria-label="Toggle navigation menu">
+                    <svg id="hamburgerIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                    <svg id="closeIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobileNavDrawer" class="mobile-nav-drawer">
+            <div style="display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1.25rem;">
+                <a href="{{ route('services.index') }}" class="mobile-nav-link">
+                    <span>🏥 Care Services</span>
+                    <span>→</span>
+                </a>
+                <a href="{{ route('marketplace.index') }}" class="mobile-nav-link">
+                    <span>👩‍⚕️ Browse Caregivers</span>
+                    <span>→</span>
+                </a>
+                <a href="{{ route('how-it-works') }}" class="mobile-nav-link">
+                    <span>🔍 How It Works</span>
+                    <span>→</span>
+                </a>
+                <a href="{{ route('about') }}" class="mobile-nav-link">
+                    <span>🛡️ Safety & Verification</span>
+                    <span>→</span>
+                </a>
+                <a href="{{ route('faq') }}" class="mobile-nav-link">
+                    <span>❓ Frequently Asked Questions</span>
+                    <span>→</span>
+                </a>
+                <a href="{{ route('contact') }}" class="mobile-nav-link">
+                    <span>📞 Contact & Support</span>
+                    <span>→</span>
+                </a>
+            </div>
+
+            <!-- Mobile Quick Actions -->
+            <div style="display: flex; flex-direction: column; gap: 0.65rem; padding-top: 1rem; border-top: 1px solid rgba(226, 232, 240, 0.8);">
                 @auth
-                    <a href="{{ route(auth()->user()->role->dashboardRoute()) }}" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 0.4rem;">
-                        <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" style="width: 24px; height: 24px; border-radius: 50%;">
-                        <span>Dashboard ({{ ucfirst(auth()->user()->role->value) }})</span>
+                    <a href="{{ route(auth()->user()->role->dashboardRoute()) }}" class="btn btn-primary" style="width: 100%;">
+                        <span>Go to Dashboard ({{ ucfirst(auth()->user()->role->value) }})</span>
                     </a>
-                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="btn btn-sm" style="background: transparent; color: var(--text-muted); border: none; cursor: pointer;">Logout</button>
+                        <button type="submit" class="btn btn-secondary" style="width: 100%;">Logout</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="btn btn-secondary btn-sm" style="font-weight: 600;">Login</a>
-                    <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 600;">Become Caregiver</a>
-                    <a href="{{ route('marketplace.index') }}" class="btn btn-primary btn-sm" style="font-weight: 700;">Find Caregiver</a>
-                    <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background: rgba(37, 211, 102, 0.14); color: #0d873d; border: 1px solid rgba(37, 211, 102, 0.35); font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;" title="Quick WhatsApp Chat">
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.516 2 2.031 6.484 2.031 12C2.031 13.805 2.508 15.5 3.336 16.969L2 22L7.172 20.688C8.594 21.461 10.258 21.906 12.031 21.906C17.547 21.906 22.031 17.422 22.031 12C22.031 6.484 17.547 2 12.031 2ZM12.031 20.156C10.453 20.156 8.969 19.719 7.688 18.969L7.375 18.781L4.312 19.562L5.125 16.578L4.922 16.25C4.109 14.953 3.672 13.5 3.672 12C3.672 7.391 7.422 3.641 12.031 3.641C16.641 3.641 20.391 7.391 20.391 12C20.391 16.609 16.641 20.156 12.031 20.156ZM16.609 14.547C16.359 14.422 15.125 13.812 14.891 13.734C14.656 13.656 14.484 13.609 14.312 13.859C14.141 14.109 13.656 14.688 13.5 14.859C13.344 15.031 13.188 15.047 12.938 14.922C12.688 14.797 11.875 14.531 10.922 13.68C10.172 13.008 9.672 12.18 9.516 11.93C9.359 11.68 9.5 11.539 9.625 11.414C9.734 11.305 9.875 11.125 10 10.984C10.125 10.844 10.172 10.734 10.25 10.578C10.328 10.422 10.281 10.281 10.219 10.156C10.156 10.031 9.656 8.812 9.453 8.312C9.25 7.828 9.047 7.891 8.891 7.891C8.75 7.891 8.578 7.875 8.406 7.875C8.234 7.875 7.953 7.938 7.719 8.188C7.484 8.438 6.828 9.047 6.828 10.281C6.828 11.516 7.734 12.703 7.859 12.875C7.984 13.047 9.641 15.609 12.188 16.703C12.797 16.969 13.266 17.125 13.641 17.25C14.25 17.438 14.812 17.406 15.25 17.344C15.75 17.266 16.781 16.719 17 16.109C17.219 15.5 17.219 14.984 17.156 14.859C17.094 14.734 16.859 14.672 16.609 14.547Z"/></svg>
-                        <span>WhatsApp</span>
+                    <a href="{{ route('marketplace.index') }}" class="btn btn-primary" style="width: 100%; font-weight: 700;">
+                        <span>Find a Verified Caregiver</span>
                     </a>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                        <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 600; text-align: center;">Become Caregiver</a>
+                        <a href="{{ route('login') }}" class="btn btn-secondary btn-sm" style="font-weight: 600; text-align: center;">Login</a>
+                    </div>
                 @endauth
+
+                <!-- 24/7 Helpline Card -->
+                <div style="background: rgba(10, 57, 74, 0.05); border: 1px solid rgba(10, 57, 74, 0.12); border-radius: var(--radius-md); padding: 0.85rem; margin-top: 0.5rem; text-align: center;">
+                    <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">24/7 Care Coordinator Hotline</div>
+                    <a href="tel:+8801610296460" style="font-size: 1.05rem; font-weight: 800; color: #0a394a; text-decoration: none; display: block; margin-top: 0.2rem;">📞 +880 1610-296460</a>
+                </div>
             </div>
         </div>
     </header>
@@ -197,6 +272,36 @@
         </span>
         <span class="whatsapp-float-text">WhatsApp Support</span>
     </a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var toggleBtn = document.getElementById('mobileMenuToggleBtn');
+            var drawer = document.getElementById('mobileNavDrawer');
+            var hamburgerIcon = document.getElementById('hamburgerIcon');
+            var closeIcon = document.getElementById('closeIcon');
+
+            if (toggleBtn && drawer) {
+                toggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var isOpen = drawer.classList.toggle('open');
+                    if (hamburgerIcon && closeIcon) {
+                        hamburgerIcon.style.display = isOpen ? 'none' : 'block';
+                        closeIcon.style.display = isOpen ? 'block' : 'none';
+                    }
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (drawer.classList.contains('open') && !drawer.contains(e.target) && !toggleBtn.contains(e.target)) {
+                        drawer.classList.remove('open');
+                        if (hamburgerIcon && closeIcon) {
+                            hamburgerIcon.style.display = 'block';
+                            closeIcon.style.display = 'none';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 
     @stack('scripts')
 </body>

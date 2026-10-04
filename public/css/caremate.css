@@ -677,3 +677,402 @@ img {
     }
 }
 
+/* ==========================================================================
+   MOBILE FIRST RESPONSIVE ARCHITECTURE (CareMate BD)
+   ========================================================================== */
+
+/* Prevent any horizontal overflow on mobile viewports */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Responsive Table Wrapper */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+    border-radius: var(--radius-md);
+}
+
+/* Mobile Nav Drawer Styles */
+.mobile-menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(203, 213, 225, 0.85);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mobile-menu-btn:hover {
+    background: #ffffff;
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
+.mobile-nav-drawer {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: 0 16px 36px -6px rgba(10, 57, 74, 0.16);
+    padding: 1.25rem 1.25rem 2rem 1.25rem;
+    z-index: 999;
+    flex-direction: column;
+    animation: drawerSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-nav-drawer.open {
+    display: flex !important;
+}
+
+@keyframes drawerSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mobile-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.15rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    background: rgba(248, 250, 252, 0.8);
+    border: 1px solid rgba(226, 232, 240, 0.75);
+    text-decoration: none;
+    transition: all 0.18s ease;
+}
+
+.mobile-nav-link:hover, .mobile-nav-link.active {
+    background: var(--brand-primary-light);
+    color: var(--brand-primary);
+    border-color: rgba(10, 57, 74, 0.18);
+    transform: translateX(4px);
+}
+
+/* Dashboard Off-Canvas Sidebar & Topbar */
+.dashboard-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 9998;
+}
+
+.dashboard-backdrop.active {
+    display: block !important;
+}
+
+/* Breakpoint: Tablets & Small Laptops (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .desktop-nav {
+        display: none !important;
+    }
+    
+    .desktop-actions {
+        display: none !important;
+    }
+
+    .mobile-menu-btn {
+        display: inline-flex !important;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+    }
+
+    .caregivers-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+    }
+
+    .steps-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.25rem !important;
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 2.5rem !important;
+    }
+
+    .profile-layout {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+
+    .marketplace-layout {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    .marketplace-filter-aside {
+        position: static !important;
+        max-height: none !important;
+        top: auto !important;
+    }
+}
+
+/* Breakpoint: Dashboard Off-Canvas & Tablet Transition (max-width: 900px) */
+@media (max-width: 900px) {
+    .dashboard-layout {
+        grid-template-columns: 1fr !important;
+        display: block !important;
+    }
+
+    .dashboard-mobile-topbar {
+        display: flex !important;
+    }
+
+    .dashboard-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: -310px !important;
+        width: 290px !important;
+        max-width: 85vw !important;
+        z-index: 9999 !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25) !important;
+        transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        overflow-y: auto !important;
+    }
+
+    .dashboard-sidebar.mobile-open {
+        left: 0 !important;
+    }
+
+    #dashboardSidebarCloseBtn {
+        display: flex !important;
+    }
+
+    .dashboard-content {
+        padding: 1.25rem 1rem !important;
+    }
+
+    /* Marketplace Mobile Filter Accordion */
+    .mobile-filter-trigger-wrap {
+        display: block !important;
+    }
+
+    .marketplace-filter-aside {
+        display: none;
+    }
+
+    .marketplace-filter-aside.mobile-visible {
+        display: block !important;
+        animation: fadeIn 0.25s ease;
+    }
+}
+
+/* Breakpoint: Mobile Phones (max-width: 768px) */
+@media (max-width: 768px) {
+    /* Global Spacing and Typography */
+    .container {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    h1 {
+        font-size: 2rem !important;
+        line-height: 1.2 !important;
+        letter-spacing: -0.02em !important;
+    }
+
+    h2 {
+        font-size: 1.65rem !important;
+        line-height: 1.25 !important;
+    }
+
+    h3 {
+        font-size: 1.25rem !important;
+    }
+
+    p {
+        font-size: 0.95rem !important;
+    }
+
+    /* Input sizing to prevent iOS Safari auto-zoom */
+    input, select, textarea, .glass-input {
+        font-size: 16px !important;
+    }
+
+    /* Cards */
+    .glass-card {
+        padding: 1.25rem 1rem !important;
+        border-radius: var(--radius-md) !important;
+    }
+
+    /* Header adjustments */
+    .brand-logo-img {
+        height: 36px !important;
+    }
+
+    .header-whatsapp-text {
+        display: none !important;
+    }
+
+    .header-whatsapp-btn {
+        padding: 0.45rem 0.55rem !important;
+    }
+
+    /* Hero Section */
+    .hero-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+
+    .hero-grid > div:last-child {
+        order: -1; /* Show welcoming caregiver photo right at the top on phones */
+    }
+
+    .hero-grid > div:last-child img {
+        height: 280px !important;
+    }
+
+    .hero-search-form {
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+    }
+
+    /* Hide floating absolute badges on mobile hero that cause edge overlap */
+    .hero-grid > div:last-child .glass-card {
+        display: none !important;
+    }
+
+    /* Grid Stacking on Mobile */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+
+    .why-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+
+    .caregivers-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    .testimonials-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+
+    .cta-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .cta-grid > div:first-child {
+        padding: 2rem 1.25rem !important;
+    }
+
+    .cta-grid > div:last-child {
+        height: 240px !important;
+        min-height: 240px !important;
+    }
+
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+        text-align: left !important;
+    }
+
+    /* Buttons touch sizing */
+    .btn {
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+}
+
+/* Breakpoint: Small Mobile Phones (max-width: 480px) */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.75rem !important;
+    }
+
+    h2 {
+        font-size: 1.45rem !important;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+    }
+
+    .hero-grid > div:last-child img {
+        height: 240px !important;
+    }
+}
+
+/* Service Catalog Cards */
+.service-catalog-card {
+    grid-template-columns: 360px 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 900px) {
+    .service-catalog-card {
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+    }
+    .service-card-body {
+        padding: 1.5rem 1.25rem !important;
+    }
+    .service-card-features {
+        grid-template-columns: 1fr !important;
+        gap: 0.5rem !important;
+    }
+    .service-card-actions {
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+    .service-card-actions .btn {
+        width: 100% !important;
+    }
+}
+
+
+

@@ -16,9 +16,20 @@
             </p>
         </div>
 
-        <div style="display: grid; grid-template-columns: 290px 1fr; gap: 2rem; align-items: flex-start;" class="marketplace-layout">
+        <!-- Mobile Filter Toggle Button -->
+        <div class="mobile-filter-trigger-wrap" style="display: none; margin-bottom: 1.25rem;">
+            <button type="button" id="mobileFilterToggleBtn" class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem; font-weight: 700;">
+                <span style="display: flex; align-items: center; gap: 0.5rem;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                    <span>Filter & Search Caregivers</span>
+                </span>
+                <span id="mobileFilterArrow" style="transition: transform 0.2s ease;">▼</span>
+            </button>
+        </div>
+
+        <div class="marketplace-layout" style="display: grid; gap: 2rem; align-items: flex-start;">
             <!-- Filter Sidebar -->
-            <aside class="glass-card" style="padding: 1.75rem; position: sticky; top: 90px; max-height: calc(100vh - 110px); overflow-y: auto;">
+            <aside id="marketplaceFilterAside" class="glass-card marketplace-filter-aside" style="padding: 1.75rem; position: sticky; top: 90px; max-height: calc(100vh - 110px); overflow-y: auto;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(226, 232, 240, 0.8);">
                     <h3 style="font-size: 1.1rem; font-weight: 700; color: #0f172a;">Filters</h3>
                     <a href="{{ route('marketplace.index') }}" style="font-size: 0.8rem; color: var(--brand-primary); font-weight: 600;">Reset All</a>
@@ -145,7 +156,7 @@
 
                 <!-- Grid of Caregivers -->
                 @if ($caregivers->isNotEmpty())
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;" class="caregivers-grid">
+                    <div class="caregivers-grid" style="display: grid; gap: 1.5rem; margin-bottom: 2.5rem;">
                         @foreach ($caregivers as $caregiver)
                             <div class="glass-card glass-card-hover" style="display: flex; flex-direction: column; position: relative;">
                                 @if ($caregiver->is_featured)
@@ -274,6 +285,24 @@
             if (divSel.value) {
                 filterDistricts(false);
             }
+        }
+
+        // Mobile filter accordion toggle
+        const filterToggleBtn = document.getElementById('mobileFilterToggleBtn');
+        const filterAside = document.getElementById('marketplaceFilterAside');
+        const filterArrow = document.getElementById('mobileFilterArrow');
+
+        if (filterToggleBtn && filterAside) {
+            filterToggleBtn.addEventListener('click', function () {
+                const isOpen = filterAside.classList.contains('mobile-visible');
+                if (isOpen) {
+                    filterAside.classList.remove('mobile-visible');
+                    if (filterArrow) filterArrow.style.transform = 'rotate(0deg)';
+                } else {
+                    filterAside.classList.add('mobile-visible');
+                    if (filterArrow) filterArrow.style.transform = 'rotate(180deg)';
+                }
+            });
         }
     });
     </script>

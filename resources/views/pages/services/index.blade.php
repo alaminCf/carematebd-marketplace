@@ -17,15 +17,15 @@
 
         <div style="display: flex; flex-direction: column; gap: 2.5rem;">
             @foreach ($services as $service)
-                <div class="glass-card" style="padding: 0; overflow: hidden; display: grid; grid-template-columns: 380px 1fr; gap: 2rem; border-radius: var(--radius-xl);">
-                    <div style="height: 100%; min-height: 280px; position: relative; overflow: hidden;">
+                <div class="glass-card service-catalog-card" style="padding: 0; overflow: hidden; display: grid; border-radius: var(--radius-xl);">
+                    <div class="service-card-image" style="height: 100%; min-height: 240px; position: relative; overflow: hidden;">
                         <img src="{{ $service->imageUrl() }}" alt="{{ $service->name }}" style="width: 100%; height: 100%; object-fit: cover;">
                         <div style="position: absolute; top: 1rem; left: 1rem;">
                             <x-badge tone="primary">{{ $service->name }}</x-badge>
                         </div>
                     </div>
 
-                    <div style="padding: 2.25rem 2.25rem 2.25rem 0; display: flex; flex-direction: column; justify-content: center;">
+                    <div class="service-card-body" style="padding: 2rem; display: flex; flex-direction: column; justify-content: center;">
                         <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
                             <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a;">
                                 {{ $service->name }}
@@ -39,7 +39,7 @@
                             {{ $service->description }}
                         </p>
 
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 2rem; font-size: 0.88rem; color: var(--text-primary);">
+                        <div class="service-card-features" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 2rem; font-size: 0.88rem; color: var(--text-primary);">
                             <div style="display: flex; align-items: center; gap: 0.4rem;">
                                 <span style="color: #059669; font-weight: 700;">✓</span> Day, Night & 24/7 Live-in Options
                             </div>
@@ -54,7 +54,7 @@
                             </div>
                         </div>
 
-                        <div style="display: flex; gap: 1rem; align-items: center;">
+                        <div class="service-card-actions" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
                             <a href="{{ route('services.show', $service->slug) }}" class="btn btn-primary">
                                 <span>Service Details & Pricing</span>
                                 <span>→</span>

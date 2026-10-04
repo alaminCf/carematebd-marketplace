@@ -21,14 +21,41 @@
         $role = $user->role->value;
     @endphp
 
+    <div class="dashboard-backdrop" id="dashboardBackdrop"></div>
+
     <div class="dashboard-layout">
+        <!-- Mobile Topbar -->
+        <div class="dashboard-mobile-topbar" style="display: none; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: #ffffff; border-bottom: 1px solid rgba(210, 228, 233, 0.8); width: 100%;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <button type="button" class="btn btn-secondary btn-sm" id="dashboardMobileMenuBtn" aria-label="Toggle Dashboard Menu" style="padding: 0.4rem 0.65rem;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="{{ route('home') }}" style="display: flex; align-items: center; text-decoration: none;">
+                    <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" style="height: 32px; width: auto; object-fit: contain;">
+                </a>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <x-badge :tone="$role === 'admin' ? 'danger' : ($role === 'caregiver' ? 'success' : 'primary')">
+                    {{ strtoupper($role) }}
+                </x-badge>
+                <img src="{{ $user->avatarUrl() }}" alt="{{ $user->name }}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+            </div>
+        </div>
+
         <!-- Sidebar -->
-        <aside class="dashboard-sidebar">
+        <aside class="dashboard-sidebar" id="dashboardSidebar">
             <!-- Brand -->
-            <a href="{{ route('home') }}" style="display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 2rem; padding: 0.25rem 0.5rem; text-decoration: none;">
-                <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" style="height: 38px; width: auto; object-fit: contain; align-self: flex-start;">
-                <span style="display: inline-block; font-size: 0.68rem; color: #15798e; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding-left: 2px;">{{ ucfirst($role) }} Portal</span>
-            </a>
+            <div class="dashboard-sidebar-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding: 0.25rem 0.5rem;">
+                <a href="{{ route('home') }}" style="display: flex; flex-direction: column; gap: 0.35rem; text-decoration: none;">
+                    <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" style="height: 38px; width: auto; object-fit: contain; align-self: flex-start;">
+                    <span style="display: inline-block; font-size: 0.68rem; color: #15798e; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding-left: 2px;">{{ ucfirst($role) }} Portal</span>
+                </a>
+                <button type="button" id="dashboardSidebarCloseBtn" class="mobile-only" aria-label="Close menu" style="background: rgba(10, 57, 74, 0.08); border: none; border-radius: 50%; width: 32px; height: 32px; display: none; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--text-primary); cursor: pointer;">✕</button>
+            </div>
 
             <!-- Navigation Links -->
             <nav style="flex: 1;">
@@ -250,6 +277,43 @@
             {{ $slot }}
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var menuBtn = document.getElementById('dashboardMobileMenuBtn');
+            var closeBtn = document.getElementById('dashboardSidebarCloseBtn');
+            var sidebar = document.getElementById('dashboardSidebar');
+            var backdrop = document.getElementById('dashboardBackdrop');
+
+            function openSidebar() {
+                if (sidebar) sidebar.classList.add('mobile-open');
+                if (backdrop) backdrop.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeSidebar() {
+                if (sidebar) sidebar.classList.remove('mobile-open');
+                if (backdrop) backdrop.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            if (menuBtn) menuBtn.addEventListener('click', openSidebar);
+            if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+            if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+            // Also close if any link inside sidebar is clicked on mobile
+            if (sidebar) {
+                var links = sidebar.querySelectorAll('a');
+                links.forEach(function(l) {
+                    l.addEventListener('click', function() {
+                        if (window.innerWidth <= 900) {
+                            closeSidebar();
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 
     @stack('scripts')
 </body>
