@@ -361,6 +361,74 @@ img {
     margin-bottom: 3rem;
 }
 
+/* Marketplace Layout Desktop */
+.marketplace-layout {
+    display: grid;
+    grid-template-columns: 290px 1fr;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.marketplace-filter-aside {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem;
+    box-shadow: 0 4px 20px rgba(10, 57, 74, 0.05);
+    position: sticky;
+    top: 85px;
+    z-index: 10;
+}
+
+/* Segmented Pill Control for filters */
+.segmented-pill {
+    display: block;
+    padding: 0.32rem 0.5rem;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #64748b;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+.segmented-pill.active {
+    background: var(--brand-primary);
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(21, 121, 142, 0.3);
+    font-weight: 700;
+}
+
+/* Category Filter Chips (Native App Horizontal Scroll) */
+.category-chip {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.42rem 0.85rem;
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #334155;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(10, 57, 74, 0.04);
+    transition: all 0.2s ease;
+}
+.category-chip:active,
+.category-chip.active {
+    background: var(--brand-primary);
+    color: #ffffff;
+    border-color: var(--brand-primary);
+    box-shadow: 0 2px 8px rgba(21, 121, 142, 0.3);
+}
+
+/* Native Mobile App Bottom Navigation Dock */
+.mobile-app-dock {
+    display: none;
+}
+
 /* Stat card */
 .stat-card {
     background: var(--glass-bg);
@@ -926,13 +994,101 @@ html, body {
         display: block !important;
     }
 
+    .marketplace-layout {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+
     .marketplace-filter-aside {
         display: none;
+        position: static !important;
+        top: auto !important;
+        border-radius: 16px !important;
+        padding: 1.25rem 1rem !important;
+        margin-bottom: 1rem !important;
     }
 
     .marketplace-filter-aside.mobile-visible {
         display: block !important;
         animation: fadeIn 0.25s ease;
+    }
+
+    /* Mobile App Bottom Navigation Dock */
+    .mobile-app-dock {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 60px !important;
+        background: rgba(255, 255, 255, 0.96) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border-top: 1px solid rgba(226, 232, 240, 0.9) !important;
+        box-shadow: 0 -4px 25px rgba(10, 57, 74, 0.08) !important;
+        z-index: 9999 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-around !important;
+        padding: 0.2rem 0.5rem !important;
+        padding-bottom: max(0.2rem, env(safe-area-inset-bottom)) !important;
+    }
+
+    .mobile-app-dock-item {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 3px !important;
+        text-decoration: none !important;
+        color: #64748b !important;
+        font-size: 0.68rem !important;
+        font-weight: 600 !important;
+        padding: 0.35rem 0.2rem !important;
+        border-radius: 12px !important;
+        transition: all 0.15s ease !important;
+        position: relative !important;
+    }
+
+    .mobile-app-dock-item svg {
+        width: 20px !important;
+        height: 20px !important;
+        transition: transform 0.15s ease !important;
+    }
+
+    .mobile-app-dock-item:active {
+        transform: scale(0.92) !important;
+    }
+
+    .mobile-app-dock-item.active {
+        color: var(--brand-primary) !important;
+        font-weight: 700 !important;
+    }
+
+    .mobile-app-dock-item.active svg {
+        stroke: var(--brand-primary) !important;
+    }
+
+    .mobile-app-dock-item.active::after {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        width: 16px;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--brand-primary);
+    }
+
+    body {
+        padding-bottom: calc(65px + env(safe-area-inset-bottom)) !important;
+    }
+
+    .dashboard-main {
+        padding-bottom: calc(75px + env(safe-area-inset-bottom)) !important;
+    }
+
+    .dashboard-header-actions {
+        display: none !important;
     }
 }
 
@@ -1097,26 +1253,46 @@ html, body {
         align-items: center !important;
     }
 
-    /* Dashboard KPI / Stat Cards */
+    /* Dashboard KPI / Stat Cards (Compact Native App 2x2 Grid) */
     .stat-card {
-        padding: 1rem 0.85rem !important;
-        border-radius: var(--radius-md) !important;
+        padding: 0.85rem 0.75rem !important;
+        border-radius: 16px !important;
+        background: #ffffff !important;
+        border: 1px solid rgba(226, 232, 240, 0.85) !important;
+        box-shadow: 0 2px 8px rgba(10, 57, 74, 0.04) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        justify-content: center !important;
+        gap: 0.15rem !important;
+        min-height: 82px !important;
     }
 
     .stat-card .stat-value {
         font-size: 1.45rem !important;
-        line-height: 1.15 !important;
-        margin: 0.3rem 0 0.15rem 0 !important;
+        font-weight: 800 !important;
+        line-height: 1.1 !important;
+        margin: 0.15rem 0 0.1rem 0 !important;
     }
 
     .stat-card .stat-label {
-        font-size: 0.74rem !important;
+        font-size: 0.68rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        color: #64748b !important;
         letter-spacing: 0.03em !important;
+        line-height: 1.2 !important;
     }
 
     .stat-card .stat-hint {
-        font-size: 0.70rem !important;
-        line-height: 1.3 !important;
+        font-size: 0.65rem !important;
+        color: #94a3b8 !important;
+        line-height: 1.2 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        width: 100% !important;
+        display: block !important;
     }
 
     /* Dashboard Tables Mobile Optimization */
@@ -1191,8 +1367,8 @@ html, body {
     }
 
     .stats-grid {
-        grid-template-columns: 1fr !important;
-        gap: 0.75rem !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.65rem !important;
     }
 
     .hero-grid > div:last-child img {

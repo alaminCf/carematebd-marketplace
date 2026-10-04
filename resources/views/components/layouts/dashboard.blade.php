@@ -12,13 +12,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.5.0">
+    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.6.0">
     <style>
         @media (max-width: 900px) {
             .dashboard-layout { display: block !important; }
             .dashboard-grid-2, .booking-layout, .booking-admin-layout, .earnings-layout, .request-grid, .support-layout, .ticket-layout, .job-layout, .schedule-layout, .edit-layout {
                 grid-template-columns: 1fr !important;
-                gap: 1.5rem !important;
+                gap: 1.25rem !important;
             }
             .dashboard-sidebar {
                 position: fixed !important;
@@ -34,7 +34,54 @@
             }
             .dashboard-sidebar.mobile-open { left: 0 !important; }
             .dashboard-mobile-topbar { display: flex !important; }
-            .dashboard-main { padding: 1.25rem 0.85rem 4rem 0.85rem !important; }
+            .dashboard-main { padding: 1rem 0.85rem calc(75px + env(safe-area-inset-bottom)) 0.85rem !important; }
+            .dashboard-header-actions { display: none !important; }
+            
+            /* Native App 2x2 Compact Stats Grid */
+            .stats-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.65rem !important;
+                margin-bottom: 1.25rem !important;
+            }
+            .stat-card {
+                padding: 0.85rem 0.75rem !important;
+                border-radius: 16px !important;
+                background: #ffffff !important;
+                border: 1px solid rgba(226, 232, 240, 0.85) !important;
+                box-shadow: 0 2px 8px rgba(10, 57, 74, 0.04) !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                justify-content: center !important;
+                gap: 0.15rem !important;
+                min-height: 82px !important;
+            }
+            .stat-card .stat-label {
+                font-size: 0.68rem !important;
+                font-weight: 700 !important;
+                text-transform: uppercase !important;
+                color: #64748b !important;
+                letter-spacing: 0.03em !important;
+                line-height: 1.2 !important;
+            }
+            .stat-card .stat-value {
+                font-size: 1.45rem !important;
+                font-weight: 800 !important;
+                line-height: 1.1 !important;
+                margin: 0.15rem 0 0.1rem 0 !important;
+            }
+            .stat-card .stat-hint {
+                font-size: 0.65rem !important;
+                color: #94a3b8 !important;
+                line-height: 1.2 !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                width: 100% !important;
+                display: block !important;
+            }
+
             .dashboard-main [style*="repeat(2, 1fr)"],
             .dashboard-main [style*="repeat(3, 1fr)"],
             .dashboard-main [style*="repeat(4, 1fr)"],
@@ -49,26 +96,11 @@
                 grid-template-columns: 1fr !important;
                 gap: 1rem !important;
             }
-        }
-        @media (max-width: 640px) {
-            .stats-grid {
-                grid-template-columns: 1fr !important;
-                gap: 0.85rem !important;
-            }
-            .stat-card {
-                padding: 1.15rem 1rem !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: flex-start !important;
-                gap: 0.35rem !important;
-            }
-            .stat-card .stat-value {
-                font-size: 1.55rem !important;
-                margin: 0.2rem 0 !important;
-            }
+
             .table-container {
                 overflow-x: auto !important;
                 -webkit-overflow-scrolling: touch !important;
+                border-radius: 14px !important;
             }
             .glass-table {
                 min-width: 560px !important;
@@ -283,7 +315,7 @@
                     <p style="color: var(--text-muted); font-size: 0.92rem;">{{ $subheading ?? 'Welcome to CareMate BD management center.' }}</p>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 1rem;">
+                <div class="dashboard-header-actions" style="display: flex; align-items: center; gap: 1rem;">
                     <!-- Public site link -->
                     <a href="{{ route('home') }}" class="btn btn-secondary btn-sm" style="font-size: 0.85rem;">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
@@ -376,6 +408,74 @@
             }
         });
     </script>
+
+        <!-- Mobile Native App Bottom Navigation Dock -->
+        <nav class="mobile-app-dock" aria-label="Mobile Bottom Navigation">
+            @if ($role === 'admin')
+                <a href="{{ route('admin.dashboard') }}" class="mobile-app-dock-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ route('admin.applications.index') }}" class="mobile-app-dock-item {{ request()->routeIs('admin.applications.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>Verify</span>
+                </a>
+                <a href="{{ route('admin.bookings.index') }}" class="mobile-app-dock-item {{ request()->routeIs('admin.bookings.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>
+                    <span>Bookings</span>
+                </a>
+                <a href="{{ route('admin.payments.index') }}" class="mobile-app-dock-item {{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    <span>Finance</span>
+                </a>
+                <a href="{{ route('admin.support.tickets') }}" class="mobile-app-dock-item {{ request()->routeIs('admin.support.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <span>Tickets</span>
+                </a>
+            @elseif ($role === 'caregiver')
+                <a href="{{ route('caregiver.dashboard') }}" class="mobile-app-dock-item {{ request()->routeIs('caregiver.dashboard') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    <span>Home</span>
+                </a>
+                <a href="{{ route('caregiver.requests.index') }}" class="mobile-app-dock-item {{ request()->routeIs('caregiver.requests.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+                    <span>Invites</span>
+                </a>
+                <a href="{{ route('caregiver.jobs.index') }}" class="mobile-app-dock-item {{ request()->routeIs('caregiver.jobs.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    <span>My Jobs</span>
+                </a>
+                <a href="{{ route('caregiver.earnings') }}" class="mobile-app-dock-item {{ request()->routeIs('caregiver.earnings*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <span>Earnings</span>
+                </a>
+                <a href="{{ route('caregiver.profile') }}" class="mobile-app-dock-item {{ request()->routeIs('caregiver.profile*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span>Profile</span>
+                </a>
+            @else
+                <a href="{{ route('client.dashboard') }}" class="mobile-app-dock-item {{ request()->routeIs('client.dashboard') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    <span>Home</span>
+                </a>
+                <a href="{{ route('marketplace.index') }}" class="mobile-app-dock-item {{ request()->routeIs('marketplace.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <span>Find Care</span>
+                </a>
+                <a href="{{ route('client.requests.index') }}" class="mobile-app-dock-item {{ request()->routeIs('client.requests.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+                    <span>Requests</span>
+                </a>
+                <a href="{{ route('client.bookings.index') }}" class="mobile-app-dock-item {{ request()->routeIs('client.bookings.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>
+                    <span>Bookings</span>
+                </a>
+                <a href="{{ route('client.support.index') }}" class="mobile-app-dock-item {{ request()->routeIs('client.support.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <span>Support</span>
+                </a>
+            @endif
+        </nav>
 
     @stack('scripts')
 </body>

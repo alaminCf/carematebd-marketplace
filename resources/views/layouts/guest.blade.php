@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.5.0">
+    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.6.0">
     @stack('styles')
 </head>
 <body>
@@ -302,6 +302,38 @@
             }
         });
     </script>
+
+        <!-- Mobile Native App Bottom Navigation Dock for Public/Guests -->
+        <nav class="mobile-app-dock" aria-label="Mobile Bottom Navigation">
+            <a href="{{ route('home') }}" class="mobile-app-dock-item {{ request()->routeIs('home') ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                <span>Home</span>
+            </a>
+            <a href="{{ route('marketplace.index') }}" class="mobile-app-dock-item {{ request()->routeIs('marketplace.*') ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span>Caregivers</span>
+            </a>
+            <a href="{{ route('services.index') }}" class="mobile-app-dock-item {{ request()->routeIs('services.*') ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                <span>Services</span>
+            </a>
+            <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" class="mobile-app-dock-item" style="color: #0d873d;">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.516 2 2.031 6.484 2.031 12C2.031 13.805 2.508 15.5 3.336 16.969L2 22L7.172 20.688C8.594 21.461 10.258 21.906 12.031 21.906C17.547 21.906 22.031 17.422 22.031 12C22.031 6.484 17.547 2 12.031 2ZM12.031 20.156C10.453 20.156 8.969 19.719 7.688 18.969L7.375 18.781L4.312 19.562L5.125 16.578L4.922 16.25C4.109 14.953 3.672 13.5 3.672 12C3.672 7.391 7.422 3.641 12.031 3.641C16.641 3.641 20.391 7.391 20.391 12C20.391 16.609 16.641 20.156 12.031 20.156ZM16.609 14.547C16.359 14.422 15.125 13.812 14.891 13.734C14.656 13.656 14.484 13.609 14.312 13.859C14.141 14.109 13.656 14.688 13.5 14.859C13.344 15.031 13.188 15.047 12.938 14.922C12.688 14.797 11.875 14.531 10.922 13.68C10.172 13.008 9.672 12.18 9.516 11.93C9.359 11.68 9.5 11.539 9.625 11.414C9.734 11.305 9.875 11.125 10 10.984C10.125 10.844 10.172 10.734 10.25 10.578C10.328 10.422 10.281 10.281 10.219 10.156C10.156 10.031 9.656 8.812 9.453 8.312C9.25 7.828 9.047 7.891 8.891 7.891C8.75 7.891 8.578 7.875 8.406 7.875C8.234 7.875 7.953 7.938 7.719 8.188C7.484 8.438 6.828 9.047 6.828 10.281C6.828 11.516 7.734 12.703 7.859 12.875C7.984 13.047 9.641 15.609 12.188 16.703C12.797 16.969 13.266 17.125 13.641 17.25C14.25 17.438 14.812 17.406 15.25 17.344C15.75 17.266 16.781 16.719 17 16.109C17.219 15.5 17.219 14.984 17.156 14.859C17.094 14.734 16.859 14.672 16.609 14.547Z"/></svg>
+                <span>WhatsApp</span>
+            </a>
+            @auth
+                @php $authRole = auth()->user()->role->value; @endphp
+                <a href="{{ $authRole === 'admin' ? route('admin.dashboard') : ($authRole === 'caregiver' ? route('caregiver.dashboard') : route('client.dashboard')) }}" class="mobile-app-dock-item {{ request()->routeIs('*.dashboard') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span>Portal</span>
+                </a>
+            @else
+                <a href="{{ route('login') }}" class="mobile-app-dock-item {{ request()->routeIs('login') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span>Login</span>
+                </a>
+            @endauth
+        </nav>
 
     @stack('scripts')
 </body>

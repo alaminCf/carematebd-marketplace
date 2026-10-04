@@ -16,37 +16,67 @@
             </p>
         </div>
 
+        @php
+            $activeFilterCount = count(array_filter(request()->only(['search', 'service', 'division_id', 'district_id', 'gender', 'experience', 'max_price', 'live_type', 'available_only'])));
+        @endphp
+
+        <!-- Quick Horizontal Category Chips (Native App Scrollable) -->
+        <div class="mobile-category-scroll" style="display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.75rem; margin-bottom: 1.25rem; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+            <a href="{{ route('marketplace.index') }}" class="category-chip {{ !request('service') ? 'active' : '' }}">
+                <span>🌟 All Care</span>
+            </a>
+            @foreach ($services as $s)
+                <a href="{{ route('marketplace.index', array_merge(request()->except('service', 'page'), ['service' => $s->slug])) }}" class="category-chip {{ request('service') == $s->slug ? 'active' : '' }}">
+                    <span>{{ $s->name }}</span>
+                </a>
+            @endforeach
+        </div>
+
         <!-- Mobile Filter Toggle Button -->
         <div class="mobile-filter-trigger-wrap" style="display: none; margin-bottom: 1.25rem;">
-            <button type="button" id="mobileFilterToggleBtn" class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem; font-weight: 700;">
+            <button type="button" id="mobileFilterToggleBtn" class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem; font-weight: 700; border-radius: 14px;">
                 <span style="display: flex; align-items: center; gap: 0.5rem;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
                     <span>Filter & Search Caregivers</span>
+                    @if ($activeFilterCount > 0)
+                        <span style="background: var(--brand-primary); color: #fff; border-radius: 99px; font-size: 0.7rem; padding: 0.15rem 0.45rem;">{{ $activeFilterCount }}</span>
+                    @endif
                 </span>
                 <span id="mobileFilterArrow" style="transition: transform 0.2s ease;">▼</span>
             </button>
         </div>
 
-        <div class="marketplace-layout" style="display: grid; gap: 2rem; align-items: flex-start;">
-            <!-- Filter Sidebar -->
-            <aside id="marketplaceFilterAside" class="glass-card marketplace-filter-aside" style="padding: 1.75rem; position: sticky; top: 90px; max-height: calc(100vh - 110px); overflow-y: auto;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(226, 232, 240, 0.8);">
-                    <h3 style="font-size: 1.1rem; font-weight: 700; color: #0f172a;">Filters</h3>
-                    <a href="{{ route('marketplace.index') }}" style="font-size: 0.8rem; color: var(--brand-primary); font-weight: 600;">Reset All</a>
+        <div class="marketplace-layout">
+            <!-- Filter Sidebar (Compact & User-Friendly on Desktop) -->
+            <aside id="marketplaceFilterAside" class="marketplace-filter-aside">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 0.65rem; border-bottom: 1px solid rgba(226, 232, 240, 0.8);">
+                    <div style="display: flex; align-items: center; gap: 0.45rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brand-primary)" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                        <span style="font-size: 0.95rem; font-weight: 800; color: #0f172a;">Filters</span>
+                        @if ($activeFilterCount > 0)
+                            <span style="background: rgba(21, 121, 142, 0.12); color: var(--brand-primary); font-size: 0.72rem; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 99px;">{{ $activeFilterCount }} active</span>
+                        @endif
+                    </div>
+                    @if ($activeFilterCount > 0)
+                        <a href="{{ route('marketplace.index') }}" style="font-size: 0.78rem; color: #ef4444; font-weight: 700; text-decoration: none;">Reset All</a>
+                    @endif
                 </div>
 
                 <form method="GET" action="{{ route('marketplace.index') }}" id="filterForm">
                     <!-- Keyword Search -->
-                    <div style="margin-bottom: 1.25rem;">
-                        <label class="form-label" style="font-size: 0.82rem; font-weight: 700;">Keywords / Name</label>
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="e.g. nurse, dementia" class="glass-input" style="font-size: 0.88rem; padding: 0.55rem 0.8rem;">
+                    <div style="margin-bottom: 0.85rem;">
+                        <label class="form-label" style="font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Search Caregivers</label>
+                        <div style="position: relative;">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Name, skills (e.g. nurse)" class="glass-input" style="font-size: 0.82rem; padding: 0.45rem 0.65rem 0.45rem 2rem; width: 100%;">
+                            <svg style="position: absolute; left: 0.65rem; top: 50%; transform: translateY(-50%); color: #94a3b8;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        </div>
                     </div>
 
                     <!-- Service Category -->
-                    <div style="margin-bottom: 1.25rem;">
-                        <label class="form-label" style="font-size: 0.82rem; font-weight: 700;">Care Specialty</label>
-                        <select name="service" class="glass-input" style="font-size: 0.88rem; padding: 0.55rem 0.8rem;">
-                            <option value="">All Services</option>
+                    <div style="margin-bottom: 0.85rem;">
+                        <label class="form-label" style="font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Care Specialty</label>
+                        <select name="service" class="glass-input" style="font-size: 0.82rem; padding: 0.45rem 0.65rem; width: 100%;">
+                            <option value="">All Care Specialties</option>
                             @foreach ($services as $s)
                                 <option value="{{ $s->slug }}" {{ request('service') == $s->slug ? 'selected' : '' }}>
                                     {{ $s->name }}
@@ -55,81 +85,105 @@
                         </select>
                     </div>
 
-                    <!-- Division -->
-                    <div style="margin-bottom: 1.25rem;">
-                        <label class="form-label" style="font-size: 0.82rem; font-weight: 700;">Division</label>
-                        <select name="division_id" id="marketDivSelect" class="glass-input" style="font-size: 0.88rem; padding: 0.55rem 0.8rem;">
-                            <option value="">All Divisions</option>
-                            @foreach ($divisions as $d)
-                                <option value="{{ $d->id }}" {{ request('division_id') == $d->id ? 'selected' : '' }}>
-                                    {{ $d->name }}
-                                </option>
-                            @endforeach
-                        </select>
+                    <!-- Division & District side-by-side -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.85rem;">
+                        <div>
+                            <label class="form-label" style="font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Division</label>
+                            <select name="division_id" id="marketDivSelect" class="glass-input" style="font-size: 0.82rem; padding: 0.45rem 0.5rem; width: 100%;">
+                                <option value="">All</option>
+                                @foreach ($divisions as $d)
+                                    <option value="{{ $d->id }}" {{ request('division_id') == $d->id ? 'selected' : '' }}>
+                                        {{ $d->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label" style="font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">District</label>
+                            <select name="district_id" id="marketDistSelect" class="glass-input" style="font-size: 0.82rem; padding: 0.45rem 0.5rem; width: 100%;">
+                                <option value="">All</option>
+                                @foreach ($districts as $dst)
+                                    <option value="{{ $dst->id }}" data-division-id="{{ $dst->parent_id }}" {{ request('district_id') == $dst->id ? 'selected' : '' }}>
+                                        {{ $dst->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
-                    <!-- District -->
-                    <div style="margin-bottom: 1.25rem;">
-                        <label class="form-label" style="font-size: 0.82rem; font-weight: 700;">District</label>
-                        <select name="district_id" id="marketDistSelect" class="glass-input" style="font-size: 0.88rem; padding: 0.55rem 0.8rem;">
-                            <option value="">All Districts</option>
-                            @foreach ($districts as $dst)
-                                <option value="{{ $dst->id }}" data-division-id="{{ $dst->parent_id }}" {{ request('district_id') == $dst->id ? 'selected' : '' }}>
-                                    {{ $dst->name }}
-                                </option>
-                            @endforeach
-                        </select>
+                    <!-- Gender Segmented Pill Buttons -->
+                    <div style="margin-bottom: 0.85rem;">
+                        <label class="form-label" style="font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Caregiver Gender</label>
+                        <div style="display: flex; gap: 0.25rem; background: #f1f5f9; padding: 3px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
+                            <label style="flex: 1; text-align: center; margin: 0; cursor: pointer;">
+                                <input type="radio" name="gender" value="" {{ !request('gender') ? 'checked' : '' }} style="display: none;" onchange="this.form.submit()">
+                                <span class="segmented-pill {{ !request('gender') ? 'active' : '' }}">Any</span>
+                            </label>
+                            <label style="flex: 1; text-align: center; margin: 0; cursor: pointer;">
+                                <input type="radio" name="gender" value="female" {{ request('gender') == 'female' ? 'checked' : '' }} style="display: none;" onchange="this.form.submit()">
+                                <span class="segmented-pill {{ request('gender') == 'female' ? 'active' : '' }}">Female</span>
+                            </label>
+                            <label style="flex: 1; text-align: center; margin: 0; cursor: pointer;">
+                                <input type="radio" name="gender" value="male" {{ request('gender') == 'male' ? 'checked' : '' }} style="display: none;" onchange="this.form.submit()">
+                                <span class="segmented-pill {{ request('gender') == 'male' ? 'active' : '' }}">Male</span>
+                            </label>
+                        </div>
                     </div>
 
-                    <!-- Gender -->
-                    <div style="margin-bottom: 1.25rem;">
-                        <label class="form-label" style="font-size: 0.82rem; font-weight: 700;">Caregiver Gender</label>
-                        <select name="gender" class="glass-input" style="font-size: 0.88rem; padding: 0.55rem 0.8rem;">
-                            <option value="">Any Gender</option>
-                            <option value="female" {{ request('gender') == 'female' ? 'selected' : '' }}>Female Caregiver</option>
-                            <option value="male" {{ request('gender') == 'male' ? 'selected' : '' }}>Male Caregiver</option>
-                        </select>
+                    <!-- Shift Arrangement Segmented Pills -->
+                    <div style="margin-bottom: 0.85rem;">
+                        <label class="form-label" style="font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Shift Type</label>
+                        <div style="display: flex; gap: 0.25rem; background: #f1f5f9; padding: 3px; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8);">
+                            <label style="flex: 1; text-align: center; margin: 0; cursor: pointer;">
+                                <input type="radio" name="live_type" value="" {{ !request('live_type') ? 'checked' : '' }} style="display: none;" onchange="this.form.submit()">
+                                <span class="segmented-pill {{ !request('live_type') ? 'active' : '' }}">Any</span>
+                            </label>
+                            <label style="flex: 1; text-align: center; margin: 0; cursor: pointer;">
+                                <input type="radio" name="live_type" value="live_out" {{ request('live_type') == 'live_out' ? 'checked' : '' }} style="display: none;" onchange="this.form.submit()">
+                                <span class="segmented-pill {{ request('live_type') == 'live_out' ? 'active' : '' }}">Day Shift</span>
+                            </label>
+                            <label style="flex: 1; text-align: center; margin: 0; cursor: pointer;">
+                                <input type="radio" name="live_type" value="live_in" {{ request('live_type') == 'live_in' ? 'checked' : '' }} style="display: none;" onchange="this.form.submit()">
+                                <span class="segmented-pill {{ request('live_type') == 'live_in' ? 'active' : '' }}">24/7 Live-In</span>
+                            </label>
+                        </div>
                     </div>
 
-                    <!-- Minimum Experience -->
-                    <div style="margin-bottom: 1.25rem;">
-                        <label class="form-label" style="font-size: 0.82rem; font-weight: 700;">Minimum Experience</label>
-                        <select name="experience" class="glass-input" style="font-size: 0.88rem; padding: 0.55rem 0.8rem;">
-                            <option value="">Any Experience</option>
-                            <option value="2" {{ request('experience') == '2' ? 'selected' : '' }}>2+ Years</option>
-                            <option value="4" {{ request('experience') == '4' ? 'selected' : '' }}>4+ Years</option>
-                            <option value="6" {{ request('experience') == '6' ? 'selected' : '' }}>6+ Years</option>
-                        </select>
+                    <!-- Experience & Max Rate side-by-side -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.85rem;">
+                        <div>
+                            <label class="form-label" style="font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Min Exp.</label>
+                            <select name="experience" class="glass-input" style="font-size: 0.82rem; padding: 0.45rem 0.5rem; width: 100%;">
+                                <option value="">Any</option>
+                                <option value="2" {{ request('experience') == '2' ? 'selected' : '' }}>2+ Yrs</option>
+                                <option value="4" {{ request('experience') == '4' ? 'selected' : '' }}>4+ Yrs</option>
+                                <option value="6" {{ request('experience') == '6' ? 'selected' : '' }}>6+ Yrs</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label" style="font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 0.25rem;">Max ৳/day</label>
+                            <input type="number" name="max_price" value="{{ request('max_price') }}" placeholder="e.g. 2500" class="glass-input" style="font-size: 0.82rem; padding: 0.45rem 0.5rem; width: 100%;">
+                        </div>
                     </div>
 
-                    <!-- Daily Rate Range -->
-                    <div style="margin-bottom: 1.25rem;">
-                        <label class="form-label" style="font-size: 0.82rem; font-weight: 700;">Max Daily Rate (৳)</label>
-                        <input type="number" name="max_price" value="{{ request('max_price') }}" placeholder="e.g. 2500" class="glass-input" style="font-size: 0.88rem; padding: 0.55rem 0.8rem;">
-                    </div>
-
-                    <!-- Live Type -->
-                    <div style="margin-bottom: 1.25rem;">
-                        <label class="form-label" style="font-size: 0.82rem; font-weight: 700;">Arrangement Type</label>
-                        <select name="live_type" class="glass-input" style="font-size: 0.88rem; padding: 0.55rem 0.8rem;">
-                            <option value="">Any</option>
-                            <option value="live_out" {{ request('live_type') == 'live_out' ? 'selected' : '' }}>Day Shift (Live-Out)</option>
-                            <option value="live_in" {{ request('live_type') == 'live_in' ? 'selected' : '' }}>24/7 (Live-In)</option>
-                            <option value="both" {{ request('live_type') == 'both' ? 'selected' : '' }}>Flexible</option>
-                        </select>
-                    </div>
-
-                    <!-- Availability -->
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; cursor: pointer;">
-                            <input type="checkbox" name="available_only" value="1" {{ request('available_only') ? 'checked' : '' }} style="width: 16px; height: 16px; accent-color: var(--brand-primary);">
-                            <span>Currently Available Only</span>
+                    <!-- Currently Available Only Checkbox -->
+                    <div style="margin-bottom: 1rem; padding: 0.35rem 0;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; cursor: pointer; color: #1e293b; font-weight: 600;">
+                            <input type="checkbox" name="available_only" value="1" {{ request('available_only') ? 'checked' : '' }} style="width: 16px; height: 16px; accent-color: #059669; border-radius: 4px;">
+                            <span>🟢 Available Now Only</span>
                         </label>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 0.9rem;">
-                        Apply Filters
-                    </button>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button type="submit" class="btn btn-primary btn-sm" style="flex: 1; padding: 0.55rem; font-size: 0.85rem; font-weight: 700; justify-content: center; border-radius: 10px;">
+                            Apply Filters
+                        </button>
+                        @if ($activeFilterCount > 0)
+                            <a href="{{ route('marketplace.index') }}" class="btn btn-secondary btn-sm" style="padding: 0.55rem 0.75rem; font-size: 0.85rem; border-radius: 10px;" title="Reset Filters">
+                                ✕
+                            </a>
+                        @endif
+                    </div>
                 </form>
             </aside>
 

@@ -58,7 +58,7 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(226, 232, 240, 0.8); padding-top: 0.75rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; border-top: 1px solid rgba(226, 232, 240, 0.8); padding-top: 0.75rem;">
                         <div style="font-size: 0.85rem; color: var(--text-secondary);">
                             Total: <strong>৳{{ number_format($booking->client_total) }}</strong> (Escrow Protected)
                         </div>
