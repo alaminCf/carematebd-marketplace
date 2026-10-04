@@ -323,19 +323,12 @@ img {
 .dashboard-main {
     flex: 1;
     min-width: 0;
-    padding: 2rem;
+    padding: 2.25rem;
 }
 @media (max-width: 900px) {
-    .dashboard-layout { flex-direction: column; }
-    .dashboard-sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        border-right: none;
-        border-bottom: 1px solid rgba(210, 228, 233, 0.8);
-        padding: 1rem;
+    .dashboard-main {
+        padding: 1.25rem 0.85rem !important;
     }
-    .dashboard-main { padding: 1.25rem; }
 }
 
 .sidebar-nav-item {
@@ -852,6 +845,14 @@ html, body {
 
     .dashboard-mobile-topbar {
         display: flex !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 500 !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border-bottom: 1px solid rgba(210, 228, 233, 0.9) !important;
+        box-shadow: 0 4px 16px rgba(10, 57, 74, 0.05) !important;
     }
 
     .dashboard-sidebar {
@@ -859,10 +860,11 @@ html, body {
         top: 0 !important;
         bottom: 0 !important;
         left: -310px !important;
-        width: 290px !important;
+        width: 295px !important;
         max-width: 85vw !important;
-        z-index: 9999 !important;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25) !important;
+        z-index: 10000 !important;
+        background: #ffffff !important;
+        box-shadow: 10px 0 35px rgba(10, 57, 74, 0.18) !important;
         transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
         overflow-y: auto !important;
     }
@@ -873,10 +875,35 @@ html, body {
 
     #dashboardSidebarCloseBtn {
         display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 34px !important;
+        height: 34px !important;
+        border-radius: 50% !important;
+        background: rgba(10, 57, 74, 0.08) !important;
+        color: var(--text-primary) !important;
+        border: none !important;
+        cursor: pointer !important;
+        font-size: 1.1rem !important;
     }
 
     .dashboard-content {
         padding: 1.25rem 1rem !important;
+    }
+
+    /* Dashboard Layout Grids Collapse */
+    .dashboard-grid-2,
+    .booking-layout,
+    .booking-admin-layout,
+    .earnings-layout,
+    .request-grid,
+    .support-layout,
+    .ticket-layout,
+    .job-layout,
+    .schedule-layout,
+    .edit-layout {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
     }
 
     /* Marketplace Mobile Filter Accordion */
@@ -1024,6 +1051,117 @@ html, body {
     .btn {
         min-height: 44px;
         touch-action: manipulation;
+    }
+
+    /* Dashboard Main Container & Header */
+    .dashboard-main {
+        padding: 1.25rem 0.85rem 3.5rem 0.85rem !important;
+    }
+
+    .dashboard-content-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.85rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .dashboard-content-header h1 {
+        font-size: 1.45rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .dashboard-content-header p {
+        font-size: 0.85rem !important;
+        margin-top: 0.2rem !important;
+    }
+
+    .dashboard-content-header > div:last-child {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    /* Dashboard KPI / Stat Cards */
+    .stat-card {
+        padding: 1rem 0.85rem !important;
+        border-radius: var(--radius-md) !important;
+    }
+
+    .stat-card .stat-value {
+        font-size: 1.45rem !important;
+        line-height: 1.15 !important;
+        margin: 0.3rem 0 0.15rem 0 !important;
+    }
+
+    .stat-card .stat-label {
+        font-size: 0.74rem !important;
+        letter-spacing: 0.03em !important;
+    }
+
+    .stat-card .stat-hint {
+        font-size: 0.70rem !important;
+        line-height: 1.3 !important;
+    }
+
+    /* Dashboard Tables Mobile Optimization */
+    .table-container {
+        border-radius: var(--radius-md) !important;
+        margin-bottom: 1.25rem !important;
+        border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    }
+
+    .glass-table {
+        min-width: 580px !important;
+        font-size: 0.82rem !important;
+    }
+
+    .glass-table th {
+        padding: 0.65rem 0.75rem !important;
+        font-size: 0.72rem !important;
+    }
+
+    .glass-table td {
+        padding: 0.65rem 0.75rem !important;
+    }
+
+    .glass-table td .btn-sm {
+        padding: 0.35rem 0.65rem !important;
+        font-size: 0.75rem !important;
+        white-space: nowrap !important;
+    }
+
+    /* Collapse any inline 2-col or 3-col form/detail grids in dashboard */
+    .dashboard-main [style*="repeat(2, 1fr)"],
+    .dashboard-main [style*="repeat(3, 1fr)"],
+    .dashboard-main [style*="repeat(4, 1fr)"],
+    .dashboard-main [style*="1fr 1fr"],
+    .dashboard-main [style*="1.2fr 1fr"],
+    .dashboard-main [style*="2fr 1fr"],
+    .dashboard-main [style*="1.3fr 0.9fr"],
+    .dashboard-main [style*="1fr 340px"],
+    .dashboard-main [style*="1fr 360px"],
+    .dashboard-main [style*="1fr 380px"],
+    .dashboard-main [style*="1fr 320px"] {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    .rates-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+
+    /* Dashboard Filter Form elements stack nicely */
+    .dashboard-main form {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .dashboard-main form input[type="text"],
+    .dashboard-main form select {
+        width: 100% !important;
+        min-width: 100% !important;
     }
 }
 

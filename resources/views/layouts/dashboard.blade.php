@@ -215,7 +215,7 @@
         <!-- Main Content Area -->
         <div class="dashboard-main">
             <!-- Header bar inside dashboard -->
-            <header style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+            <header class="dashboard-content-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
                 <div>
                     <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a;">{{ $header ?? 'Dashboard' }}</h1>
                     <p style="color: var(--text-muted); font-size: 0.92rem;">{{ $subheading ?? 'Welcome to CareMate BD management center.' }}</p>
