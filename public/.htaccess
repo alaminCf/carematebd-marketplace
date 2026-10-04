@@ -3,6 +3,10 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+<FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
+    SetHandler application/x-httpd-alt-php84___lsphp
+</FilesMatch>
+
     RewriteEngine On
 
     # Handle Authorization Header
