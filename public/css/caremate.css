@@ -49,6 +49,9 @@ html {
     font-size: 16px;
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
 }
 
 body {
@@ -58,7 +61,15 @@ body {
     background-attachment: fixed;
     min-height: 100vh;
     line-height: 1.55;
-    overflow-x: hidden;
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    width: 100% !important;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+}
+
+img, svg, video, canvas, audio, iframe, embed, object {
+    max-width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -283,6 +294,223 @@ img {
 @media (max-width: 640px) {
     .grid-cols-4, .grid-cols-3, .grid-cols-2 { grid-template-columns: 1fr; }
     .glass-card { padding: 1.25rem; border-radius: var(--radius-md); }
+}
+
+/* Page Intro Standard Headers */
+.page-intro-header {
+    text-align: center;
+    max-width: 750px;
+    margin: 0 auto 3rem auto;
+    padding: 0 0.5rem;
+}
+.page-intro-tag {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brand-primary);
+    margin-bottom: 0.5rem;
+}
+.page-intro-title {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0.85rem;
+    line-height: 1.2;
+    word-break: break-word;
+}
+.page-intro-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.65;
+    word-break: break-word;
+}
+
+/* How It Works - Detailed Step Cards */
+.steps-detail-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    margin-bottom: 3.5rem;
+}
+.step-detail-card {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.75rem;
+    padding: 2.25rem;
+    border-radius: var(--radius-xl);
+}
+.step-badge {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 900;
+    flex-shrink: 0;
+}
+.step-badge-1 { background: #e0f2fe; color: #0284c7; }
+.step-badge-2 { background: #dcfce7; color: #059669; }
+.step-badge-3 { background: #fef3c7; color: #d97706; }
+.step-badge-4 { background: #ccfbf1; color: #0d9488; }
+.step-body {
+    flex: 1;
+    min-width: 0;
+}
+.step-body h3 {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+}
+.step-body p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+}
+.step-checklist {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+.cta-banner-card {
+    padding: 3rem;
+    text-align: center;
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(224, 242, 254, 0.75) 100%);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+}
+.cta-banner-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0.85rem;
+    line-height: 1.25;
+}
+.cta-banner-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 1.75rem auto;
+    line-height: 1.6;
+}
+.cta-banner-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Service Show Hero Section */
+.service-hero-card {
+    padding: 0;
+    overflow: hidden;
+    border-radius: var(--radius-xl);
+    margin-bottom: 3.5rem;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+}
+.service-hero-content {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+.service-hero-title {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+.service-hero-desc {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 1.75rem;
+}
+.service-rate-banner {
+    background: rgba(10, 57, 74, 0.06);
+    border-left: 4px solid var(--brand-primary);
+    padding: 1rem 1.25rem;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin-bottom: 2rem;
+}
+.service-hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.service-hero-media {
+    min-height: 380px;
+    height: 100%;
+}
+.service-hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.service-staff-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+.service-staff-count {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--brand-primary);
+}
+
+/* Contact Page Grid */
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 3rem;
+}
+.contact-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+/* About Page Grids */
+.about-mission-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+.about-card {
+    padding: 2.5rem;
+    border-radius: var(--radius-xl);
+}
+.about-pillars-card {
+    padding: 3rem;
+    border-radius: var(--radius-xl);
+    margin-bottom: 4rem;
+}
+.about-pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+.about-hq-card {
+    padding: 2.5rem;
+    border-radius: var(--radius-xl);
+    text-align: center;
 }
 
 /* Flex utilities */
@@ -1203,6 +1431,188 @@ html, body {
         grid-template-columns: 1fr !important;
         gap: 2rem !important;
         text-align: left !important;
+    }
+
+    /* Mobile Page Intro Typography */
+    .page-intro-header {
+        margin-bottom: 2rem !important;
+        padding: 0 !important;
+    }
+    .page-intro-title {
+        font-size: 1.75rem !important;
+        line-height: 1.25 !important;
+        margin-bottom: 0.65rem !important;
+    }
+    .page-intro-subtitle {
+        font-size: 0.95rem !important;
+        line-height: 1.55 !important;
+    }
+
+    /* How It Works on Mobile Phones */
+    .steps-detail-wrapper {
+        gap: 1.15rem !important;
+        margin-bottom: 2.5rem !important;
+    }
+    .step-detail-card {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.85rem !important;
+        padding: 1.25rem 1rem !important;
+    }
+    .step-badge {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 1.15rem !important;
+        border-radius: 10px !important;
+    }
+    .step-body h3 {
+        font-size: 1.15rem !important;
+        margin-bottom: 0.45rem !important;
+        line-height: 1.35 !important;
+    }
+    .step-body p {
+        font-size: 0.9rem !important;
+        line-height: 1.55 !important;
+        margin-bottom: 0.85rem !important;
+    }
+    .step-checklist {
+        flex-direction: column !important;
+        gap: 0.4rem !important;
+        font-size: 0.82rem !important;
+    }
+    .cta-banner-card {
+        padding: 1.75rem 1.15rem !important;
+    }
+    .cta-banner-title {
+        font-size: 1.35rem !important;
+        line-height: 1.3 !important;
+    }
+    .cta-banner-subtitle {
+        font-size: 0.92rem !important;
+        margin-bottom: 1.25rem !important;
+    }
+    .cta-banner-actions {
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 0.75rem !important;
+    }
+    .cta-banner-actions .btn {
+        width: 100% !important;
+        padding: 0.75rem 1.25rem !important;
+    }
+
+    /* Service Hero Card on Mobile Phones */
+    .service-hero-card {
+        grid-template-columns: 1fr !important;
+        margin-bottom: 2.25rem !important;
+    }
+    .service-hero-content {
+        padding: 1.5rem 1.15rem !important;
+    }
+    .service-hero-title {
+        font-size: 1.75rem !important;
+        line-height: 1.25 !important;
+    }
+    .service-hero-desc {
+        font-size: 0.92rem !important;
+        margin-bottom: 1.25rem !important;
+    }
+    .service-rate-banner {
+        padding: 0.85rem 1rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+    .service-hero-actions {
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 0.75rem !important;
+    }
+    .service-hero-actions .btn {
+        width: 100% !important;
+    }
+    .service-hero-media {
+        min-height: 220px !important;
+        max-height: 260px !important;
+        height: 240px !important;
+        order: -1;
+    }
+    .service-staff-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Contact Page on Mobile Phones */
+    .contact-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+    .contact-form-row {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+
+    /* About Page on Mobile Phones */
+    .about-mission-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+        margin-bottom: 2.5rem !important;
+    }
+    .about-card {
+        padding: 1.5rem 1.15rem !important;
+    }
+    .about-pillars-card {
+        padding: 1.5rem 1.15rem !important;
+        margin-bottom: 2.5rem !important;
+    }
+    .about-pillars-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+    .about-hq-card {
+        padding: 1.5rem 1.15rem !important;
+    }
+
+    /* Comprehensive Grid Stacking Fallback for all layouts */
+    .profile-layout,
+    .request-grid,
+    .booking-layout,
+    .support-layout,
+    .ticket-layout {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    /* Inline multi-column grids collapse gracefully */
+    [style*="grid-template-columns: 1.1fr"],
+    [style*="grid-template-columns: 1.15fr"],
+    [style*="grid-template-columns: 1.2fr"],
+    [style*="grid-template-columns: 1fr 1.2fr"],
+    [style*="grid-template-columns: 1fr 320px"],
+    [style*="grid-template-columns: 1fr 340px"],
+    [style*="grid-template-columns: 1fr 360px"],
+    [style*="grid-template-columns: 1fr 380px"],
+    [style*="grid-template-columns: 80px 1fr"],
+    [style*="grid-template-columns: 1fr 1fr 1fr"],
+    [style*="grid-template-columns: 1.2fr 1fr 1fr"],
+    [style*="grid-template-columns: repeat(3, 1fr)"],
+    [style*="grid-template-columns: repeat(4, 1fr)"],
+    [style*="grid-template-columns: repeat(auto-fit"] {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    [style*="grid-template-columns: 1fr 1fr"],
+    [style*="grid-template-columns: 1.2fr 1fr"],
+    [style*="grid-template-columns: repeat(2, 1fr)"] {
+        grid-template-columns: 1fr !important;
+        gap: 0.85rem !important;
+    }
+
+    /* Exceptions: KPI stats retain 2 columns */
+    .stats-grid,
+    .dashboard-stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
     }
 
     /* Buttons touch sizing */

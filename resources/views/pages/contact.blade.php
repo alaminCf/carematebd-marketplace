@@ -3,19 +3,19 @@
     <x-slot:description>Contact CareMate BD at ICT Tower, Agargaon, Dhaka. 24/7 care hotline, emergency caregiver dispatch, and customer support.</x-slot:description>
 
     <div class="container" style="padding: 3rem 1.25rem 5rem 1.25rem;">
-        <div style="text-align: center; max-width: 680px; margin: 0 auto 3.5rem auto;">
-            <div style="display: inline-block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-primary); margin-bottom: 0.5rem;">
+        <div class="page-intro-header">
+            <div class="page-intro-tag">
                 We Are Here 24/7
             </div>
-            <h1 style="font-size: 2.8rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem;">
+            <h1 class="page-intro-title">
                 Care Coordination Desk
             </h1>
-            <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.6;">
+            <p class="page-intro-subtitle">
                 Have an urgent care emergency, need help matching a specialized nurse, or have questions? Send us a message or call our direct hotline.
             </p>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem;" class="contact-grid">
+        <div class="contact-grid">
             <!-- Left Info Panel -->
             <div>
                 <div class="glass-card" style="padding: 2.25rem; border-radius: var(--radius-xl); margin-bottom: 2rem;">
@@ -108,7 +108,7 @@
                         @enderror
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                    <div class="contact-form-row">
                         <div>
                             <label class="form-label">Email Address <span style="color: #ef4444;">*</span></label>
                             <input type="email" name="email" value="{{ old('email') }}" required placeholder="asif@example.com" class="glass-input">

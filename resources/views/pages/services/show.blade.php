@@ -4,30 +4,30 @@
 
     <div class="container" style="padding: 3rem 1.25rem 5rem 1.25rem;">
         <!-- Service Hero Banner -->
-        <div class="glass-card" style="padding: 0; overflow: hidden; border-radius: var(--radius-xl); margin-bottom: 3.5rem; display: grid; grid-template-columns: 1.1fr 0.9fr;">
-            <div style="padding: 3rem; display: flex; flex-direction: column; justify-content: center;">
+        <div class="glass-card service-hero-card">
+            <div class="service-hero-content">
                 <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
                     <a href="{{ route('services.index') }}" style="font-size: 0.85rem; color: var(--text-muted);">Services</a>
                     <span style="color: var(--text-muted);">/</span>
                     <span style="font-size: 0.85rem; color: var(--brand-primary); font-weight: 700;">{{ $service->name }}</span>
                 </div>
 
-                <h1 style="font-size: 2.6rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; line-height: 1.2;">
+                <h1 class="service-hero-title">
                     {{ $service->name }}
                 </h1>
 
-                <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 1.75rem;">
+                <p class="service-hero-desc">
                     {{ $service->description }}
                 </p>
 
-                <div style="background: rgba(10, 57, 74, 0.06); border-left: 4px solid var(--brand-primary); padding: 1rem 1.25rem; border-radius: 0 var(--radius-md) var(--radius-md) 0; margin-bottom: 2rem;">
+                <div class="service-rate-banner">
                     <div style="font-size: 0.82rem; font-weight: 700; color: #0a394a; text-transform: uppercase;">Standard Platform Baseline Rate</div>
                     <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-top: 0.25rem;">
                         ৳{{ number_format($service->base_rate_daily) }} <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-muted);">per day (negotiable depending on condition)</span>
                     </div>
                 </div>
 
-                <div style="display: flex; gap: 1rem;">
+                <div class="service-hero-actions">
                     <a href="{{ route('marketplace.index', ['service' => $service->slug]) }}" class="btn btn-primary btn-lg">
                         Find {{ $service->name }} Staff
                     </a>
@@ -37,14 +37,14 @@
                 </div>
             </div>
 
-            <div style="min-height: 380px;">
-                <img src="{{ $service->imageUrl() }}" alt="{{ $service->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+            <div class="service-hero-media">
+                <img src="{{ $service->imageUrl() }}" alt="{{ $service->name }}">
             </div>
         </div>
 
         <!-- Available Staff Providing This Service -->
         <div>
-            <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 2rem;">
+            <div class="service-staff-header">
                 <div>
                     <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a;">
                         Verified {{ $service->name }} Caregivers
@@ -53,7 +53,7 @@
                         All caregivers below are qualified, background-checked, and ready to serve your family.
                     </p>
                 </div>
-                <span style="font-size: 0.9rem; font-weight: 700; color: var(--brand-primary);">
+                <span class="service-staff-count">
                     {{ $caregivers->total() }} Caregivers Available
                 </span>
             </div>
