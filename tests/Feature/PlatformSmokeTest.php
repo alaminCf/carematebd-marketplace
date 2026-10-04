@@ -291,4 +291,16 @@ class PlatformSmokeTest extends TestCase
 
         $this->assertEquals('pending_verification', $caregiverUser->caregiver->fresh()->status->value);
     }
+
+    public function test_locale_switcher_changes_language_and_persists(): void
+    {
+        $response = $this->get('/locale/bn');
+        $response->assertSessionHas('locale', 'bn');
+        $response->assertCookie('caremate_locale', 'bn');
+
+        // Test English switch back
+        $responseEn = $this->get('/locale/en');
+        $responseEn->assertSessionHas('locale', 'en');
+        $responseEn->assertCookie('caremate_locale', 'en');
+    }
 }

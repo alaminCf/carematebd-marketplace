@@ -9,37 +9,37 @@
                 <div>
                     <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(10, 57, 74, 0.08); border: 1px solid rgba(10, 57, 74, 0.2); padding: 0.4rem 0.9rem; border-radius: var(--radius-pill); font-size: 0.82rem; font-weight: 700; color: #0a394a; margin-bottom: 1.25rem;">
                         <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
-                        Bangladesh's #1 Verified Caregiver Marketplace
+                        {{ __("Bangladesh's #1 Verified Caregiver Marketplace") }}
                     </div>
 
                     <h1 style="font-size: 3.25rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 1.25rem; color: #092632;">
-                        Care that feels like <span style="background: linear-gradient(135deg, #0a394a 0%, #15798e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">family</span>, found in minutes.
+                        {{ __('Care that feels like family, found in minutes.') }}
                     </h1>
 
                     <p style="font-size: 1.15rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 2rem;">
-                        Compassionate, government NID & background-checked caregivers for your parents, children, and patients. Safe, verified, and coordinated end-to-end by CareMate Care Managers.
+                        {{ __('Compassionate, government NID & background-checked caregivers for your parents, children, and patients. Safe, verified, and coordinated end-to-end by CareMate Care Managers.') }}
                     </p>
 
                     <!-- Quick Search Glass Card -->
                     <div class="glass-card" style="padding: 1.25rem; margin-bottom: 2rem; border-radius: var(--radius-lg); box-shadow: var(--glass-shadow-lg);">
                         <form action="{{ route('marketplace.index') }}" method="GET" style="display: grid; grid-template-columns: 1.5fr 1fr auto; gap: 0.75rem; align-items: center;" class="hero-search-form">
                             <div>
-                                <label style="display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem;">Service Needed</label>
+                                <label style="display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem;">{{ __('Service Needed') }}</label>
                                 <select name="service" class="glass-input" style="padding: 0.6rem 0.85rem; font-size: 0.9rem;">
-                                    <option value="">All Caregiver Specialties</option>
+                                    <option value="">{{ __('All Caregiver Specialties') }}</option>
                                     @foreach ($services as $service)
-                                        <option value="{{ $service->slug }}">{{ $service->name }}</option>
+                                        <option value="{{ $service->slug }}">{{ __($service->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div>
-                                <label style="display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem;">Care Location</label>
+                                <label style="display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem;">{{ __('Care Location') }}</label>
                                 <input type="text" name="search" placeholder="e.g. Dhanmondi, Uttara" class="glass-input" style="padding: 0.6rem 0.85rem; font-size: 0.9rem;">
                             </div>
                             <div style="align-self: flex-end;">
                                 <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.7rem 1.4rem;">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                                    <span>Find Care</span>
+                                    <span>{{ __('Find Care') }}</span>
                                 </button>
                             </div>
                         </form>
@@ -48,13 +48,13 @@
                     <!-- Trust Points -->
                     <div style="display: flex; align-items: center; gap: 1.75rem; font-size: 0.88rem; color: var(--text-secondary); flex-wrap: wrap;">
                         <div style="display: flex; align-items: center; gap: 0.4rem;">
-                            <span style="color: #059669; font-weight: 800;">✓</span> NID & Police Verified
+                            <span style="color: #059669; font-weight: 800;">✓</span> {{ __('NID & Police Verified') }}
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.4rem;">
-                            <span style="color: #059669; font-weight: 800;">✓</span> Zero Phone Leaks (Privacy)
+                            <span style="color: #059669; font-weight: 800;">✓</span> {{ __('Zero Phone Leaks (Privacy)') }}
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.4rem;">
-                            <span style="color: #059669; font-weight: 800;">✓</span> bKash / Nagad Escrow
+                            <span style="color: #059669; font-weight: 800;">✓</span> {{ __('bKash / Nagad Escrow') }}
                         </div>
                     </div>
 
@@ -64,7 +64,7 @@
                             <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.516 2 2.031 6.484 2.031 12C2.031 13.805 2.508 15.5 3.336 16.969L2 22L7.172 20.688C8.594 21.461 10.258 21.906 12.031 21.906C17.547 21.906 22.031 17.422 22.031 12C22.031 6.484 17.547 2 12.031 2ZM12.031 20.156C10.453 20.156 8.969 19.719 7.688 18.969L7.375 18.781L4.312 19.562L5.125 16.578L4.922 16.25C4.109 14.953 3.672 13.5 3.672 12C3.672 7.391 7.422 3.641 12.031 3.641C16.641 3.641 20.391 7.391 20.391 12C20.391 16.609 16.641 20.156 12.031 20.156ZM16.609 14.547C16.359 14.422 15.125 13.812 14.891 13.734C14.656 13.656 14.484 13.609 14.312 13.859C14.141 14.109 13.656 14.688 13.5 14.859C13.344 15.031 13.188 15.047 12.938 14.922C12.688 14.797 11.875 14.531 10.922 13.68C10.172 13.008 9.672 12.18 9.516 11.93C9.359 11.68 9.5 11.539 9.625 11.414C9.734 11.305 9.875 11.125 10 10.984C10.125 10.844 10.172 10.734 10.25 10.578C10.328 10.422 10.281 10.281 10.219 10.156C10.156 10.031 9.656 8.812 9.453 8.312C9.25 7.828 9.047 7.891 8.891 7.891C8.75 7.891 8.578 7.875 8.406 7.875C8.234 7.875 7.953 7.938 7.719 8.188C7.484 8.438 6.828 9.047 6.828 10.281C6.828 11.516 7.734 12.703 7.859 12.875C7.984 13.047 9.641 15.609 12.188 16.703C12.797 16.969 13.266 17.125 13.641 17.25C14.25 17.438 14.812 17.406 15.25 17.344C15.75 17.266 16.781 16.719 17 16.109C17.219 15.5 17.219 14.984 17.156 14.859C17.094 14.734 16.859 14.672 16.609 14.547Z"/></svg>
                         </span>
                         <div style="font-size: 0.88rem; color: #064e3b;">
-                            Prefer to talk directly? <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20need%20quick%20caregiver%20assistance." target="_blank" rel="noopener noreferrer" style="color: #075E54; font-weight: 800; text-decoration: underline; margin-left: 0.25rem;">Chat on WhatsApp with Care Coordinator →</a>
+                            {{ __('Prefer to talk directly?') }} <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20need%20quick%20caregiver%20assistance." target="_blank" rel="noopener noreferrer" style="color: #075E54; font-weight: 800; text-decoration: underline; margin-left: 0.25rem;">{{ __('Chat on WhatsApp with Care Coordinator →') }}</a>
                         </div>
                     </div>
                 </div>

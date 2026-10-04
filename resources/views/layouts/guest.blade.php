@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.8.0">
+    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.9.0">
     @stack('styles')
 </head>
 <body>
@@ -38,31 +38,37 @@
 
             <!-- Desktop Nav Links -->
             <nav style="display: flex; align-items: center; gap: 1.75rem;" class="desktop-nav">
-                <a href="{{ route('services.index') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">Services</a>
-                <a href="{{ route('marketplace.index') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">Caregivers</a>
-                <a href="{{ route('how-it-works') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">How It Works</a>
-                <a href="{{ route('about') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">About</a>
-                <a href="{{ route('faq') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">FAQ</a>
-                <a href="{{ route('contact') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">Contact</a>
+                <a href="{{ route('services.index') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">{{ __('Services') }}</a>
+                <a href="{{ route('marketplace.index') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">{{ __('Caregivers') }}</a>
+                <a href="{{ route('how-it-works') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">{{ __('How It Works') }}</a>
+                <a href="{{ route('about') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">{{ __('About') }}</a>
+                <a href="{{ route('faq') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">{{ __('FAQ') }}</a>
+                <a href="{{ route('contact') }}" style="font-weight: 600; color: var(--text-secondary); font-size: 0.95rem;">{{ __('Contact') }}</a>
             </nav>
 
             <!-- Actions -->
             <div style="display: flex; align-items: center; gap: 0.6rem;">
+                <!-- Language Switcher Capsule Toggle (Matching user reference design) -->
+                <div class="lang-switch-toggle" title="Switch Language / ভাষা পরিবর্তন করুন">
+                    <a href="{{ route('locale.switch', 'en') }}" class="lang-switch-pill {{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
+                    <a href="{{ route('locale.switch', 'bn') }}" class="lang-switch-pill {{ app()->getLocale() === 'bn' ? 'active' : '' }}">বাংলা</a>
+                </div>
+
                 <!-- Desktop-only Action buttons -->
                 <div class="desktop-actions" style="display: flex; align-items: center; gap: 0.6rem;">
                     @auth
                         <a href="{{ route(auth()->user()->role->dashboardRoute()) }}" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 0.4rem;">
                             <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" style="width: 24px; height: 24px; border-radius: 50%;">
-                            <span>Dashboard</span>
+                            <span>{{ __('Dashboard') }}</span>
                         </a>
                         <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                             @csrf
-                            <button type="submit" class="btn btn-sm" style="background: transparent; color: var(--text-muted); border: none; cursor: pointer;">Logout</button>
+                            <button type="submit" class="btn btn-sm" style="background: transparent; color: var(--text-muted); border: none; cursor: pointer;">{{ __('Logout') }}</button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-secondary btn-sm" style="font-weight: 600;">Login</a>
-                        <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 600;">Become Caregiver</a>
-                        <a href="{{ route('marketplace.index') }}" class="btn btn-primary btn-sm" style="font-weight: 700;">Find Caregiver</a>
+                        <a href="{{ route('login') }}" class="btn btn-secondary btn-sm" style="font-weight: 600;">{{ __('Login') }}</a>
+                        <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 600;">{{ __('Become Caregiver') }}</a>
+                        <a href="{{ route('marketplace.index') }}" class="btn btn-primary btn-sm" style="font-weight: 700;">{{ __('Find Caregiver') }}</a>
                     @endauth
                 </div>
 
@@ -291,30 +297,30 @@
     <nav class="mobile-app-dock" aria-label="Mobile Bottom Navigation">
         <a href="{{ route('home') }}" class="mobile-app-dock-item {{ request()->routeIs('home') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-            <span>Home</span>
+            <span>{{ __('Home') }}</span>
         </a>
         <a href="{{ route('marketplace.index') }}" class="mobile-app-dock-item {{ request()->routeIs('marketplace.*') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <span>Caregivers</span>
+            <span>{{ __('Caregivers') }}</span>
         </a>
         <a href="{{ route('services.index') }}" class="mobile-app-dock-item {{ request()->routeIs('services.*') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-            <span>Services</span>
+            <span>{{ __('Services') }}</span>
         </a>
         <a href="{{ route('how-it-works') }}" class="mobile-app-dock-item {{ request()->routeIs('how-it-works') ? 'active' : '' }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            <span>How It Works</span>
+            <span>{{ __('How It Works') }}</span>
         </a>
         @auth
             @php $authRole = auth()->user()->role->value; @endphp
             <a href="{{ $authRole === 'admin' ? route('admin.dashboard') : ($authRole === 'caregiver' ? route('caregiver.dashboard') : route('client.dashboard')) }}" class="mobile-app-dock-item {{ request()->routeIs('*.dashboard') ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <span>Portal</span>
+                <span>{{ __('Portal') }}</span>
             </a>
         @else
             <a href="{{ route('login') }}" class="mobile-app-dock-item {{ request()->routeIs('login') ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <span>Login</span>
+                <span>{{ __('Login') }}</span>
             </a>
         @endauth
     </nav>

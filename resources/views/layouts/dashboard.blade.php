@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.8.0">
+    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.9.0">
     <style>
         @media (max-width: 900px) {
             .dashboard-layout { display: block !important; }
@@ -157,6 +157,10 @@
                 </a>
             </div>
             <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div class="lang-switch-toggle" title="Switch Language / ভাষা পরিবর্তন করুন">
+                    <a href="{{ route('locale.switch', 'en') }}" class="lang-switch-pill {{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
+                    <a href="{{ route('locale.switch', 'bn') }}" class="lang-switch-pill {{ app()->getLocale() === 'bn' ? 'active' : '' }}">বাংলা</a>
+                </div>
                 <x-badge :tone="$role === 'admin' ? 'danger' : ($role === 'caregiver' ? 'success' : 'primary')">
                     {{ strtoupper($role) }}
                 </x-badge>
@@ -167,12 +171,18 @@
         <!-- Sidebar -->
         <aside class="dashboard-sidebar" id="dashboardSidebar">
             <!-- Brand -->
-            <div class="dashboard-sidebar-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding: 0.25rem 0.5rem;">
+            <div class="dashboard-sidebar-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding: 0.25rem 0.5rem;">
                 <a href="{{ route('home') }}" style="display: flex; flex-direction: column; gap: 0.35rem; text-decoration: none;">
                     <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" style="height: 38px; width: auto; object-fit: contain; align-self: flex-start;">
                     <span style="display: inline-block; font-size: 0.68rem; color: #15798e; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding-left: 2px;">{{ ucfirst($role) }} Portal</span>
                 </a>
-                <button type="button" id="dashboardSidebarCloseBtn" class="mobile-only" aria-label="Close menu" style="background: rgba(10, 57, 74, 0.08); border: none; border-radius: 50%; width: 32px; height: 32px; display: none; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--text-primary); cursor: pointer;">✕</button>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div class="lang-switch-toggle" title="Switch Language / ভাষা পরিবর্তন করুন">
+                        <a href="{{ route('locale.switch', 'en') }}" class="lang-switch-pill {{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
+                        <a href="{{ route('locale.switch', 'bn') }}" class="lang-switch-pill {{ app()->getLocale() === 'bn' ? 'active' : '' }}">বাংলা</a>
+                    </div>
+                    <button type="button" id="dashboardSidebarCloseBtn" class="mobile-only" aria-label="Close menu" style="background: rgba(10, 57, 74, 0.08); border: none; border-radius: 50%; width: 32px; height: 32px; display: none; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--text-primary); cursor: pointer;">✕</button>
+                </div>
             </div>
 
             <!-- Navigation Links -->

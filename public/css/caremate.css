@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-    --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: 'Outfit', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-body: 'Plus Jakarta Sans', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     
     --bg-mesh: radial-gradient(at 0% 0%, rgba(214, 237, 242, 0.75) 0px, transparent 50%),
                radial-gradient(at 100% 0%, rgba(226, 243, 246, 0.7) 0px, transparent 50%),
@@ -130,6 +130,46 @@ img {
     top: 0;
     z-index: 50;
     transition: box-shadow 0.2s ease;
+}
+
+/* Language Switcher Capsule Toggle (Matching user reference design) */
+.lang-switch-toggle {
+    display: inline-flex;
+    align-items: center;
+    background: #eef2f6;
+    border: 1px solid rgba(203, 213, 225, 0.9);
+    border-radius: 9999px;
+    padding: 3px;
+    gap: 3px;
+    user-select: none;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.lang-switch-pill {
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #64748b;
+    text-decoration: none !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.1;
+    min-width: 32px;
+}
+
+.lang-switch-pill:hover:not(.active) {
+    color: #0f172a;
+}
+
+.lang-switch-pill.active {
+    background: #ffffff;
+    color: #0f172a;
+    font-weight: 800;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 .glass-input {
@@ -1356,6 +1396,17 @@ html, body {
 
     .header-whatsapp-btn {
         padding: 0.45rem 0.55rem !important;
+    }
+
+    .lang-switch-toggle {
+        padding: 2px !important;
+        gap: 2px !important;
+    }
+
+    .lang-switch-pill {
+        padding: 0.2rem 0.45rem !important;
+        font-size: 0.72rem !important;
+        min-width: 28px !important;
     }
 
     /* Hero Section */
