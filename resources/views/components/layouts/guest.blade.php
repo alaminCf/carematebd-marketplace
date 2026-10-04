@@ -19,8 +19,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v={{ file_exists(public_path('css/caremate.css')) ? filemtime(public_path('css/caremate.css')) : '3.0.1' }}">
+    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v={{ file_exists(public_path('css/caremate.css')) ? filemtime(public_path('css/caremate.css')) : '3.0.2' }}">
     <style>
+        html, body {
+            overflow-x: clip !important;
+        }
+        .glass-header {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+            background: rgba(255, 255, 255, 0.94) !important;
+            backdrop-filter: blur(20px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.85) !important;
+            box-shadow: 0 4px 20px rgba(10, 57, 74, 0.06) !important;
+        }
         .header-container {
             display: flex !important;
             align-items: center !important;
@@ -94,7 +107,7 @@
     </div>
 
     <!-- Navigation Bar -->
-    <header class="glass-header">
+    <header class="glass-header" style="position: sticky; top: 0; z-index: 1000;">
         <div class="container header-container" style="display: flex; align-items: center; justify-content: space-between; max-width: 1400px; width: 100%; margin: 0 auto; padding: 0.65rem 1.25rem;">
             <!-- Brand Logo -->
             <a href="{{ route('home') }}" class="header-brand-logo" style="display: flex; align-items: center; text-decoration: none; flex-shrink: 0;">
