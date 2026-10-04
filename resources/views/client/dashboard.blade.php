@@ -4,7 +4,7 @@
     <x-slot:subheading>Manage your family's care requests, active caregiver shifts, and safety coordination.</x-slot:subheading>
 
     <!-- Top KPI Stats Grid -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;" class="stats-grid">
+    <div class="stats-grid">
         <div class="glass-card stat-card">
             <span class="stat-label">Active Care Bookings</span>
             <div class="stat-value" style="color: #0a394a;">{{ $stats['active_bookings'] }}</div>
@@ -31,7 +31,7 @@
     </div>
 
     <!-- Active Bookings & Requests Sections -->
-    <div style="display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 2rem; margin-bottom: 3rem;" class="dashboard-grid-2">
+    <div class="dashboard-grid-2">
         <!-- Active Care Bookings -->
         <div>
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">

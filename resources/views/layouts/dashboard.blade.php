@@ -12,7 +12,69 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.5.0">
+    <style>
+        @media (max-width: 900px) {
+            .dashboard-layout { display: block !important; }
+            .dashboard-grid-2, .booking-layout, .booking-admin-layout, .earnings-layout, .request-grid, .support-layout, .ticket-layout, .job-layout, .schedule-layout, .edit-layout {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem !important;
+            }
+            .dashboard-sidebar {
+                position: fixed !important;
+                top: 0 !important;
+                bottom: 0 !important;
+                left: -320px !important;
+                width: 295px !important;
+                max-width: 85vw !important;
+                z-index: 10000 !important;
+                background: #ffffff !important;
+                box-shadow: 10px 0 35px rgba(10, 57, 74, 0.18) !important;
+                transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            }
+            .dashboard-sidebar.mobile-open { left: 0 !important; }
+            .dashboard-mobile-topbar { display: flex !important; }
+            .dashboard-main { padding: 1.25rem 0.85rem 4rem 0.85rem !important; }
+            .dashboard-main [style*="repeat(2, 1fr)"],
+            .dashboard-main [style*="repeat(3, 1fr)"],
+            .dashboard-main [style*="repeat(4, 1fr)"],
+            .dashboard-main [style*="1fr 1fr"],
+            .dashboard-main [style*="1.2fr 1fr"],
+            .dashboard-main [style*="2fr 1fr"],
+            .dashboard-main [style*="1.3fr 0.9fr"],
+            .dashboard-main [style*="1fr 340px"],
+            .dashboard-main [style*="1fr 360px"],
+            .dashboard-main [style*="1fr 380px"],
+            .dashboard-main [style*="1fr 320px"] {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+        }
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr !important;
+                gap: 0.85rem !important;
+            }
+            .stat-card {
+                padding: 1.15rem 1rem !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 0.35rem !important;
+            }
+            .stat-card .stat-value {
+                font-size: 1.55rem !important;
+                margin: 0.2rem 0 !important;
+            }
+            .table-container {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+            .glass-table {
+                min-width: 560px !important;
+            }
+        }
+    </style>
     @stack('styles')
 </head>
 <body>

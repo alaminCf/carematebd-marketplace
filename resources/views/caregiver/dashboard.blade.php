@@ -23,7 +23,7 @@
     @endif
 
     <!-- Top KPI Stats Grid -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;" class="stats-grid">
+    <div class="stats-grid">
         <div class="glass-card stat-card">
             <span class="stat-label">Pending Invitations</span>
             <div class="stat-value" style="color: #0a394a;">{{ $stats['pending_requests'] }}</div>
@@ -50,9 +50,9 @@
     </div>
 
     <!-- Assigned Requests & Upcoming Jobs Grid -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;" class="dashboard-grid-2">
+    <div class="dashboard-grid-2">
         <!-- Assigned Requests -->
-        <div class="glass-card" style="padding: 1.75rem; border-radius: var(--radius-xl);">
+        <div class="glass-card" style="padding: 1.5rem; border-radius: var(--radius-xl);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
                 <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a;">Assigned Care Requests</h3>
                 <a href="{{ route('caregiver.requests.index') }}" style="font-size: 0.82rem; font-weight: 700; color: var(--brand-primary);">View All →</a>
@@ -60,7 +60,7 @@
 
             @forelse ($assignedRequests as $req)
                 <div style="background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(226, 232, 240, 0.9); padding: 1.25rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
                         <span style="font-weight: 700; color: var(--brand-primary); font-size: 0.85rem;">#{{ $req->request_reference }}</span>
                         <x-badge :tone="$req->status->badgeTone()">{{ $req->status->label() }}</x-badge>
                     </div>
@@ -72,7 +72,7 @@
                         Schedule: {{ $req->start_date->format('M d') }} to {{ $req->end_date->format('M d, Y') }} • {{ ucfirst(str_replace('_', ' ', $req->shift_type)) }}
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(226, 232, 240, 0.8); padding-top: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; border-top: 1px solid rgba(226, 232, 240, 0.8); padding-top: 0.75rem;">
                         <div style="font-weight: 800; color: #059669; font-size: 0.95rem;">
                             Net Pay: ৳{{ number_format($req->caregiver_net_amount) }}
                         </div>
@@ -89,7 +89,7 @@
         </div>
 
         <!-- Upcoming & Active Jobs -->
-        <div class="glass-card" style="padding: 1.75rem; border-radius: var(--radius-xl);">
+        <div class="glass-card" style="padding: 1.5rem; border-radius: var(--radius-xl);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
                 <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a;">Active & Upcoming Jobs</h3>
                 <a href="{{ route('caregiver.jobs.index') }}" style="font-size: 0.82rem; font-weight: 700; color: var(--brand-primary);">View All →</a>
@@ -97,7 +97,7 @@
 
             @forelse ($upcomingJobs as $job)
                 <div style="background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(226, 232, 240, 0.9); padding: 1.25rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
                         <span style="font-weight: 700; color: var(--brand-primary); font-size: 0.85rem;">Booking #{{ $job->booking_reference }}</span>
                         <x-badge :tone="$job->status->badgeTone()">{{ $job->status->label() }}</x-badge>
                     </div>
@@ -109,7 +109,7 @@
                         {{ $job->start_date->format('M d') }} - {{ $job->end_date->format('M d, Y') }} ({{ $job->total_days }} days)
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(226, 232, 240, 0.8); padding-top: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; border-top: 1px solid rgba(226, 232, 240, 0.8); padding-top: 0.75rem;">
                         <div style="font-size: 0.82rem; color: var(--text-muted);">
                             📍 {{ $job->client->city }}
                         </div>

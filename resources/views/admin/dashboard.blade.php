@@ -4,7 +4,7 @@
     <x-slot:subheading>Real-time platform metrics, verification queues, and care mediation workflows.</x-slot:subheading>
 
     <!-- Top 4 Metrics -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;" class="stats-grid">
+    <div class="stats-grid">
         <div class="glass-card stat-card">
             <span class="stat-label">Platform GMV (Volume)</span>
             <div class="stat-value" style="color: #0a394a;">৳{{ number_format($stats['total_volume']) }}</div>
@@ -33,7 +33,7 @@
     </div>
 
     <!-- Quick Action / Triage Grids -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;" class="dashboard-grid-2">
+    <div class="dashboard-grid-2">
         <!-- Verification Queue (Pending Caregivers) -->
         <div class="glass-card" style="padding: 1.75rem; border-radius: var(--radius-xl);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
