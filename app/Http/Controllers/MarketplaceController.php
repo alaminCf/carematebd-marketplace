@@ -27,7 +27,9 @@ class MarketplaceController extends Controller
                     ->orWhere('city', 'like', "%{$search}%")
                     ->orWhere('caregiver_type', 'like', "%{$search}%")
                     ->orWhere('skills', 'like', "%{$search}%")
-                    ->orWhere('about', 'like', "%{$search}%");
+                    ->orWhere('about', 'like', "%{$search}%")
+                    ->orWhereHas('district', fn ($d) => $d->where('name', 'like', "%{$search}%"))
+                    ->orWhereHas('area', fn ($a) => $a->where('name', 'like', "%{$search}%"));
             });
         }
 

@@ -51,7 +51,12 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
-        return view('pages.home', compact('services', 'featuredCaregivers', 'stats', 'faqs', 'testimonials'));
+        $popularAreas = [
+            'Dhanmondi', 'Gulshan', 'Banani', 'Uttara', 'Mirpur',
+            'Mohammadpur', 'Bashundhara', 'Banasree', 'Sylhet', 'Chittagong',
+        ];
+
+        return view('pages.home', compact('services', 'featuredCaregivers', 'stats', 'faqs', 'testimonials', 'popularAreas'));
     }
 
     public function howItWorks(): View
