@@ -38,9 +38,11 @@
                                         </div>
                                         <div class="pathao-loc-details">
                                             <div class="pathao-loc-sub">
-                                                <span>{{ __('Your Care Location') }}</span>
-                                                <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span>
-                                                <span id="pathaoLocStatus" style="color: #059669; font-size: 0.68rem; text-transform: none; font-weight: 600;">{{ __('Auto-detecting...') }}</span>
+                                                <span class="pathao-loc-label">{{ __('Care Location') }}</span>
+                                                <span id="pathaoLocStatus" class="pathao-status-tag">
+                                                    <span class="pathao-status-dot"></span>
+                                                    <span class="pathao-status-text">{{ __('Detecting...') }}</span>
+                                                </span>
                                             </div>
                                             <div class="pathao-loc-name" id="pathaoLocationName">{{ __('Dhaka, Bangladesh') }}</div>
                                             <input type="hidden" name="search" id="heroLocationInput" value="Dhaka">
@@ -66,7 +68,7 @@
                                     @endforeach
                                 </div>
 
-                                <!-- Service Grid Select Chips (5 Chips in one neat row on desktop) -->
+                                <!-- Service Grid Select Chips (5 Chips in one neat row) -->
                                 <div class="pathao-services-grid">
                                     @php
                                         $serviceIcons = [
@@ -78,12 +80,19 @@
                                     @endphp
                                     <div class="pathao-service-chip active" data-slug="" onclick="selectHeroServiceChip('', this)">
                                         <span class="chip-icon">✨</span>
-                                        <span>{{ __('All Services') }}</span>
+                                        <span class="chip-text">{{ __('All Services') }}</span>
                                     </div>
                                     @foreach ($services as $service)
                                         <div class="pathao-service-chip" data-slug="{{ $service->slug }}" onclick="selectHeroServiceChip('{{ $service->slug }}', this)">
                                             <span class="chip-icon">{{ $serviceIcons[$service->slug] ?? '🤝' }}</span>
-                                            <span>{{ __($service->name) }}</span>
+                                            <span class="chip-text">
+                                                @if($service->slug === 'medical-transportation')
+                                                    <span class="d-none d-sm-inline">{{ __($service->name) }}</span>
+                                                    <span class="d-inline d-sm-none">{{ __('Transport') }}</span>
+                                                @else
+                                                    {{ __($service->name) }}
+                                                @endif
+                                            </span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -750,15 +759,21 @@
             }
         }
 
+        function updateLocationStatus(text) {
+            const locStatus = document.getElementById('pathaoLocStatus');
+            if (!locStatus) return;
+            const textEl = locStatus.querySelector('.pathao-status-text') || locStatus;
+            textEl.textContent = text;
+        }
+
         function applyLocationValue(searchVal, displayName, isManual = false) {
             const locNameEl = document.getElementById('pathaoLocationName');
             const locInputEl = document.getElementById('heroLocationInput');
-            const locStatusEl = document.getElementById('pathaoLocStatus');
             const btnTextEl = document.getElementById('findCareBtnText');
 
             if (locNameEl) locNameEl.textContent = displayName;
             if (locInputEl) locInputEl.value = searchVal;
-            if (locStatusEl && isManual) locStatusEl.textContent = '{{ __("Selected") }}';
+            if (isManual) updateLocationStatus('{{ __("Selected") }}');
             if (btnTextEl) btnTextEl.textContent = `{{ __("Find Caregiver in") }} ${searchVal}`;
 
             // Sync quick zone chip selection
@@ -789,28 +804,24 @@
         }
 
         async function fallbackToNetworkLocation() {
-            const locStatus = document.getElementById('pathaoLocStatus');
             try {
                 const data = await detectLocationApi();
                 if (data && data.success) {
                     applyLocationValue(data.area, data.display, false);
-                    if (locStatus) {
-                        locStatus.textContent = data.source === 'ip' ? '{{ __("Auto-detected (Network)") }}' : '{{ __("Ready") }}';
-                    }
+                    updateLocationStatus(data.source === 'ip' ? '{{ __("Network") }}' : '{{ __("Ready") }}');
                 }
             } catch (e) {
-                if (locStatus) locStatus.textContent = '{{ __("Ready") }}';
+                updateLocationStatus('{{ __("Ready") }}');
             }
         }
 
         async function detectCurrentLocation(userInitiated = false) {
             const pinIcon = document.getElementById('pathaoPinIcon');
-            const locStatus = document.getElementById('pathaoLocStatus');
             const gpsBtn = document.getElementById('pathaoGpsBtn');
 
             if (pinIcon) pinIcon.classList.add('locating');
             if (gpsBtn) gpsBtn.disabled = true;
-            if (locStatus) locStatus.textContent = '{{ __("Detecting location...") }}';
+            updateLocationStatus('{{ __("Detecting...") }}');
 
             if (!navigator.geolocation) {
                 if (userInitiated) {
@@ -830,7 +841,7 @@
                         const data = await detectLocationApi(lat, lon);
                         if (data && data.success) {
                             applyLocationValue(data.area, data.display, false);
-                            if (locStatus) locStatus.textContent = '{{ __("Auto-detected via GPS") }}';
+                            updateLocationStatus('{{ __("GPS Detected") }}');
                         } else {
                             await fallbackToNetworkLocation();
                         }
@@ -864,8 +875,7 @@
                     const data = JSON.parse(saved);
                     if (data && data.search && data.isManual) {
                         applyLocationValue(data.search, data.name || data.search, true);
-                        const locStatus = document.getElementById('pathaoLocStatus');
-                        if (locStatus) locStatus.textContent = '{{ __("Saved Location") }}';
+                        updateLocationStatus('{{ __("Saved") }}');
                         return;
                     }
                 }
