@@ -16,27 +16,37 @@
             <!-- Left Main Column -->
             <div>
                 <!-- Top Profile Card -->
-                <div class="glass-card caregiver-profile-card">
+                <div class="glass-card caregiver-profile-card" style="margin-bottom: 2rem !important; padding: 2.25rem; border-radius: var(--radius-xl);">
                     <div class="caregiver-header-flex">
                         <div class="caregiver-avatar-col">
                             <div class="caregiver-avatar-wrapper">
                                 <img src="{{ $profile['avatar_url'] }}" alt="{{ $profile['name'] }}" class="caregiver-avatar-img">
-                                <div class="caregiver-verified-badge" title="{{ __('Verified') }}">
-                                    ✓
+                                <div class="caregiver-verified-badge" title="{{ __('Verified CareMate Caregiver') }}">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
                                 </div>
                             </div>
                         </div>
 
                         <div class="caregiver-info-col">
                             <div class="caregiver-title-row">
-                                <h1 class="caregiver-name">
-                                    {{ $profile['name'] }}
-                                </h1>
-                                <x-badge tone="success">{{ __('Verified Caregiver') }}</x-badge>
+                                <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                                    <h1 class="caregiver-name">
+                                        {{ $profile['name'] }}
+                                    </h1>
+                                    <span class="badge-verified-tag">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                        <span>{{ __('Verified Caregiver') }}</span>
+                                    </span>
+                                </div>
+                                <div style="font-size: 0.8rem; font-weight: 700; color: #0a394a; background: rgba(10, 57, 74, 0.08); padding: 0.3rem 0.7rem; border-radius: var(--radius-pill);">
+                                    CareMate ID: #CM-{{ str_pad($profile['id'] ?? 100, 4, '0', STR_PAD_LEFT) }}
+                                </div>
                             </div>
 
                             <div class="caregiver-serving-location">
-                                📍 {{ __('Serving:') }} <strong>{{ $profile['location']['area'] ?? $profile['location']['city'] }}, {{ $profile['location']['district'] }}</strong>
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <span>{{ __('Serving:') }}</span>
+                                <strong>{{ $profile['location']['area'] ?? $profile['location']['city'] }}, {{ $profile['location']['district'] }}</strong>
                             </div>
 
                             <div class="caregiver-stats-badges">
@@ -46,25 +56,27 @@
                                     <span class="stat-sub">({{ $profile['ratings']['count'] }} {{ __('reviews') }})</span>
                                 </div>
                                 <div class="caregiver-stat-pill">
+                                    <span style="font-size: 1rem;">💼</span>
                                     <span class="stat-highlight">{{ $profile['years_experience'] }} {{ __('years') }}</span>
                                     <span class="stat-sub">{{ __('Experience') }}</span>
                                 </div>
                                 <div class="caregiver-stat-pill">
+                                    <span style="font-size: 1rem;">🛡️</span>
                                     <span class="stat-highlight">{{ $profile['completed_jobs_count'] }}</span>
-                                    <span class="stat-sub">{{ __('Bookings') }}</span>
+                                    <span class="stat-sub">{{ __('Bookings Done') }}</span>
                                 </div>
                             </div>
 
                             <!-- Trust Checks -->
                             <div class="caregiver-trust-badges">
                                 <div class="trust-badge">
-                                    ✓ {{ __('NID Checked') }}
+                                    <span style="color: #059669; font-weight: 800;">✓</span> {{ __('NID Checked') }}
                                 </div>
                                 <div class="trust-badge">
-                                    ✓ {{ __('Police Verification Cleared') }}
+                                    <span style="color: #059669; font-weight: 800;">✓</span> {{ __('Police Verification Cleared') }}
                                 </div>
                                 <div class="trust-badge">
-                                    ✓ {{ __('Health Screened') }}
+                                    <span style="color: #059669; font-weight: 800;">✓</span> {{ __('Health Screened') }}
                                 </div>
                             </div>
                         </div>

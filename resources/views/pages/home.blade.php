@@ -3,7 +3,7 @@
     <x-slot:description>Find background-verified caregivers in Dhaka and across Bangladesh. Admin-coordinated care for your loved ones with total safety, privacy, and peace of mind.</x-slot:description>
 
     <!-- Hero Section -->
-    <section style="padding: 3.5rem 0 4rem 0; position: relative; overflow: hidden;">
+    <section style="padding: 3.5rem 0 4rem 0; position: relative; z-index: 20; overflow: visible;">
         <div class="container">
             <div class="hero-grid">
                 <!-- Left Column on Desktop / Reordered via display:contents on Mobile -->
@@ -99,19 +99,22 @@
                                 <!-- Dropdown Location Picker Modal -->
                                 <div class="location-picker-modal" id="locationPickerModal">
                                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem;">
-                                        <div style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">{{ __('Select Your Location') }}</div>
-                                        <button type="button" onclick="toggleLocationPicker(false)" style="background: none; border: none; font-size: 1.25rem; line-height: 1; cursor: pointer; color: var(--text-muted);">&times;</button>
+                                        <div style="font-weight: 800; font-size: 0.95rem; color: #0f172a; display: flex; align-items: center; gap: 0.4rem;">
+                                            <span>📍</span>
+                                            <span>{{ __('Select Your Care Location') }}</span>
+                                        </div>
+                                        <button type="button" onclick="toggleLocationPicker(false)" style="background: rgba(10, 57, 74, 0.06); border: none; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; line-height: 1; cursor: pointer; color: var(--text-muted); transition: background 0.15s ease;" onmouseover="this.style.background='rgba(10, 57, 74, 0.15)'" onmouseout="this.style.background='rgba(10, 57, 74, 0.06)'">&times;</button>
                                     </div>
-                                    <div style="position: relative; margin-bottom: 0.75rem;">
+                                    <div style="position: relative; margin-bottom: 0.85rem;">
                                         <input type="text" id="manualLocationInput" placeholder="{{ __('Type area e.g. Banani, Uttara, Mirpur...') }}" class="glass-input" style="width: 100%; padding: 0.65rem 0.85rem; font-size: 0.9rem;" onkeyup="handleManualLocationKey(event)">
                                         <button type="button" class="btn btn-primary btn-sm" style="position: absolute; right: 5px; top: 5px; bottom: 5px; padding: 0 0.85rem; border-radius: 6px;" onclick="applyManualLocation()">
                                             {{ __('Set') }}
                                         </button>
                                     </div>
-                                    <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.45rem;">
+                                    <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.04em;">
                                         {{ __('Popular Care Locations') }}
                                     </div>
-                                    <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; max-height: 140px; overflow-y: auto;">
+                                    <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; max-height: 160px; overflow-y: auto; padding-right: 2px;">
                                         @foreach($popularAreas as $area)
                                             <button type="button" class="pathao-zone-chip" onclick="applyQuickLocation('{{ $area }}')">
                                                 📍 {{ $area }}
@@ -210,7 +213,7 @@
     </section>
 
     <!-- Stats Bar -->
-    <section style="margin-bottom: 4rem;">
+    <section style="margin-bottom: 4rem; position: relative; z-index: 1;">
         <div class="container">
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;" class="stats-grid">
                 <div class="glass-card" style="text-align: center; padding: 1.5rem;">
