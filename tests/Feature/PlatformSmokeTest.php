@@ -303,4 +303,29 @@ class PlatformSmokeTest extends TestCase
         $responseEn->assertSessionHas('locale', 'en');
         $responseEn->assertCookie('caremate_locale', 'en');
     }
+
+    public function test_detect_location_api_returns_success_and_valid_structure(): void
+    {
+        // 1. Default / IP fallback
+        $response = $this->getJson(route('api.detect-location'));
+        $response->assertStatus(200);
+        $response->assertJson([
+            'success' => true,
+        ]);
+        $this->assertNotEmpty($response->json('area'));
+        $this->assertNotEmpty($response->json('display'));
+
+        // 2. Dhanmondi GPS coordinates
+        $gpsResponse = $this->getJson(route('api.detect-location', [
+            'lat' => 23.7465,
+            'lon' => 90.3760,
+        ]));
+        $gpsResponse->assertStatus(200);
+        $gpsResponse->assertJson([
+            'success' => true,
+            'area' => 'Dhanmondi',
+            'city' => 'Dhaka',
+            'display' => 'Dhanmondi, Dhaka',
+        ]);
+    }
 }

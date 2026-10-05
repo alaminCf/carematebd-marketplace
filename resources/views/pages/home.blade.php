@@ -5,10 +5,26 @@
     <!-- Hero Section -->
     <section style="padding: 3.5rem 0 4rem 0; position: relative; overflow: hidden;">
         <div class="container">
-            <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 3.5rem; align-items: center;" class="hero-grid">
+            <div class="hero-grid">
                 <!-- Left Column on Desktop / Reordered via display:contents on Mobile -->
                 <div class="hero-left-col">
-                    <!-- 1. Pathao-Style Find Care Card (On mobile: order 1 at the very top!) -->
+                    <!-- 1. Text Content (Headline, Subtitle) - Desktop Top / Mobile Order 3 -->
+                    <div class="hero-text-content">
+                        <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(10, 57, 74, 0.08); border: 1px solid rgba(10, 57, 74, 0.2); padding: 0.4rem 0.9rem; border-radius: var(--radius-pill); font-size: 0.82rem; font-weight: 700; color: #0a394a; margin-bottom: 1.25rem;">
+                            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
+                            {{ __("Bangladesh's #1 Verified Caregiver Marketplace") }}
+                        </div>
+
+                        <h1 style="font-size: clamp(2.2rem, 3.5vw, 3.25rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 1.25rem; color: #092632;">
+                            {{ __('Care that feels like family, found in minutes.') }}
+                        </h1>
+
+                        <p style="font-size: 1.15rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 2rem;">
+                            {{ __('Compassionate, government NID & background-checked caregivers for your parents, children, and patients. Safe, verified, and coordinated end-to-end by CareMate Care Managers.') }}
+                        </p>
+                    </div>
+
+                    <!-- 2. Pathao-Style Find Care Card - Desktop Below Headline / Mobile Order 1 at very top! -->
                     <div class="hero-find-care-col">
                         <div class="pathao-find-card">
                             <form action="{{ route('marketplace.index') }}" method="GET" id="heroFindCareForm">
@@ -31,7 +47,7 @@
                                         </div>
                                     </div>
                                     <div class="pathao-loc-actions" onclick="event.stopPropagation()">
-                                        <button type="button" class="pathao-gps-btn" onclick="detectCurrentLocation(true)" title="{{ __('Use GPS Location') }}">
+                                        <button type="button" class="pathao-gps-btn" onclick="detectCurrentLocation(true)" title="{{ __('Use GPS Location') }}" id="pathaoGpsBtn">
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
                                         </button>
                                         <button type="button" class="pathao-change-btn" onclick="toggleLocationPicker()">
@@ -44,13 +60,13 @@
                                 <div class="pathao-quick-zones">
                                     <span class="pathao-zone-label">{{ __('Popular:') }}</span>
                                     @foreach($popularAreas as $area)
-                                        <button type="button" class="pathao-zone-chip {{ $loop->first ? 'selected' : '' }}" onclick="selectAreaZone('{{ $area }}', this)">
+                                        <button type="button" class="pathao-zone-chip" onclick="selectAreaZone('{{ $area }}', this)">
                                             {{ $area }}
                                         </button>
                                     @endforeach
                                 </div>
 
-                                <!-- Service Grid Select Chips -->
+                                <!-- Service Grid Select Chips (5 Chips in one neat row on desktop) -->
                                 <div class="pathao-services-grid">
                                     @php
                                         $serviceIcons = [
@@ -107,23 +123,10 @@
                         </div>
                     </div>
 
-                    <!-- 2. Text Content (Headline, Subtitle, Trust Points, WhatsApp) -->
-                    <div class="hero-text-content">
-                        <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(10, 57, 74, 0.08); border: 1px solid rgba(10, 57, 74, 0.2); padding: 0.4rem 0.9rem; border-radius: var(--radius-pill); font-size: 0.82rem; font-weight: 700; color: #0a394a; margin-bottom: 1.25rem;">
-                            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
-                            {{ __("Bangladesh's #1 Verified Caregiver Marketplace") }}
-                        </div>
-
-                        <h1 style="font-size: clamp(2.1rem, 3.4vw, 3.25rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 1.1rem; color: #092632;">
-                            {{ __('Care that feels like family, found in minutes.') }}
-                        </h1>
-
-                        <p style="font-size: 1.1rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem;">
-                            {{ __('Compassionate, government NID & background-checked caregivers for your parents, children, and patients. Safe, verified, and coordinated end-to-end by CareMate Care Managers.') }}
-                        </p>
-
+                    <!-- 3. Trust Points & WhatsApp Link - Desktop Bottom / Mobile Order 4 -->
+                    <div class="hero-trust-content">
                         <!-- Trust Points -->
-                        <div style="display: flex; align-items: center; gap: 1.5rem; font-size: 0.88rem; color: var(--text-secondary); flex-wrap: wrap; margin-bottom: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1.5rem; font-size: 0.88rem; color: var(--text-secondary); flex-wrap: wrap; margin-bottom: 1.25rem;">
                             <div style="display: flex; align-items: center; gap: 0.4rem;">
                                 <span style="color: #059669; font-weight: 800;">✓</span> {{ __('NID & Police Verified') }}
                             </div>
@@ -147,40 +150,17 @@
                     </div>
                 </div>
 
-                <!-- Right Column: Interactive Service Slider Showcase -->
+                <!-- Right Column: Interactive Service Slider Showcase (Identical Frame to Original) -->
                 <div class="hero-slider-container" style="position: relative;">
                     <div class="hero-slider-wrapper" id="heroServiceSlider">
                         <div class="hero-slider-track" id="heroSliderTrack">
                             @foreach ($services as $index => $service)
-                                @php
-                                    $imgUrl = $service->image_path ? asset($service->image_path) : asset('images/hero_caregiver.jpg');
-                                    if (!file_exists(public_path(ltrim($service->image_path, '/')))) {
-                                        $imgUrl = asset('images/hero_caregiver.jpg');
-                                    }
-                                @endphp
                                 <div class="hero-slide" data-index="{{ $index }}" data-slug="{{ $service->slug }}">
-                                    <img src="{{ $imgUrl }}" alt="{{ $service->name }} in Bangladesh" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
-                                    <div class="hero-slide-overlay">
-                                        <div class="hero-slide-top">
-                                            <span class="hero-slide-badge">
-                                                {{ $serviceIcons[$service->slug] ?? '🌟' }} {{ __($service->name) }}
-                                            </span>
-                                        </div>
-                                        <div class="hero-slide-bottom">
-                                            <div class="hero-slide-title">
-                                                <span>{{ __($service->name) }}</span>
-                                                <span style="font-size: 0.72rem; font-weight: 600; background: rgba(45, 212, 191, 0.2); color: #2dd4bf; padding: 0.2rem 0.55rem; border-radius: var(--radius-pill); border: 1px solid rgba(45, 212, 191, 0.4);">
-                                                    {{ __('Verified Staff') }}
-                                                </span>
-                                            </div>
-                                            <p class="hero-slide-desc">
-                                                {{ __($service->short_description ?? $service->description) }}
-                                            </p>
-                                            <a href="{{ route('marketplace.index', ['service' => $service->slug]) }}" class="hero-slide-link">
-                                                <span>{{ __('Explore') }} {{ __($service->name) }} {{ __('Caregivers') }}</span>
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                                            </a>
-                                        </div>
+                                    <img src="{{ $service->imageUrl() }}" alt="{{ $service->name }} in Bangladesh" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
+                                    <div class="hero-slide-overlay"></div>
+                                    <div class="hero-slide-caption">
+                                        <div class="hero-slide-title">Care Coordinator Verified • {{ __($service->name) }}</div>
+                                        <div class="hero-slide-desc">{{ __($service->short_description ?? $service->description) }}</div>
                                     </div>
                                 </div>
                             @endforeach
@@ -742,7 +722,7 @@
                 chip.classList.toggle('selected', chip.textContent.trim().toLowerCase() === areaName.toLowerCase());
             });
 
-            applyLocationValue(areaName, `${areaName}, Dhaka`);
+            applyLocationValue(areaName, `${areaName}, Dhaka`, true);
         }
 
         function applyQuickLocation(areaName) {
@@ -755,7 +735,7 @@
             if (!input) return;
             const val = input.value.trim();
             if (val) {
-                applyLocationValue(val, val);
+                applyLocationValue(val, val, true);
                 toggleLocationPicker(false);
             }
         }
@@ -767,7 +747,7 @@
             }
         }
 
-        function applyLocationValue(searchVal, displayName) {
+        function applyLocationValue(searchVal, displayName, isManual = false) {
             const locNameEl = document.getElementById('pathaoLocationName');
             const locInputEl = document.getElementById('heroLocationInput');
             const locStatusEl = document.getElementById('pathaoLocStatus');
@@ -775,103 +755,102 @@
 
             if (locNameEl) locNameEl.textContent = displayName;
             if (locInputEl) locInputEl.value = searchVal;
-            if (locStatusEl) locStatusEl.textContent = '{{ __("Selected") }}';
+            if (locStatusEl && isManual) locStatusEl.textContent = '{{ __("Selected") }}';
             if (btnTextEl) btnTextEl.textContent = `{{ __("Find Caregiver in") }} ${searchVal}`;
+
+            // Sync quick zone chip selection
+            document.querySelectorAll('.pathao-quick-zones .pathao-zone-chip').forEach(chip => {
+                chip.classList.toggle('selected', chip.textContent.trim().toLowerCase() === searchVal.toLowerCase());
+            });
 
             try {
                 localStorage.setItem('caremate_user_location', JSON.stringify({
                     search: searchVal,
                     name: displayName,
+                    isManual: isManual,
                     timestamp: Date.now()
                 }));
             } catch (err) {}
         }
 
-        function fallbackCoordinateArea(lat, lon) {
-            if (lat >= 23.73 && lat <= 23.76 && lon >= 90.36 && lon <= 90.39) return { search: 'Dhanmondi', name: 'Dhanmondi, Dhaka' };
-            if (lat >= 23.77 && lat <= 23.81 && lon >= 90.40 && lon <= 90.43) return { search: 'Gulshan', name: 'Gulshan, Dhaka' };
-            if (lat >= 23.78 && lat <= 23.81 && lon >= 90.39 && lon <= 90.41) return { search: 'Banani', name: 'Banani, Dhaka' };
-            if (lat >= 23.85 && lat <= 23.90 && lon >= 90.37 && lon <= 90.42) return { search: 'Uttara', name: 'Uttara, Dhaka' };
-            if (lat >= 23.79 && lat <= 23.84 && lon >= 90.34 && lon <= 90.38) return { search: 'Mirpur', name: 'Mirpur, Dhaka' };
-            if (lat >= 23.74 && lat <= 23.78 && lon >= 90.34 && lon <= 90.37) return { search: 'Mohammadpur', name: 'Mohammadpur, Dhaka' };
-            if (lat >= 23.80 && lat <= 23.84 && lon >= 90.42 && lon <= 90.45) return { search: 'Bashundhara', name: 'Bashundhara, Dhaka' };
-            if (lat >= 23.68 && lat <= 23.92 && lon >= 90.32 && lon <= 90.52) return { search: 'Dhaka', name: 'Dhaka, Bangladesh' };
-            if (lat >= 22.25 && lat <= 22.45 && lon >= 91.75 && lon <= 91.90) return { search: 'Chittagong', name: 'Chittagong, Bangladesh' };
-            if (lat >= 24.85 && lat <= 24.95 && lon >= 91.80 && lon <= 91.95) return { search: 'Sylhet', name: 'Sylhet, Bangladesh' };
-            return { search: 'Dhaka', name: 'Dhaka, Bangladesh' };
+        async function detectLocationApi(lat = null, lon = null) {
+            let url = '{{ route("api.detect-location") }}';
+            if (lat !== null && lon !== null) {
+                url += `?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`;
+            }
+            const response = await fetch(url, {
+                headers: { 'Accept': 'application/json' }
+            });
+            if (!response.ok) throw new Error('Location detection failed');
+            return await response.json();
+        }
+
+        async function fallbackToNetworkLocation() {
+            const locStatus = document.getElementById('pathaoLocStatus');
+            try {
+                const data = await detectLocationApi();
+                if (data && data.success) {
+                    applyLocationValue(data.area, data.display, false);
+                    if (locStatus) {
+                        locStatus.textContent = data.source === 'ip' ? '{{ __("Auto-detected (Network)") }}' : '{{ __("Ready") }}';
+                    }
+                }
+            } catch (e) {
+                if (locStatus) locStatus.textContent = '{{ __("Ready") }}';
+            }
         }
 
         async function detectCurrentLocation(userInitiated = false) {
             const pinIcon = document.getElementById('pathaoPinIcon');
             const locStatus = document.getElementById('pathaoLocStatus');
+            const gpsBtn = document.getElementById('pathaoGpsBtn');
+
+            if (pinIcon) pinIcon.classList.add('locating');
+            if (gpsBtn) gpsBtn.disabled = true;
+            if (locStatus) locStatus.textContent = '{{ __("Detecting location...") }}';
 
             if (!navigator.geolocation) {
                 if (userInitiated) {
                     alert('{{ __("Geolocation is not supported by your browser. Please select or type your area.") }}');
                 }
+                await fallbackToNetworkLocation();
+                if (pinIcon) pinIcon.classList.remove('locating');
+                if (gpsBtn) gpsBtn.disabled = false;
                 return;
             }
 
-            if (pinIcon) pinIcon.classList.add('locating');
-            if (locStatus) locStatus.textContent = '{{ __("Detecting GPS...") }}';
-
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-
-                    let detectedSearch = 'Dhaka';
-                    let detectedName = 'Dhaka, Bangladesh';
-
                     try {
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 4000);
-                        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=en`, {
-                            signal: controller.signal,
-                            headers: { 'Accept': 'application/json' }
-                        });
-                        clearTimeout(timeoutId);
-
-                        if (response.ok) {
-                            const data = await response.json();
-                            const addr = data.address || {};
-                            const localArea = addr.suburb || addr.neighbourhood || addr.residential || addr.city_district || addr.subdistrict || addr.quarter || addr.town || addr.village;
-                            const city = addr.city || addr.state || 'Dhaka';
-
-                            if (localArea) {
-                                detectedSearch = localArea;
-                                detectedName = `${localArea}, ${city}`;
-                            } else if (city) {
-                                detectedSearch = city;
-                                detectedName = `${city}, Bangladesh`;
-                            }
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const data = await detectLocationApi(lat, lon);
+                        if (data && data.success) {
+                            applyLocationValue(data.area, data.display, false);
+                            if (locStatus) locStatus.textContent = '{{ __("Auto-detected via GPS") }}';
+                        } else {
+                            await fallbackToNetworkLocation();
                         }
-                    } catch (e) {
-                        const fallback = fallbackCoordinateArea(lat, lon);
-                        detectedSearch = fallback.search;
-                        detectedName = fallback.name;
+                    } catch (err) {
+                        await fallbackToNetworkLocation();
+                    } finally {
+                        if (pinIcon) pinIcon.classList.remove('locating');
+                        if (gpsBtn) gpsBtn.disabled = false;
                     }
-
-                    if (pinIcon) pinIcon.classList.remove('locating');
-                    applyLocationValue(detectedSearch, detectedName);
-                    if (locStatus) locStatus.textContent = '{{ __("Auto-detected via GPS") }}';
-
-                    document.querySelectorAll('.pathao-quick-zones .pathao-zone-chip').forEach(chip => {
-                        chip.classList.toggle('selected', chip.textContent.trim().toLowerCase() === detectedSearch.toLowerCase());
-                    });
                 },
-                (error) => {
-                    if (pinIcon) pinIcon.classList.remove('locating');
+                async (error) => {
                     if (userInitiated) {
                         if (error.code === error.PERMISSION_DENIED) {
                             alert('{{ __("Location permission was denied. Please allow location access in your browser settings or select an area manually.") }}');
                         } else {
-                            alert('{{ __("Could not detect location. Please choose an area from the popular list or type your area.") }}');
+                            alert('{{ __("Could not detect GPS location. Falling back to network location.") }}');
                         }
                     }
-                    if (locStatus) locStatus.textContent = '{{ __("Ready") }}';
+                    await fallbackToNetworkLocation();
+                    if (pinIcon) pinIcon.classList.remove('locating');
+                    if (gpsBtn) gpsBtn.disabled = false;
                 },
-                { timeout: 7000, enableHighAccuracy: true, maximumAge: 300000 }
+                { timeout: 7000, enableHighAccuracy: true, maximumAge: 60000 }
             );
         }
 
@@ -880,8 +859,8 @@
                 const saved = localStorage.getItem('caremate_user_location');
                 if (saved) {
                     const data = JSON.parse(saved);
-                    if (data && data.search) {
-                        applyLocationValue(data.search, data.name || data.search);
+                    if (data && data.search && data.isManual) {
+                        applyLocationValue(data.search, data.name || data.search, true);
                         const locStatus = document.getElementById('pathaoLocStatus');
                         if (locStatus) locStatus.textContent = '{{ __("Saved Location") }}';
                         return;
