@@ -114,6 +114,602 @@
                 display: none !important;
             }
         }
+
+        /* Mobile Caregiver Profile Centering & Header CTA */
+        .caregiver-name-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+        }
+
+        .caregiver-id-pill {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(10, 57, 74, 0.06);
+            border: 1px solid rgba(10, 57, 74, 0.12);
+            color: var(--brand-primary, #0a394a);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.35rem 0.8rem;
+            border-radius: 9999px;
+            letter-spacing: 0.03em;
+        }
+
+        .caregiver-mobile-booking-box {
+            display: none;
+        }
+
+        /* Site Footer Base Styles */
+        .site-footer {
+            margin-top: 5rem;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 4rem 0 2rem 0;
+        }
+
+        .site-footer .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.25rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 2fr 1.3fr;
+            gap: 3rem;
+            margin-bottom: 2.5rem;
+            align-items: flex-start;
+        }
+
+        .footer-brand-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-brand-logo {
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .footer-logo-img {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .footer-concern-tag {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #15798e;
+            letter-spacing: 0.02em;
+        }
+
+        .footer-brand-desc {
+            color: var(--text-secondary, #475569);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 320px;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(10, 57, 74, 0.06);
+            border: 1px solid rgba(10, 57, 74, 0.12);
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #0a394a;
+            width: fit-content;
+        }
+
+        .footer-links-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .footer-col {
+            min-width: 0;
+        }
+
+        .footer-heading {
+            font-size: 0.92rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted, #64748b);
+            margin-bottom: 1.1rem;
+        }
+
+        .footer-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            font-size: 0.9rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .footer-list a {
+            color: var(--text-secondary, #475569);
+            text-decoration: none;
+            transition: color 0.18s;
+        }
+
+        .footer-list a:hover {
+            color: var(--brand-primary, #0a394a);
+        }
+
+        .footer-browse-link {
+            color: var(--brand-primary, #0a394a) !important;
+            font-weight: 700 !important;
+        }
+
+        .footer-contact-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .footer-address-text {
+            font-size: 0.88rem;
+            color: var(--text-secondary, #475569);
+            line-height: 1.5;
+            margin-bottom: 0.4rem;
+        }
+
+        .footer-contact-chips-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-contact-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 9999px;
+            background: #ffffff;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--brand-primary, #0a394a);
+            text-decoration: none;
+            width: fit-content;
+            transition: all 0.2s;
+        }
+
+        .footer-contact-chip:hover {
+            background: #e6f1f4;
+            border-color: rgba(10, 57, 74, 0.25);
+        }
+
+        .footer-chip-whatsapp {
+            background: rgba(37, 211, 102, 0.1);
+            color: #0d873d;
+            border-color: rgba(37, 211, 102, 0.35);
+        }
+
+        .footer-chip-whatsapp:hover {
+            background: rgba(37, 211, 102, 0.2);
+        }
+
+        .footer-operating-hours {
+            font-size: 0.78rem;
+            color: var(--text-muted, #64748b);
+            margin-top: 0.25rem;
+        }
+
+        .footer-bottom-row {
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.84rem;
+            color: var(--text-muted, #64748b);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-legal-links {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-legal-links a {
+            color: var(--text-muted, #64748b);
+            text-decoration: none;
+        }
+
+        .footer-legal-links a:hover {
+            color: var(--brand-primary, #0a394a);
+        }
+
+        @media (max-width: 768px) {
+            .caregiver-profile-card {
+                padding: 1.5rem 1rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .caregiver-header-flex {
+                flex-direction: column !important;
+                align-items: center !important;
+                text-align: center !important;
+                gap: 1.15rem !important;
+            }
+
+            .caregiver-avatar-col {
+                display: flex !important;
+                justify-content: center !important;
+                width: 100% !important;
+                margin: 0 auto !important;
+            }
+
+            .caregiver-avatar-wrapper,
+            .caregiver-avatar-img {
+                width: 110px !important;
+                height: 110px !important;
+                margin: 0 auto !important;
+            }
+
+            .caregiver-info-col {
+                width: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                text-align: center !important;
+            }
+
+            .caregiver-title-row {
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 0.45rem !important;
+                margin-bottom: 0.5rem !important;
+                width: 100% !important;
+                text-align: center !important;
+            }
+
+            .caregiver-name-wrap {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                gap: 0.35rem !important;
+                width: 100% !important;
+            }
+
+            .caregiver-name {
+                font-size: 1.85rem !important;
+                text-align: center !important;
+                margin: 0 auto !important;
+                width: 100% !important;
+            }
+
+            .badge-verified-tag {
+                margin: 0 auto !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                gap: 0.35rem !important;
+            }
+
+            .caregiver-id-pill {
+                margin: 0.2rem auto !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                text-align: center !important;
+            }
+
+            .caregiver-serving-location {
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                width: 100% !important;
+                gap: 0.35rem !important;
+                font-size: 0.92rem !important;
+                margin: 0.4rem auto 0.9rem auto !important;
+            }
+
+            .caregiver-stats-badges {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 0.55rem !important;
+                width: 100% !important;
+                margin: 0 auto 1.1rem auto !important;
+            }
+
+            .caregiver-stat-pill:first-child {
+                grid-column: span 2 !important;
+                justify-content: center !important;
+                align-items: center !important;
+                text-align: center !important;
+                background: rgba(255, 255, 255, 0.85) !important;
+                border: 1px solid rgba(226, 232, 240, 0.9) !important;
+                padding: 0.6rem 0.85rem !important;
+            }
+
+            .caregiver-stat-pill:not(:first-child) {
+                justify-content: center !important;
+                align-items: center !important;
+                text-align: center !important;
+                padding: 0.55rem 0.45rem !important;
+                font-size: 0.82rem !important;
+            }
+
+            .caregiver-trust-badges {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                justify-content: center !important;
+                gap: 0.4rem !important;
+                width: 100% !important;
+                margin: 0 auto !important;
+            }
+
+            .trust-badge {
+                font-size: 0.76rem !important;
+                padding: 0.3rem 0.6rem !important;
+                justify-content: center !important;
+                text-align: center !important;
+            }
+
+            /* Mobile Top Booking CTA Box in profile header */
+            .caregiver-mobile-booking-box {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 0.75rem !important;
+                width: 100% !important;
+                margin-top: 1.25rem !important;
+                padding-top: 1.25rem !important;
+                border-top: 1.5px solid rgba(226, 232, 240, 0.9) !important;
+            }
+
+            .mobile-booking-rate-row {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                background: rgba(10, 57, 74, 0.05) !important;
+                border: 1px solid rgba(10, 57, 74, 0.12) !important;
+                border-radius: 14px !important;
+                padding: 0.65rem 1rem !important;
+                width: 100% !important;
+            }
+
+            .mobile-booking-rate-left {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                text-align: left !important;
+            }
+
+            .mobile-booking-rate-label {
+                font-size: 0.72rem !important;
+                text-transform: uppercase !important;
+                font-weight: 700 !important;
+                color: #64748b !important;
+                letter-spacing: 0.04em !important;
+            }
+
+            .mobile-booking-rate-val {
+                font-size: 1.45rem !important;
+                font-weight: 800 !important;
+                color: #0f172a !important;
+                line-height: 1.1 !important;
+            }
+
+            .mobile-booking-rate-sub {
+                font-size: 0.82rem !important;
+                font-weight: 600 !important;
+                color: #64748b !important;
+            }
+
+            .mobile-booking-monthly-tag {
+                font-size: 0.78rem !important;
+                font-weight: 700 !important;
+                color: #0a394a !important;
+                background: #ffffff !important;
+                padding: 0.35rem 0.65rem !important;
+                border-radius: 9999px !important;
+                border: 1px solid rgba(10, 57, 74, 0.12) !important;
+            }
+
+            .mobile-booking-actions {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 0.65rem !important;
+                width: 100% !important;
+            }
+
+            .mobile-book-btn {
+                width: 100% !important;
+                font-size: 1.02rem !important;
+                font-weight: 700 !important;
+                padding: 0.85rem 1.25rem !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 0.5rem !important;
+                border-radius: 14px !important;
+                background: #0a394a !important;
+                color: #ffffff !important;
+                box-shadow: 0 4px 14px rgba(10, 57, 74, 0.22) !important;
+                text-decoration: none !important;
+            }
+
+            .mobile-book-btn:hover {
+                background: #062531 !important;
+                color: #ffffff !important;
+            }
+
+            .mobile-whatsapp-btn {
+                width: 100% !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 0.5rem !important;
+                background: rgba(37, 211, 102, 0.12) !important;
+                color: #0d873d !important;
+                border: 1.5px solid rgba(37, 211, 102, 0.4) !important;
+                font-weight: 700 !important;
+                font-size: 0.92rem !important;
+                border-radius: 14px !important;
+                padding: 0.7rem 1rem !important;
+                text-decoration: none !important;
+            }
+
+            .mobile-whatsapp-btn:hover {
+                background: rgba(37, 211, 102, 0.22) !important;
+                color: #0b7233 !important;
+            }
+
+            /* Mobile Footer: Compact, Clean & User-friendly */
+            .site-footer {
+                margin-top: 2rem !important;
+                padding: 2rem 0 calc(78px + env(safe-area-inset-bottom, 16px)) 0 !important;
+                background: rgba(255, 255, 255, 0.92) !important;
+            }
+
+            .footer-grid {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1.25rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .footer-brand-col {
+                text-align: center !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 0.35rem !important;
+            }
+
+            .footer-logo-img {
+                height: 32px !important;
+                margin: 0 auto !important;
+            }
+
+            .footer-concern-tag {
+                font-size: 0.74rem !important;
+                margin-bottom: 0.2rem !important;
+            }
+
+            .footer-brand-desc {
+                font-size: 0.8rem !important;
+                line-height: 1.45 !important;
+                max-width: 320px !important;
+                margin: 0 auto 0.35rem auto !important;
+                color: var(--text-secondary, #475569) !important;
+            }
+
+            .footer-verified-badge {
+                margin: 0 auto !important;
+                font-size: 0.72rem !important;
+                padding: 0.25rem 0.6rem !important;
+            }
+
+            .footer-links-wrap {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 0.85rem !important;
+                background: rgba(248, 250, 252, 0.85) !important;
+                border: 1px solid rgba(226, 232, 240, 0.85) !important;
+                border-radius: 18px !important;
+                padding: 1.1rem 0.9rem !important;
+                text-align: left !important;
+                box-shadow: 0 2px 10px rgba(10, 57, 74, 0.03) !important;
+            }
+
+            .footer-links-wrap .footer-col {
+                min-width: 0 !important;
+            }
+
+            .footer-links-wrap .footer-heading {
+                font-size: 0.8rem !important;
+                font-weight: 800 !important;
+                margin-bottom: 0.55rem !important;
+                color: #0f172a !important;
+            }
+
+            .footer-links-wrap .footer-list {
+                gap: 0.45rem !important;
+                font-size: 0.78rem !important;
+            }
+
+            .footer-contact-col {
+                width: 100% !important;
+                text-align: center !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 0.4rem !important;
+            }
+
+            .footer-contact-col .footer-heading {
+                font-size: 0.82rem !important;
+                font-weight: 800 !important;
+                margin-bottom: 0.25rem !important;
+                color: #0f172a !important;
+            }
+
+            .footer-address-text {
+                font-size: 0.76rem !important;
+                line-height: 1.4 !important;
+                max-width: 320px !important;
+                margin: 0 auto 0.45rem auto !important;
+                color: var(--text-secondary, #475569) !important;
+            }
+
+            .footer-contact-chips-grid {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                justify-content: center !important;
+                gap: 0.45rem !important;
+                width: 100% !important;
+            }
+
+            .footer-contact-chip {
+                padding: 0.4rem 0.65rem !important;
+                font-size: 0.76rem !important;
+                font-weight: 700 !important;
+            }
+
+            .footer-operating-hours {
+                font-size: 0.72rem !important;
+                color: var(--text-muted, #64748b) !important;
+                margin-top: 0.15rem !important;
+            }
+
+            .footer-bottom-row {
+                flex-direction: column !important;
+                text-align: center !important;
+                gap: 0.4rem !important;
+                padding-top: 1rem !important;
+                margin-top: 1rem !important;
+                font-size: 0.75rem !important;
+                border-top: 1px solid rgba(226, 232, 240, 0.8) !important;
+            }
+
+            .footer-legal-links {
+                justify-content: center !important;
+                gap: 0.75rem !important;
+                font-size: 0.75rem !important;
+            }
+        }
     </style>
     @stack('styles')
 </head>
@@ -304,79 +900,89 @@
     </main>
 
     <!-- Footer -->
-    <footer style="margin-top: 5rem; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); border-top: 1px solid rgba(226, 232, 240, 0.8); padding: 4rem 0 2rem 0;">
+    <footer class="site-footer">
         <div class="container">
-            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 2.5rem; margin-bottom: 3rem;" class="footer-grid">
+            <div class="footer-grid">
                 <!-- Column 1: Brand -->
-                <div>
-                    <a href="{{ route('home') }}" style="display: inline-block; margin-bottom: 0.25rem; text-decoration: none;">
-                        <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" style="height: 42px; width: auto; object-fit: contain;">
+                <div class="footer-brand-col">
+                    <a href="{{ route('home') }}" class="footer-brand-logo">
+                        <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" class="footer-logo-img">
                     </a>
-                    <div style="font-size: 0.82rem; font-weight: 700; color: #15798e; margin-bottom: 0.85rem; letter-spacing: 0.03em;">
+                    <div class="footer-concern-tag">
                         {{ __('A Concern of Techboloy') }}
                     </div>
-                    <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.25rem;">
+                    <p class="footer-brand-desc">
                         {{ __('Care that feels like family, found in minutes. Bangladesh\'s premier verified caregiver marketplace protecting family dignity and providing verified care.') }}
                     </p>
-                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(10, 57, 74, 0.08); border: 1px solid rgba(10, 57, 74, 0.15); padding: 0.4rem 0.8rem; border-radius: var(--radius-pill); font-size: 0.78rem; font-weight: 700; color: #0a394a;">
+                    <div class="footer-verified-badge">
                         <span>{{ __('✓ Government NID & Police Background Checked') }}</span>
                     </div>
                 </div>
 
-                <!-- Column 2: Care Services -->
-                <div>
-                    <h4 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 1.25rem;">{{ __('Care Services') }}</h4>
-                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.92rem;">
-                        <li><a href="{{ route('services.show', 'elderly-care') }}" style="color: var(--text-secondary);">{{ __('Elderly Care') }}</a></li>
-                        <li><a href="{{ route('services.show', 'child-care') }}" style="color: var(--text-secondary);">{{ __('Child Care & Nanny') }}</a></li>
-                        <li><a href="{{ route('services.show', 'nursing-care') }}" style="color: var(--text-secondary);">{{ __('Clinical Nursing Care') }}</a></li>
-                        <li><a href="{{ route('services.show', 'medical-transportation') }}" style="color: var(--text-secondary);">{{ __('Medical Transportation') }}</a></li>
-                        <li><a href="{{ route('marketplace.index') }}" style="color: var(--brand-primary); font-weight: 600;">{{ __('Browse All Caregivers →') }}</a></li>
-                    </ul>
-                </div>
+                <!-- Link Columns: Side-by-side 2-column on mobile -->
+                <div class="footer-links-wrap">
+                    <!-- Column 2: Care Services -->
+                    <div class="footer-col">
+                        <h4 class="footer-heading">{{ __('Care Services') }}</h4>
+                        <ul class="footer-list">
+                            <li><a href="{{ route('services.show', 'elderly-care') }}">{{ __('Elderly Care') }}</a></li>
+                            <li><a href="{{ route('services.show', 'child-care') }}">{{ __('Child Care & Nanny') }}</a></li>
+                            <li><a href="{{ route('services.show', 'nursing-care') }}">{{ __('Clinical Nursing Care') }}</a></li>
+                            <li><a href="{{ route('services.show', 'medical-transportation') }}">{{ __('Medical Transportation') }}</a></li>
+                            <li><a href="{{ route('marketplace.index') }}" class="footer-browse-link">{{ __('Browse All Caregivers →') }}</a></li>
+                        </ul>
+                    </div>
 
-                <!-- Column 3: Platform -->
-                <div>
-                    <h4 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 1.25rem;">{{ __('Platform') }}</h4>
-                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.92rem;">
-                        <li><a href="{{ route('how-it-works') }}" style="color: var(--text-secondary);">{{ __('How CareMate Works') }}</a></li>
-                        <li><a href="{{ route('about') }}" style="color: var(--text-secondary);">{{ __('Safety & Verification') }}</a></li>
-                        <li><a href="{{ route('caregiver.register') }}" style="color: var(--text-secondary);">{{ __('Apply as a Caregiver') }}</a></li>
-                        <li><a href="{{ route('faq') }}" style="color: var(--text-secondary);">{{ __('Frequently Asked Questions') }}</a></li>
-                        <li><a href="{{ route('contact') }}" style="color: var(--text-secondary);">{{ __('Care Coordination Desk') }}</a></li>
-                    </ul>
+                    <!-- Column 3: Platform -->
+                    <div class="footer-col">
+                        <h4 class="footer-heading">{{ __('Platform') }}</h4>
+                        <ul class="footer-list">
+                            <li><a href="{{ route('how-it-works') }}">{{ __('How CareMate Works') }}</a></li>
+                            <li><a href="{{ route('about') }}">{{ __('Safety & Verification') }}</a></li>
+                            <li><a href="{{ route('caregiver.register') }}">{{ __('Apply as a Caregiver') }}</a></li>
+                            <li><a href="{{ route('faq') }}">{{ __('Frequently Asked Questions') }}</a></li>
+                            <li><a href="{{ route('contact') }}">{{ __('Care Coordination Desk') }}</a></li>
+                        </ul>
+                    </div>
                 </div>
 
                 <!-- Column 4: Contact & Support -->
-                <div>
-                    <h4 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 1.25rem;">{{ __('CareDesk Bangladesh') }}</h4>
-                    <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">
+                <div class="footer-contact-col">
+                    <h4 class="footer-heading">{{ __('CareDesk Bangladesh') }}</h4>
+                    <p class="footer-address-text">
                         📍 {{ __('E-14/X, ICT Tower (14th Floor), Agargaon, Dhaka-1207, Bangladesh') }}
                     </p>
-                    <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
-                        📞 <strong>{{ __('Contact') }}:</strong> <a href="tel:+8801610296460" style="color: inherit; text-decoration: none;">+880 1610-296460</a>
-                    </p>
-                    <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
-                        💬 <strong>WhatsApp:</strong> <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" style="color: #075E54; font-weight: 700; text-decoration: none;">+880 1610-296460</a>
-                    </p>
-                    <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
-                        ✉️ <strong>Email:</strong> <a href="mailto:contact@carematebd.com" style="color: inherit; text-decoration: none;">contact@carematebd.com</a>
-                    </p>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">
+                    <div class="footer-contact-chips-grid">
+                        <a href="tel:+8801610296460" class="footer-contact-chip">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <span>+880 1610-296460</span>
+                        </a>
+                        <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" class="footer-contact-chip footer-chip-whatsapp">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.516 2 2.031 6.484 2.031 12C2.031 13.805 2.508 15.5 3.336 16.969L2 22L7.172 20.688C8.594 21.461 10.258 21.906 12.031 21.906C17.547 21.906 22.031 17.422 22.031 12C22.031 6.484 17.547 2 12.031 2ZM12.031 20.156C10.453 20.156 8.969 19.719 7.688 18.969L7.375 18.781L4.312 19.562L5.125 16.578L4.922 16.25C4.109 14.953 3.672 13.5 3.672 12C3.672 7.391 7.422 3.641 12.031 3.641C16.641 3.641 20.391 7.391 20.391 12C20.391 16.609 16.641 20.156 12.031 20.156ZM16.609 14.547C16.359 14.422 15.125 13.812 14.891 13.734C14.656 13.656 14.484 13.609 14.312 13.859C14.141 14.109 13.656 14.688 13.5 14.859C13.344 15.031 13.188 15.047 12.938 14.922C12.688 14.797 11.875 14.531 10.922 13.68C10.172 13.008 9.672 12.18 9.516 11.93C9.359 11.68 9.5 11.539 9.625 11.414C9.734 11.305 9.875 11.125 10 10.984C10.125 10.844 10.172 10.734 10.25 10.578C10.328 10.422 10.281 10.281 10.219 10.156C10.156 10.031 9.656 8.812 9.453 8.312C9.25 7.828 9.047 7.891 8.891 7.891C8.75 7.891 8.578 7.875 8.406 7.875C8.234 7.875 7.953 7.938 7.719 8.188C7.484 8.438 6.828 9.047 6.828 10.281C6.828 11.516 7.734 12.703 7.859 12.875C7.984 13.047 9.641 15.609 12.188 16.703C12.797 16.969 13.266 17.125 13.641 17.25C14.25 17.438 14.812 17.406 15.25 17.344C15.75 17.266 16.781 16.719 17 16.109C17.219 15.5 17.219 14.984 17.156 14.859C17.094 14.734 16.859 14.672 16.609 14.547Z"/></svg>
+                            <span>WhatsApp 24/7</span>
+                        </a>
+                        <a href="mailto:contact@carematebd.com" class="footer-contact-chip">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            <span>contact@carematebd.com</span>
+                        </a>
+                    </div>
+                    <div class="footer-operating-hours">
                         {{ __('Operating hours: 24/7 Care Coordination') }}
                     </div>
                 </div>
             </div>
 
             <!-- Bottom Copyright -->
-            <div style="border-top: 1px solid rgba(226, 232, 240, 0.7); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted); flex-wrap: wrap; gap: 1rem;">
-                <div>
+            <div class="footer-bottom-row">
+                <div class="footer-copyright-text">
                     © {{ date('Y') }} CareMate BD — {{ __('A Concern of Techboloy') }}. {{ __('All rights reserved.') }}
                 </div>
-                <div style="display: flex; gap: 1.5rem;">
-                    <span>{{ __('Privacy Policy') }}</span>
-                    <span>{{ __('Terms of Service') }}</span>
-                    <span>{{ __('Safety Standard') }}</span>
+                <div class="footer-legal-links">
+                    <a href="{{ route('faq') }}">{{ __('Privacy Policy') }}</a>
+                    <span>•</span>
+                    <a href="{{ route('faq') }}">{{ __('Terms of Service') }}</a>
+                    <span>•</span>
+                    <a href="{{ route('about') }}">{{ __('Safety Standard') }}</a>
                 </div>
             </div>
         </div>

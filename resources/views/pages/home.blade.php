@@ -2,8 +2,35 @@
     <x-slot:title>CareMate BD — Trusted Caregivers for Elderly, Child, & Nursing Care in Bangladesh</x-slot:title>
     <x-slot:description>Find background-verified caregivers in Dhaka and across Bangladesh. Admin-coordinated care for your loved ones with total safety, privacy, and peace of mind.</x-slot:description>
 
+    @push('styles')
+    <style>
+        .hero-section {
+            padding-top: 0.75rem !important;
+        }
+        @media (max-width: 900px) {
+            .hero-section {
+                padding-top: 0.25rem !important;
+            }
+        }
+        @media (max-width: 768px) {
+            .hero-section {
+                padding-top: 0.15rem !important;
+            }
+            .hero-find-care-col,
+            .pathao-find-card {
+                margin-top: 0 !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-section {
+                padding-top: 0.05rem !important;
+            }
+        }
+    </style>
+    @endpush
+
     <!-- Hero Section -->
-    <section style="padding: 3.5rem 0 4rem 0; position: relative; z-index: 20; overflow: visible;">
+    <section class="hero-section">
         <div class="container">
             <div class="hero-grid">
                 <!-- Left Column on Desktop / Reordered via display:contents on Mobile -->
