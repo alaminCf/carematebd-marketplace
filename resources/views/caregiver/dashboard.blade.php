@@ -22,8 +22,29 @@
         </div>
     @endif
 
+    <style>
+        .stats-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            gap: 1.25rem !important;
+            margin-bottom: 2.25rem !important;
+        }
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 1rem !important;
+            }
+        }
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr !important;
+                gap: 0.85rem !important;
+            }
+        }
+    </style>
+
     <!-- Top KPI Stats Grid -->
-    <div class="stats-grid">
+    <div class="stats-grid" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; margin-bottom: 2.25rem;">
         <div class="glass-card stat-card">
             <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
                 <span class="stat-label">Pending Invitations</span>
