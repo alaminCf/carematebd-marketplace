@@ -14,6 +14,21 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.9.0">
     <style>
+        /* Base Desktop KPI Stats Grid */
+        .stats-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            gap: 1.25rem !important;
+            margin-bottom: 2.25rem !important;
+        }
+
+        @media (max-width: 1100px) and (min-width: 901px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1rem !important;
+            }
+        }
+
         @media (max-width: 900px) {
             .dashboard-layout { display: block !important; }
             .dashboard-grid-2, .booking-layout, .booking-admin-layout, .earnings-layout, .request-grid, .support-layout, .ticket-layout, .job-layout, .schedule-layout, .edit-layout, .documents-layout {

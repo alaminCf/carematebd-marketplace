@@ -6,25 +6,37 @@
     <!-- Top KPI Stats Grid -->
     <div class="stats-grid">
         <div class="glass-card stat-card">
-            <span class="stat-label">Active Care Bookings</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span class="stat-label">Active Care Bookings</span>
+                <span style="font-size: 1.35rem; line-height: 1;">🩺</span>
+            </div>
             <div class="stat-value" style="color: #0a394a;">{{ $stats['active_bookings'] }}</div>
             <span class="stat-hint">In-progress caregiver shifts</span>
         </div>
 
         <div class="glass-card stat-card">
-            <span class="stat-label">Pending Requests</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span class="stat-label">Pending Requests</span>
+                <span style="font-size: 1.35rem; line-height: 1;">⏳</span>
+            </div>
             <div class="stat-value" style="color: #d97706;">{{ $stats['pending_requests'] }}</div>
             <span class="stat-hint">Under Admin triage</span>
         </div>
 
         <div class="glass-card stat-card">
-            <span class="stat-label">Completed Care Days</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span class="stat-label">Completed Care Days</span>
+                <span style="font-size: 1.35rem; line-height: 1;">✅</span>
+            </div>
             <div class="stat-value" style="color: #059669;">{{ $stats['completed_bookings'] }}</div>
             <span class="stat-hint">Successfully verified care</span>
         </div>
 
         <div class="glass-card stat-card">
-            <span class="stat-label">Saved Caregivers</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span class="stat-label">Saved Caregivers</span>
+                <span style="font-size: 1.35rem; line-height: 1;">❤️</span>
+            </div>
             <div class="stat-value" style="color: #e11d48;">{{ $stats['saved_caregivers'] }}</div>
             <span class="stat-hint">In your family favorites</span>
         </div>

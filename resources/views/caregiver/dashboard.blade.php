@@ -25,25 +25,37 @@
     <!-- Top KPI Stats Grid -->
     <div class="stats-grid">
         <div class="glass-card stat-card">
-            <span class="stat-label">Pending Invitations</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span class="stat-label">Pending Invitations</span>
+                <span style="font-size: 1.35rem; line-height: 1;">📩</span>
+            </div>
             <div class="stat-value" style="color: #0a394a;">{{ $stats['pending_requests'] }}</div>
             <span class="stat-hint">CareMate Admin dispatched</span>
         </div>
 
         <div class="glass-card stat-card">
-            <span class="stat-label">Active / Upcoming Jobs</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span class="stat-label">Active / Upcoming Jobs</span>
+                <span style="font-size: 1.35rem; line-height: 1;">🗓️</span>
+            </div>
             <div class="stat-value" style="color: #059669;">{{ $stats['active_jobs'] }}</div>
             <span class="stat-hint">Confirmed client duties</span>
         </div>
 
         <div class="glass-card stat-card">
-            <span class="stat-label">Total Net Earnings</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span class="stat-label">Total Net Earnings</span>
+                <span style="font-size: 1.35rem; line-height: 1;">💰</span>
+            </div>
             <div class="stat-value" style="color: #0d9488;">৳{{ number_format($stats['total_earnings']) }}</div>
             <span class="stat-hint">Withdrawable via bKash/Bank</span>
         </div>
 
         <div class="glass-card stat-card">
-            <span class="stat-label">Family Rating</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span class="stat-label">Family Rating</span>
+                <span style="font-size: 1.35rem; line-height: 1;">⭐</span>
+            </div>
             <div class="stat-value" style="color: #f59e0b;">★ {{ number_format($stats['average_rating'], 1) }}</div>
             <span class="stat-hint">Based on client reviews</span>
         </div>

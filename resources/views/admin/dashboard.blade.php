@@ -6,25 +6,37 @@
     <!-- Top 4 Metrics -->
     <div class="stats-grid">
         <div class="glass-card stat-card">
-            <span class="stat-label">Platform GMV (Volume)</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span class="stat-label">Platform GMV (Volume)</span>
+                <span style="font-size: 1.35rem; line-height: 1;">📊</span>
+            </div>
             <div class="stat-value" style="color: #0a394a;">৳{{ number_format($stats['total_volume']) }}</div>
             <span class="stat-hint">Commission: ৳{{ number_format($stats['platform_revenue']) }}</span>
         </div>
 
         <div class="glass-card stat-card">
-            <span class="stat-label">Pending Verifications</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span class="stat-label">Pending Verifications</span>
+                <span style="font-size: 1.35rem; line-height: 1;">🛡️</span>
+            </div>
             <div class="stat-value" style="color: #d97706;">{{ $stats['pending_caregivers'] }}</div>
             <span class="stat-hint">Caregivers awaiting NID triage</span>
         </div>
 
         <div class="glass-card stat-card">
-            <span class="stat-label">Active Care Bookings</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span class="stat-label">Active Care Bookings</span>
+                <span style="font-size: 1.35rem; line-height: 1;">🩺</span>
+            </div>
             <div class="stat-value" style="color: #059669;">{{ $stats['active_bookings'] }}</div>
             <span class="stat-hint">Shifts supervised right now</span>
         </div>
 
         <div class="glass-card stat-card">
-            <span class="stat-label">Open Support Tickets</span>
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <span class="stat-label">Open Support Tickets</span>
+                <span style="font-size: 1.35rem; line-height: 1;">🎧</span>
+            </div>
             <div class="stat-value" style="color: {{ $stats['open_tickets'] > 0 ? '#e11d48' : '#059669' }};">
                 {{ $stats['open_tickets'] }}
             </div>
