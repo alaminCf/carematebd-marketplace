@@ -41,7 +41,7 @@
     <!-- Structured Data (JSON-LD) Global Schemas for Google AI Overviews & Knowledge Graph -->
     <script type="application/ld+json">
     {!! json_encode([
-        '@context' => 'https://schema.org',
+        "\x40context" => 'https://schema.org',
         '@graph' => [
             [
                 '@type' => 'Organization',

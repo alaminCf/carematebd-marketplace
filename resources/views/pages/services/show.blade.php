@@ -5,7 +5,7 @@
     @push('schema')
     <script type="application/ld+json">
     {!! json_encode([
-        '@context' => 'https://schema.org',
+        "\x40context" => 'https://schema.org',
         '@graph' => [
             [
                 '@type' => 'BreadcrumbList',

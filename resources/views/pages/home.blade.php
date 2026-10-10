@@ -6,7 +6,7 @@
     @if (isset($faqs) && $faqs->isNotEmpty())
     <script type="application/ld+json">
     {!! json_encode([
-        '@context' => 'https://schema.org',
+        "\x40context" => 'https://schema.org',
         '@type' => 'FAQPage',
         'mainEntity' => $faqs->map(function ($faq) {
             return [
