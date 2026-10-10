@@ -33,6 +33,8 @@ class PlatformSmokeTest extends TestCase
             '/login',
             '/register/client',
             '/become-caregiver',
+            '/sitemap.xml',
+            '/robots.txt',
         ];
 
         foreach ($publicRoutes as $route) {

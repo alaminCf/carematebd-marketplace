@@ -1,2 +1,12 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /client/
+Disallow: /caregiver/
+Disallow: /admin/
+Disallow: /secure/
+Disallow: /locale/
+Disallow: /login
+Disallow: /register/
+
+Sitemap: https://carematebd.com/sitemap.xml
+Sitemap: https://beta.carematebd.com/sitemap.xml

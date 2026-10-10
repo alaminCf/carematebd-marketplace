@@ -42,6 +42,9 @@ Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('servic
 Route::get('/caregivers', [MarketplaceController::class, 'index'])->name('marketplace.index');
 Route::get('/caregivers/{slug}', [MarketplaceController::class, 'show'])->name('marketplace.show');
 
+Route::get('/sitemap.xml', [HomeController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [HomeController::class, 'robots'])->name('robots');
+
 /*
 |--------------------------------------------------------------------------
 | Authentication Routes

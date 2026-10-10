@@ -1,17 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? 'CareMate BD — Care that feels like family, found in minutes.' }}</title>
-    <meta name="description" content="{{ $description ?? 'CareMate BD is a premier admin-mediated caregiver marketplace in Bangladesh connecting families with verified caregivers for Elderly, Child, Nursing, and Transportation Care.' }}">
+    <title>{{ $title ?? 'CareMate BD — Trusted Caregivers for Elderly, Child, & Nursing Care in Bangladesh' }}</title>
+    <meta name="description" content="{{ $description ?? 'CareMate BD is Bangladesh\'s #1 admin-mediated caregiver marketplace. Connect with background-checked caregivers for Elderly Care, Baby Care, Patient Nursing & Medical Transport across Dhaka and all Bangladesh.' }}">
+    <meta name="keywords" content="{{ $keywords ?? 'caregiver in bangladesh, elderly care dhaka, baby care dhaka, patient care nurse bangladesh, home nursing service dhaka, background checked caregiver bd, caremate bd, best caregiver agency dhaka, home care service bangladesh, nanny service dhaka' }}">
+    <meta name="author" content="CareMate BD">
+    <meta name="robots" content="{{ $robots ?? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' }}">
+    <link rel="canonical" href="{{ $canonical ?? url()->current() }}">
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="{{ $title ?? 'CareMate BD — Trusted Caregiver Marketplace' }}">
-    <meta property="og:description" content="Verified, background-checked caregivers across Bangladesh. Elderly Care, Child Care, Nursing Care & Medical Transportation.">
-    <meta property="og:image" content="{{ asset('images/hero_caregiver.jpg') }}">
-    <meta property="og:type" content="website">
+    <!-- Alternate Language Hreflang Tags (Multilingual SEO) -->
+    <link rel="alternate" hreflang="en" href="{{ route('locale.switch', 'en') }}">
+    <link rel="alternate" hreflang="bn" href="{{ route('locale.switch', 'bn') }}">
+    <link rel="alternate" hreflang="x-default" href="{{ url()->current() }}">
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn, AI Search) -->
+    <meta property="og:site_name" content="CareMate BD">
+    <meta property="og:type" content="{{ $ogType ?? 'website' }}">
+    <meta property="og:title" content="{{ $title ?? 'CareMate BD — Trusted Caregivers for Elderly, Child, & Nursing Care in Bangladesh' }}">
+    <meta property="og:description" content="{{ $description ?? 'Verified, background-checked caregivers across Bangladesh. Elderly Care, Child Care, Nursing Care & Medical Transportation.' }}">
+    <meta property="og:url" content="{{ $canonical ?? url()->current() }}">
+    <meta property="og:image" content="{{ $ogImage ?? asset('images/hero_caregiver.jpg') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="CareMate BD Verified Caregivers in Bangladesh">
+    <meta property="og:locale" content="{{ app()->getLocale() === 'bn' ? 'bn_BD' : 'en_US' }}">
+    <meta property="og:locale:alternate" content="{{ app()->getLocale() === 'bn' ? 'en_US' : 'bn_BD' }}">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@CareMateBD">
+    <meta name="twitter:creator" content="@CareMateBD">
+    <meta name="twitter:title" content="{{ $title ?? 'CareMate BD — Trusted Caregivers in Bangladesh' }}">
+    <meta name="twitter:description" content="{{ $description ?? 'Verified, background-checked caregivers across Dhaka and Bangladesh.' }}">
+    <meta name="twitter:image" content="{{ $ogImage ?? asset('images/hero_caregiver.jpg') }}">
+
+    <!-- Structured Data (JSON-LD) Global Schemas for Google AI Overviews & Knowledge Graph -->
+    <!-- Structured Data (JSON-LD) Global Schemas for Google AI Overviews & Knowledge Graph -->
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@graph' => [
+            [
+                '@type' => 'Organization',
+                '@id' => url('/') . '/#organization',
+                'name' => 'CareMate BD',
+                'alternateName' => ['CareMate', 'কেয়ারমেট বিডি', 'CareMate Bangladesh'],
+                'url' => url('/'),
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    '@id' => url('/') . '/#logo',
+                    'url' => asset('images/logo.png'),
+                    'caption' => 'CareMate BD Logo',
+                ],
+                'image' => asset('images/hero_caregiver.jpg'),
+                'description' => "CareMate BD is Bangladesh's premier admin-mediated caregiver network providing verified, background-checked caregivers for elderly care, child supervision, clinical nursing, and patient medical transport.",
+                'telephone' => '+8801610296460',
+                'email' => 'contact@carematebd.com',
+                'address' => [
+                    '@type' => 'PostalAddress',
+                    'streetAddress' => 'E-14/X, ICT Tower (14th Floor), Agargaon',
+                    'addressLocality' => 'Dhaka',
+                    'postalCode' => '1207',
+                    'addressCountry' => 'BD',
+                ],
+                'geo' => [
+                    '@type' => 'GeoCoordinates',
+                    'latitude' => '23.777176',
+                    'longitude' => '90.376840',
+                ],
+                'areaServed' => [
+                    ['@type' => 'City', 'name' => 'Dhaka'],
+                    ['@type' => 'City', 'name' => 'Chattogram'],
+                    ['@type' => 'City', 'name' => 'Sylhet'],
+                    ['@type' => 'Country', 'name' => 'Bangladesh'],
+                ],
+                'sameAs' => [
+                    'https://facebook.com/carematebd',
+                    'https://twitter.com/carematebd',
+                    'https://linkedin.com/company/carematebd',
+                ],
+                'priceRange' => '৳৳',
+            ],
+            [
+                '@type' => 'WebSite',
+                '@id' => url('/') . '/#website',
+                'url' => url('/'),
+                'name' => 'CareMate BD',
+                'publisher' => ['@id' => url('/') . '/#organization'],
+                'inLanguage' => ['en', 'bn'],
+                'potentialAction' => [
+                    '@type' => 'SearchAction',
+                    'target' => [
+                        '@type' => 'EntryPoint',
+                        'urlTemplate' => route('marketplace.index') . '?search={search_term_string}',
+                    ],
+                    'query-input' => 'required name=search_term_string',
+                ],
+            ],
+            [
+                '@type' => 'MedicalBusiness',
+                '@id' => url('/') . '/#localbusiness',
+                'name' => 'CareMate BD Care Coordination Desk',
+                'image' => asset('images/hero_caregiver.jpg'),
+                'telephone' => '+8801610296460',
+                'priceRange' => '৳৳',
+                'address' => [
+                    '@type' => 'PostalAddress',
+                    'streetAddress' => 'E-14/X, ICT Tower (14th Floor), Agargaon',
+                    'addressLocality' => 'Dhaka',
+                    'addressRegion' => 'Dhaka Division',
+                    'postalCode' => '1207',
+                    'addressCountry' => 'BD',
+                ],
+                'geo' => [
+                    '@type' => 'GeoCoordinates',
+                    'latitude' => '23.777176',
+                    'longitude' => '90.376840',
+                ],
+                'openingHoursSpecification' => [
+                    '@type' => 'OpeningHoursSpecification',
+                    'dayOfWeek' => [
+                        'Monday',
+                        'Tuesday',
+                        'Wednesday',
+                        'Thursday',
+                        'Friday',
+                        'Saturday',
+                        'Sunday',
+                    ],
+                    'opens' => '00:00',
+                    'closes' => '23:59',
+                ],
+            ],
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+
+    @stack('schema')
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +147,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v={{ file_exists(public_path('css/caremate.css')) ? filemtime(public_path('css/caremate.css')) : '3.0.2' }}">
+    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v={{ file_exists(public_path('css/caremate.css')) ? filemtime(public_path('css/caremate.css')) : '3.1.0' }}">
     <style>
         html, body {
             overflow-x: clip !important;
@@ -969,6 +1097,46 @@
                     <div class="footer-operating-hours">
                         {{ __('Operating hours: 24/7 Care Coordination') }}
                     </div>
+                </div>
+            </div>
+
+            <!-- Local SEO & Search Keyword Navigation for AI Overviews & Search Engines -->
+            <div class="footer-seo-bar">
+                <div class="footer-seo-title">{{ __('Care Services & Coverage in Bangladesh') }}</div>
+                <div class="footer-seo-tags">
+                    <a href="{{ route('services.show', 'elderly-care') }}">{{ __('Elderly Care Dhaka') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('services.show', 'child-care') }}">{{ __('Baby Care & Nanny Dhaka') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('services.show', 'nursing-care') }}">{{ __('Patient Care Attendant') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('services.show', 'nursing-care') }}">{{ __('Home Nursing BD') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('services.show', 'medical-transportation') }}">{{ __('Patient Medical Transport') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('marketplace.index', ['gender' => 'female']) }}">{{ __('Female Caregiver BD') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('marketplace.index', ['gender' => 'male']) }}">{{ __('Male Caregiver BD') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('marketplace.index', ['district' => 'Dhaka']) }}">{{ __('Caregiver Gulshan') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('marketplace.index', ['district' => 'Dhaka']) }}">{{ __('Caregiver Banani') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('marketplace.index', ['district' => 'Dhaka']) }}">{{ __('Caregiver Dhanmondi') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('marketplace.index', ['district' => 'Dhaka']) }}">{{ __('Caregiver Uttara') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('marketplace.index', ['district' => 'Dhaka']) }}">{{ __('Caregiver Bashundhara') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('marketplace.index', ['district' => 'Dhaka']) }}">{{ __('Caregiver Mirpur') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('marketplace.index', ['district' => 'Dhaka']) }}">{{ __('Caregiver Mohammadpur') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('marketplace.index', ['district' => 'Chattogram']) }}">{{ __('Caregiver Chattogram') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('marketplace.index', ['district' => 'Sylhet']) }}">{{ __('Caregiver Sylhet') }}</a>
+                    <span class="footer-seo-divider">•</span>
+                    <a href="{{ route('sitemap') }}">{{ __('XML Sitemap') }}</a>
                 </div>
             </div>
 

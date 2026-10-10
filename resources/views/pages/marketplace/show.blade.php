@@ -2,6 +2,74 @@
     <x-slot:title>{{ $profile['name'] }} — Verified Caregiver | CareMate BD</x-slot:title>
     <x-slot:description>{{ Str::limit($profile['about'] ?? 'Professional verified caregiver on CareMate BD', 150) }}</x-slot:description>
 
+    @push('schema')
+    @php
+        $personData = [
+            '@type' => 'Person',
+            'name' => $profile['name'],
+            'image' => $profile['avatar_url'],
+            'jobTitle' => 'Verified Caregiver',
+            'description' => $profile['about'] ?? 'Professional verified caregiver on CareMate BD',
+            'worksFor' => [
+                '@type' => 'Organization',
+                '@id' => url('/') . '/#organization',
+                'name' => 'CareMate BD',
+            ],
+            'address' => [
+                '@type' => 'PostalAddress',
+                'addressLocality' => $profile['location']['area'] ?? $profile['location']['city'],
+                'addressRegion' => $profile['location']['district'],
+                'addressCountry' => 'BD',
+            ],
+        ];
+
+        if (($profile['ratings']['count'] ?? 0) > 0) {
+            $personData['aggregateRating'] = [
+                '@type' => 'AggregateRating',
+                'ratingValue' => (string) $profile['ratings']['average'],
+                'reviewCount' => (string) $profile['ratings']['count'],
+                'bestRating' => '5',
+                'worstRating' => '1',
+            ];
+        }
+    @endphp
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@graph' => [
+            [
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => [
+                    [
+                        '@type' => 'ListItem',
+                        'position' => 1,
+                        'name' => 'Home',
+                        'item' => route('home'),
+                    ],
+                    [
+                        '@type' => 'ListItem',
+                        'position' => 2,
+                        'name' => 'Caregivers',
+                        'item' => route('marketplace.index'),
+                    ],
+                    [
+                        '@type' => 'ListItem',
+                        'position' => 3,
+                        'name' => $profile['name'],
+                        'item' => route('marketplace.show', $caregiver->slug),
+                    ],
+                ],
+            ],
+            [
+                '@type' => 'ProfilePage',
+                '@id' => route('marketplace.show', $caregiver->slug) . '#profilepage',
+                'mainEntity' => $personData,
+            ],
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+    @endpush
+
     @push('styles')
     <style>
         @media (max-width: 768px) {

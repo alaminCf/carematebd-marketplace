@@ -2088,6 +2088,48 @@ html, body {
     color: var(--brand-primary);
 }
 
+.footer-seo-bar {
+    border-top: 1px solid rgba(226, 232, 240, 0.75);
+    padding-top: 1.25rem;
+    margin-top: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.footer-seo-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-heading);
+}
+
+.footer-seo-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+    align-items: center;
+    line-height: 1.5;
+}
+
+.footer-seo-tags a, .footer-seo-tags span.footer-seo-tag {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.footer-seo-tags a:hover {
+    color: var(--brand-primary);
+    text-decoration: underline;
+}
+
+.footer-seo-divider {
+    color: rgba(203, 213, 225, 0.8);
+    font-size: 0.75rem;
+}
+
 /* Breakpoint: Desktop Navigation to Mobile Drawer (max-width: 1180px) */
 @media (max-width: 1180px) {
     .desktop-nav {

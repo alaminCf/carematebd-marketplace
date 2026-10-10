@@ -2,6 +2,27 @@
     <x-slot:title>CareMate BD — Trusted Caregivers for Elderly, Child, & Nursing Care in Bangladesh</x-slot:title>
     <x-slot:description>Find background-verified caregivers in Dhaka and across Bangladesh. Admin-coordinated care for your loved ones with total safety, privacy, and peace of mind.</x-slot:description>
 
+    @push('schema')
+    @if (isset($faqs) && $faqs->isNotEmpty())
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'FAQPage',
+        'mainEntity' => $faqs->map(function ($faq) {
+            return [
+                '@type' => 'Question',
+                'name' => $faq->question,
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => strip_tags($faq->answer),
+                ],
+            ];
+        })->values()->all(),
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+    @endif
+    @endpush
+
     @push('styles')
     <style>
         .hero-section {
@@ -627,6 +648,95 @@
                 <a href="{{ route('faq') }}" class="btn btn-secondary btn-sm">
                     View All Frequently Asked Questions →
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Overview & Caregiver Guide: Authoritative Quick Answers & Local Pricing -->
+    <section style="margin-bottom: 5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; padding: 4rem 0;">
+        <div class="container">
+            <div style="max-width: 860px; margin: 0 auto;">
+                <div style="text-align: center; margin-bottom: 2.5rem;">
+                    <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-primary); background: rgba(10,57,74,0.08); padding: 0.35rem 0.85rem; border-radius: var(--radius-pill);">
+                        {{ __('Caregiver Guide & Quick Facts') }}
+                    </span>
+                    <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-top: 0.75rem;">
+                        {{ __('Hiring a Verified Caregiver in Bangladesh — What You Need to Know') }}
+                    </h2>
+                    <p style="font-size: 1.05rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                        {{ __('Key answers to common questions about caregiver safety, standard pricing, shift types, and hiring procedures.') }}
+                    </p>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <article class="glass-card" style="padding: 1.75rem; background: #fff; border: 1px solid rgba(226, 232, 240, 0.9);">
+                        <h3 style="font-size: 1.2rem; font-weight: 700; color: #0a394a; margin-bottom: 0.65rem;">
+                            {{ __('How does CareMate BD verify caregivers in Bangladesh?') }}
+                        </h3>
+                        <p style="font-size: 0.95rem; color: #334155; line-height: 1.7; margin: 0;">
+                            {{ __('Every caregiver on CareMate BD undergoes strict multi-step vetting before their profile is published. This includes government National ID (NID) digital authentication, permanent address physical verification, police background check clearance, clinical qualification review for nurses, and an in-person interview with a Care Coordinator. Family members can review verified badges and certifications directly on each caregiver profile.') }}
+                        </p>
+                    </article>
+
+                    <article class="glass-card" style="padding: 1.75rem; background: #fff; border: 1px solid rgba(226, 232, 240, 0.9);">
+                        <h3 style="font-size: 1.2rem; font-weight: 700; color: #0a394a; margin-bottom: 0.65rem;">
+                            {{ __('What are the standard caregiver rates and shifts in Dhaka?') }}
+                        </h3>
+                        <p style="font-size: 0.95rem; color: #334155; line-height: 1.7; margin-bottom: 0.85rem;">
+                            {{ __('Caregiver charges in Dhaka depend on the level of care required (basic elderly assistance, child supervision, or specialized post-surgery nursing) and shift duration:') }}
+                        </p>
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
+                                <thead>
+                                    <tr style="border-bottom: 2px solid #e2e8f0; background: #f1f5f9;">
+                                        <th style="padding: 0.75rem 1rem; color: #0a394a; font-weight: 700;">{{ __('Service Shift') }}</th>
+                                        <th style="padding: 0.75rem 1rem; color: #0a394a; font-weight: 700;">{{ __('Duration') }}</th>
+                                        <th style="padding: 0.75rem 1rem; color: #0a394a; font-weight: 700;">{{ __('Typical Rate Range') }}</th>
+                                        <th style="padding: 0.75rem 1rem; color: #0a394a; font-weight: 700;">{{ __('Best Suited For') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 0.75rem 1rem; font-weight: 600;">{{ __('Hourly / Short Visit') }}</td>
+                                        <td style="padding: 0.75rem 1rem;">2 – 6 {{ __('Hours') }}</td>
+                                        <td style="padding: 0.75rem 1rem; color: #0a394a; font-weight: 700;">৳150 – ৳350 / {{ __('hr') }}</td>
+                                        <td style="padding: 0.75rem 1rem;">{{ __('Doctor visits, wound dressing, companion walk') }}</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e2e8f0; background: #fafafa;">
+                                        <td style="padding: 0.75rem 1rem; font-weight: 600;">{{ __('Day Shift / Night Shift') }}</td>
+                                        <td style="padding: 0.75rem 1rem;">10 – 12 {{ __('Hours') }}</td>
+                                        <td style="padding: 0.75rem 1rem; color: #0a394a; font-weight: 700;">৳800 – ৳1,800 / {{ __('day') }}</td>
+                                        <td style="padding: 0.75rem 1rem;">{{ __('Working parents, post-discharge hospital recovery') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 0.75rem 1rem; font-weight: 600;">{{ __('24/7 Live-In (Monthly)') }}</td>
+                                        <td style="padding: 0.75rem 1rem;">{{ __('Full Time Monthly') }}</td>
+                                        <td style="padding: 0.75rem 1rem; color: #0a394a; font-weight: 700;">৳18,000 – ৳35,000 / {{ __('mo') }}</td>
+                                        <td style="padding: 0.75rem 1rem;">{{ __('Bedridden seniors, Alzheimer\'s, continuous patient care') }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+
+                    <article class="glass-card" style="padding: 1.75rem; background: #fff; border: 1px solid rgba(226, 232, 240, 0.9);">
+                        <h3 style="font-size: 1.2rem; font-weight: 700; color: #0a394a; margin-bottom: 0.65rem;">
+                            {{ __('What happens if a caregiver falls sick or is unavailable?') }}
+                        </h3>
+                        <p style="font-size: 0.95rem; color: #334155; line-height: 1.7; margin: 0;">
+                            {{ __('CareMate BD operates with an active admin-mediated Care Coordination Desk. If your assigned caregiver faces an unexpected emergency, our Care Managers immediately arrange an equivalent background-verified substitute caregiver at no extra coordination charge, ensuring uninterrupted continuity of care for your loved one.') }}
+                        </p>
+                    </article>
+
+                    <article class="glass-card" style="padding: 1.75rem; background: #fff; border: 1px solid rgba(226, 232, 240, 0.9);">
+                        <h3 style="font-size: 1.2rem; font-weight: 700; color: #0a394a; margin-bottom: 0.65rem;">
+                            {{ __('Which areas in Bangladesh are covered by CareMate BD?') }}
+                        </h3>
+                        <p style="font-size: 0.95rem; color: #334155; line-height: 1.7; margin: 0;">
+                            {{ __('We provide complete caregiver coverage across all major areas of Dhaka city, including Gulshan, Banani, Baridhara, Dhanmondi, Uttara, Bashundhara R/A, Mirpur, Mohammadpur, Badda, Khilgaon, and Old Dhaka. We also coordinate nursing and elderly home care in Chattogram and Sylhet metropolitan areas.') }}
+                        </p>
+                    </article>
+                </div>
             </div>
         </div>
     </section>

@@ -14,6 +14,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
@@ -217,6 +218,36 @@ class HomeController extends Controller
             'city' => 'Dhaka',
             'display' => 'Dhaka, Bangladesh',
             'source' => 'default',
+        ]);
+    }
+
+    public function sitemap(): Response
+    {
+        $services = Service::where('is_active', true)->get();
+        $caregivers = Caregiver::publiclyVisible()->get();
+
+        $content = view('pages.sitemap', compact('services', 'caregivers'))->render();
+
+        return response($content, 200, [
+            'Content-Type' => 'application/xml; charset=utf-8',
+        ]);
+    }
+
+    public function robots(): Response
+    {
+        $content = "User-agent: *\n"
+            ."Allow: /\n"
+            ."Disallow: /client/\n"
+            ."Disallow: /caregiver/\n"
+            ."Disallow: /admin/\n"
+            ."Disallow: /secure/\n"
+            ."Disallow: /locale/\n"
+            ."Disallow: /login\n"
+            ."Disallow: /register\n\n"
+            .'Sitemap: '.url('/sitemap.xml')."\n";
+
+        return response($content, 200, [
+            'Content-Type' => 'text/plain; charset=utf-8',
         ]);
     }
 }

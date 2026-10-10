@@ -2,6 +2,49 @@
     <x-slot:title>Frequently Asked Questions — CareMate BD</x-slot:title>
     <x-slot:description>Got questions about caregiver hiring, safety checks, payments, or working with CareMate BD? Find answers here.</x-slot:description>
 
+    @push('schema')
+    @php
+        $allFaqs = collect($clientFaqs ?? [])->concat(collect($caregiverFaqs ?? []));
+    @endphp
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@graph' => [
+            [
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => [
+                    [
+                        '@type' => 'ListItem',
+                        'position' => 1,
+                        'name' => 'Home',
+                        'item' => route('home'),
+                    ],
+                    [
+                        '@type' => 'ListItem',
+                        'position' => 2,
+                        'name' => 'FAQ',
+                        'item' => route('faq'),
+                    ],
+                ],
+            ],
+            [
+                '@type' => 'FAQPage',
+                'mainEntity' => $allFaqs->map(function ($faq) {
+                    return [
+                        '@type' => 'Question',
+                        'name' => $faq->question,
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => strip_tags($faq->answer),
+                        ],
+                    ];
+                })->values()->all(),
+            ],
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+    @endpush
+
     <div class="container container-narrow" style="padding: 3rem 1.25rem 5rem 1.25rem;">
         <div style="text-align: center; margin-bottom: 3.5rem;">
             <div style="display: inline-block; font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-primary); margin-bottom: 0.5rem;">
