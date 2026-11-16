@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     name: Sync Files & Clear View Cache via FTP
@@ -15,32 +18,40 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 5
 
       - name: Upload changed files and clear compiled Blade views
+        id: ftp_sync
+        continue-on-error: true
         env:
-          FTP_HOST: ${{ secrets.FTP_HOST || 'drh3.hostwhitelabel.com' }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           REMOTE_BASE: /domains/carematebd.com
         run: |
-          python3 - << 'EOF'
+          python3 -u - << 'EOF' 2>&1 | tee deploy.log
           import ftplib
           import os
           import subprocess
           import sys
+          import traceback
 
-          host = os.environ.get('FTP_HOST') or 'drh3.hostwhitelabel.com'
-          user = os.environ.get('FTP_USERNAME')
-          password = os.environ.get('FTP_PASSWORD')
-          remote_base = os.environ.get('REMOTE_BASE', '/domains/carematebd.com')
+          host = (os.environ.get('FTP_HOST') or '').strip() or 'drh3.hostwhitelabel.com'
+          user = (os.environ.get('FTP_USERNAME') or '').strip()
+          password = (os.environ.get('FTP_PASSWORD') or '').strip()
+          remote_base = (os.environ.get('REMOTE_BASE') or '/domains/carematebd.com').strip()
+
+          print(f"Starting deploy to {host}:{remote_base} (user set: {bool(user)}, pass set: {bool(password)})")
 
           if not user or not password:
-              print("Error: FTP_USERNAME and FTP_PASSWORD secrets must be configured in GitHub repository settings.")
+              print("ERROR: FTP_USERNAME or FTP_PASSWORD secret is empty!")
               sys.exit(1)
 
-          # Determine changed files in latest push, plus always ensure core contact/settings files are synced
-          changed = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'], text=True).splitlines()
+          try:
+              changed = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD~3', 'HEAD'], text=True).splitlines()
+          except Exception:
+              changed = []
+
           core_sync = [
               'app/Http/Controllers/Admin/AdminSettingController.php',
               'app/Models/Setting.php',
@@ -78,45 +89,65 @@ jobs:
                   curr += '/' + p
                   try:
                       ftp.cwd(curr)
-                  except ftplib.error_perm:
-                      ftp.mkd(curr)
+                  except Exception:
+                      try:
+                          ftp.mkd(curr)
+                      except Exception:
+                          pass
 
-          ftp = ftplib.FTP()
-          ftp.connect(host, 21, timeout=30)
-          ftp.login(user, password)
-          print(f"Connected to {host} as {user}")
-
-          for rel_path in files_to_sync:
-              if not os.path.isfile(rel_path):
-                  continue
-              if not rel_path.startswith(allowed_prefixes):
-                  continue
-
-              remote_file = f"{remote_base}/{rel_path}"
-              ensure_remote_dir(ftp, os.path.dirname(remote_file))
-              with open(rel_path, 'rb') as f:
-                  ftp.storbinary(f"STOR {remote_file}", f)
-              print(f"Uploaded: {remote_file}")
-
-              # Mirror public/ assets into public_html/ as well
-              if rel_path.startswith('public/') and rel_path != 'public/index.php':
-                  sub_path = rel_path[len('public/'):]
-                  remote_pub_html = f"{remote_base}/public_html/{sub_path}"
-                  ensure_remote_dir(ftp, os.path.dirname(remote_pub_html))
-                  with open(rel_path, 'rb') as f:
-                      ftp.storbinary(f"STOR {remote_pub_html}", f)
-                  print(f"Uploaded: {remote_pub_html}")
-
-          # Clear compiled Blade views so changes take effect immediately
           try:
-              ftp.cwd(f"{remote_base}/storage/framework/views")
-              for name in ftp.nlst():
-                  if name.endswith('.php'):
-                      ftp.delete(name)
-              print("Cleared compiled Blade views on live server.")
-          except Exception as e:
-              print(f"Note while clearing views: {e}")
+              ftp = ftplib.FTP()
+              ftp.connect(host, 21, timeout=30)
+              ftp.login(user, password)
+              ftp.set_pasv(True)
+              print(f"Connected to {host} as {user}, PWD={ftp.pwd()}")
 
-          ftp.quit()
+              for rel_path in files_to_sync:
+                  if not os.path.isfile(rel_path):
+                      continue
+                  if not rel_path.startswith(allowed_prefixes):
+                      continue
+
+                  remote_file = f"{remote_base}/{rel_path}"
+                  ensure_remote_dir(ftp, os.path.dirname(remote_file))
+                  with open(rel_path, 'rb') as f:
+                      ftp.storbinary(f"STOR {remote_file}", f)
+                  print(f"Uploaded: {remote_file}")
+
+                  if rel_path.startswith('public/') and rel_path != 'public/index.php':
+                      sub_path = rel_path[len('public/'):]
+                      remote_pub_html = f"{remote_base}/public_html/{sub_path}"
+                      ensure_remote_dir(ftp, os.path.dirname(remote_pub_html))
+                      with open(rel_path, 'rb') as f:
+                          ftp.storbinary(f"STOR {remote_pub_html}", f)
+                      print(f"Uploaded: {remote_pub_html}")
+
+              try:
+                  ftp.cwd(f"{remote_base}/storage/framework/views")
+                  cleared = 0
+                  for name in ftp.nlst():
+                      if name.endswith('.php'):
+                          ftp.delete(name)
+                          cleared += 1
+                  print(f"Cleared {cleared} compiled Blade views on live server.")
+              except Exception as e:
+                  print(f"Note while clearing views: {e}")
+
+              ftp.quit()
+              print("DEPLOY SUCCESS")
+          except Exception as e:
+              traceback.print_exc()
+              sys.exit(1)
           EOF
 
+      - name: Publish deploy log to deploy-log branch
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan deploy-log-temp
+          git rm -rf . >/dev/null 2>&1 || true
+          cp deploy.log ./deploy.log || echo "No log" > ./deploy.log
+          git add deploy.log
+          git commit -m "Update deploy log"
+          git push -f origin deploy-log-temp:deploy-log
