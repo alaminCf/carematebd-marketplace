@@ -3,7 +3,7 @@
     <x-slot:header>CareDesk Support</x-slot:header>
     <x-slot:subheading>Direct communication with your CareMate Care Manager. 24/7 priority mediation and assistance.</x-slot:subheading>
 
-    <div style="display: grid; grid-template-columns: 1fr 380px; gap: 2rem; align-items: flex-start;" class="support-layout">
+    <div class="support-layout">
         <!-- Tickets List -->
         <div class="glass-card" style="padding: 1.75rem; border-radius: var(--radius-xl);">
             <div style="font-weight: 700; font-size: 1.15rem; color: #0f172a; margin-bottom: 1.25rem;">

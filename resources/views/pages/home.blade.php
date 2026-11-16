@@ -47,6 +47,155 @@
                 padding-top: 0.05rem !important;
             }
         }
+
+        /* Google Reviews Header CTAs */
+        .google-header-ctas {
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+        .google-btn-primary,
+        .google-btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 0.52rem 0.95rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+        .google-btn-primary {
+            background: #0a394a;
+            color: #ffffff !important;
+            border: 1px solid #0a394a;
+            box-shadow: 0 3px 12px rgba(10, 57, 74, 0.14);
+        }
+        .google-btn-primary:hover {
+            background: #0d4a60;
+            transform: translateY(-1px);
+        }
+        .google-btn-secondary {
+            background: #ffffff;
+            color: #0a394a !important;
+            border: 1.5px solid #cbd5e1;
+        }
+        .google-btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+        .btn-text-short {
+            display: none;
+        }
+        .btn-text-full {
+            display: inline;
+        }
+
+        @media (max-width: 640px) {
+            .google-header-ctas {
+                width: 100%;
+                gap: 0.5rem;
+            }
+            .google-btn-primary,
+            .google-btn-secondary {
+                flex: 1 1 50%;
+                min-width: 0;
+                font-size: 0.78rem;
+                padding: 0.52rem 0.5rem;
+                text-align: center;
+            }
+            .google-btn-primary svg {
+                width: 13px;
+                height: 13px;
+                flex-shrink: 0;
+            }
+            .btn-text-full {
+                display: none;
+            }
+            .btn-text-short {
+                display: inline;
+            }
+        }
+        @media (max-width: 360px) {
+            .google-btn-primary,
+            .google-btn-secondary {
+                font-size: 0.72rem;
+                padding: 0.46rem 0.35rem;
+                gap: 0.25rem;
+            }
+        }
+
+        /* FAQ Rates Table & Cards */
+        .desktop-rates-table {
+            display: block;
+        }
+        .mobile-rates-cards {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .desktop-rates-table {
+                display: none !important;
+            }
+            .mobile-rates-cards {
+                display: flex !important;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            .rate-card-item {
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 0.9rem 1rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            }
+            .rate-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 0.5rem;
+                margin-bottom: 0.35rem;
+            }
+            .rate-card-title {
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: #0f172a;
+                margin: 0;
+            }
+            .rate-duration-badge {
+                font-size: 0.72rem;
+                font-weight: 600;
+                background: #e2e8f0;
+                color: #334155;
+                padding: 0.2rem 0.55rem;
+                border-radius: 9999px;
+                white-space: nowrap;
+            }
+            .rate-card-price {
+                font-size: 1.1rem;
+                font-weight: 800;
+                color: #0a394a;
+                margin-bottom: 0.35rem;
+            }
+            .rate-price-unit {
+                font-size: 0.8rem;
+                font-weight: 600;
+                color: #64748b;
+            }
+            .rate-card-desc {
+                font-size: 0.82rem;
+                color: #475569;
+                line-height: 1.45;
+            }
+            .rate-card-desc strong {
+                color: #1e293b;
+            }
+        }
     </style>
     @endpush
 
@@ -204,7 +353,7 @@
                                 <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.516 2 2.031 6.484 2.031 12C2.031 13.805 2.508 15.5 3.336 16.969L2 22L7.172 20.688C8.594 21.461 10.258 21.906 12.031 21.906C17.547 21.906 22.031 17.422 22.031 12C22.031 6.484 17.547 2 12.031 2ZM12.031 20.156C10.453 20.156 8.969 19.719 7.688 18.969L7.375 18.781L4.312 19.562L5.125 16.578L4.922 16.25C4.109 14.953 3.672 13.5 3.672 12C3.672 7.391 7.422 3.641 12.031 3.641C16.641 3.641 20.391 7.391 20.391 12C20.391 16.609 16.641 20.156 12.031 20.156ZM16.609 14.547C16.359 14.422 15.125 13.812 14.891 13.734C14.656 13.656 14.484 13.609 14.312 13.859C14.141 14.109 13.656 14.688 13.5 14.859C13.344 15.031 13.188 15.047 12.938 14.922C12.688 14.797 11.875 14.531 10.922 13.68C10.172 13.008 9.672 12.18 9.516 11.93C9.359 11.68 9.5 11.539 9.625 11.414C9.734 11.305 9.875 11.125 10 10.984C10.125 10.844 10.172 10.734 10.25 10.578C10.328 10.422 10.281 10.281 10.219 10.156C10.156 10.031 9.656 8.812 9.453 8.312C9.25 7.828 9.047 7.891 8.891 7.891C8.75 7.891 8.578 7.875 8.406 7.875C8.234 7.875 7.953 7.938 7.719 8.188C7.484 8.438 6.828 9.047 6.828 10.281C6.828 11.516 7.734 12.703 7.859 12.875C7.984 13.047 9.641 15.609 12.188 16.703C12.797 16.969 13.266 17.125 13.641 17.25C14.25 17.438 14.812 17.406 15.25 17.344C15.75 17.266 16.781 16.719 17 16.109C17.219 15.5 17.219 14.984 17.156 14.859C17.094 14.734 16.859 14.672 16.609 14.547Z"/></svg>
                             </span>
                             <div style="font-size: 0.88rem; color: #064e3b;">
-                                {{ __('Prefer to talk directly?') }} <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20need%20quick%20caregiver%20assistance." target="_blank" rel="noopener noreferrer" style="color: #075E54; font-weight: 800; text-decoration: underline; margin-left: 0.25rem;">{{ __('Chat on WhatsApp with Care Coordinator →') }}</a>
+                                {{ __('Prefer to talk directly?') }} <a href="https://wa.me/{{ $siteSettings['contact_phone_wa'] }}?text=Hello%20CareMate%20BD%2C%20I%20need%20quick%20caregiver%20assistance." target="_blank" rel="noopener noreferrer" style="color: #075E54; font-weight: 800; text-decoration: underline; margin-left: 0.25rem;">{{ __('Chat on WhatsApp with Care Coordinator →') }}</a>
                             </div>
                         </div>
                     </div>
@@ -549,43 +698,255 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    @if ($testimonials->isNotEmpty())
-        <section style="margin-bottom: 5rem;">
-            <div class="container">
-                <div style="text-align: center; max-width: 600px; margin: 0 auto 3rem auto;">
-                    <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-primary);">
-                        Real Stories
-                    </span>
-                    <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-top: 0.35rem;">
+    <!-- Google Reviews / Testimonials Section -->
+    <section style="margin-bottom: 5rem;" id="reviews">
+        <div class="container">
+            <!-- Header with Google Badge -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1.5rem;">
+                <div>
+                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: #ffffff; padding: 0.4rem 0.9rem; border-radius: 9999px; border: 1px solid rgba(226, 232, 240, 0.9); box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 0.75rem;">
+                        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+                        <span style="font-size: 0.8rem; font-weight: 800; color: #0f172a; letter-spacing: 0.02em;">Google Customer Reviews</span>
+                        <span style="color: #f59e0b; font-size: 0.82rem; font-weight: 800;">★ {{ number_format($googleStats['rating'], 1) }} Rating</span>
+                    </div>
+                    <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin: 0 0 0.5rem 0; line-height: 1.2;">
                         Trusted by Bangladeshi Families
                     </h2>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary); margin: 0;">
+                        Live verified reviews from patients, doctors, and family members across Bangladesh.
+                    </p>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;" class="testimonials-grid">
-                    @foreach ($testimonials->take(3) as $review)
-                        <div class="glass-card" style="display: flex; flex-direction: column;">
-                            <div style="display: flex; align-items: center; gap: 0.25rem; margin-bottom: 1rem;">
-                                <x-star-rating :rating="$review->rating" />
-                            </div>
-                            <p style="font-size: 0.95rem; color: var(--text-secondary); font-style: italic; line-height: 1.6; margin-bottom: 1.5rem; flex: 1;">
-                                "{{ $review->comment }}"
-                            </p>
-                            <div style="border-top: 1px solid rgba(226, 232, 240, 0.7); padding-top: 1rem; display: flex; align-items: center; justify-content: space-between;">
-                                <div>
-                                    <div style="font-weight: 700; font-size: 0.9rem; color: #0f172a;">{{ $review->client->user->name ?? 'Verified Family' }}</div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted);">Care recipient family</div>
+                <!-- Google CTA Buttons -->
+                <div class="google-header-ctas">
+                    <a href="{{ $googleStats['write_review_url'] }}" target="_blank" rel="noopener noreferrer" class="google-btn-primary">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        <span class="btn-text-full">Write a Google Review</span>
+                        <span class="btn-text-short">Write a Review</span>
+                    </a>
+                    <a href="{{ $googleStats['review_url'] }}" target="_blank" rel="noopener noreferrer" class="google-btn-secondary">
+                        <span class="btn-text-full">View on Google Maps ↗</span>
+                        <span class="btn-text-short">Google Maps ↗</span>
+                    </a>
+                </div>
+            </div>
+
+            @if (!empty($googleReviewsEmbed))
+                <div class="google-reviews-embed" style="margin-top: 1.5rem;">
+                    {!! $googleReviewsEmbed !!}
+                </div>
+            @else
+                <style>
+                    /* Desktop Grid */
+                    .g-reviews-desktop-grid {
+                        display: grid;
+                        grid-template-columns: repeat({{ min(max($googleReviews->count(), 1), 3) }}, 1fr);
+                        gap: 1.75rem;
+                    }
+                    .g-reviews-mobile-carousel {
+                        display: none;
+                    }
+
+                    /* Mobile Carousel Mode */
+                    @media (max-width: 768px) {
+                        .g-reviews-desktop-grid {
+                            display: none !important;
+                        }
+                        .g-reviews-mobile-carousel {
+                            display: block !important;
+                            position: relative;
+                            width: 100%;
+                            overflow: hidden;
+                        }
+                        .g-reviews-carousel-track-box {
+                            position: relative;
+                            width: 100%;
+                            overflow: hidden;
+                            border-radius: var(--radius-xl);
+                        }
+                        .g-reviews-carousel-track {
+                            display: flex !important;
+                            width: 100%;
+                            transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+                            will-change: transform;
+                        }
+                        .g-review-slide-item {
+                            flex: 0 0 100% !important;
+                            min-width: 100% !important;
+                            max-width: 100% !important;
+                            box-sizing: border-box !important;
+                            padding: 0 2px;
+                        }
+                        .g-reviews-carousel-controls {
+                            display: flex !important;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 1.25rem;
+                            margin-top: 1.25rem;
+                        }
+                        .g-rev-ctrl-btn {
+                            width: 42px;
+                            height: 42px;
+                            border-radius: 50%;
+                            background: #ffffff;
+                            border: 1px solid rgba(226, 232, 240, 0.9);
+                            box-shadow: 0 2px 8px rgba(10, 57, 74, 0.08);
+                            color: #0a394a;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            cursor: pointer;
+                            padding: 0;
+                            transition: all 0.2s ease;
+                        }
+                        .g-rev-ctrl-btn:active {
+                            transform: scale(0.92);
+                            background: #f1f5f9;
+                        }
+                        .g-rev-dots-list {
+                            display: flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                        }
+                        .g-rev-dot-btn {
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 9999px;
+                            background: #cbd5e1;
+                            border: none;
+                            padding: 0;
+                            cursor: pointer;
+                            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        }
+                        .g-rev-dot-btn.active {
+                            width: 28px;
+                            background: #0a394a;
+                        }
+                    }
+                </style>
+
+                <!-- Desktop Grid View -->
+                <div class="g-reviews-desktop-grid">
+                    @foreach ($googleReviews as $rev)
+                        <div class="glass-card" style="display: flex; flex-direction: column; padding: 1.85rem; border-radius: var(--radius-xl); position: relative; background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.9); box-shadow: 0 8px 24px rgba(10, 57, 74, 0.05); transition: transform 0.2s, box-shadow 0.2s;">
+                            <!-- Header: User + Google Badge -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    @php
+                                        $bgColors = ['#0a394a', '#15798e', '#059669', '#d97706', '#7c3aed', '#db2777'];
+                                        $initialColor = $bgColors[abs(crc32($rev->author_name)) % count($bgColors)];
+                                    @endphp
+                                    <div style="width: 44px; height: 44px; border-radius: 50%; background: {{ $initialColor }}; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                        {{ strtoupper(substr($rev->author_name, 0, 1)) }}
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 800; color: #0f172a; font-size: 0.95rem; line-height: 1.2;">
+                                            {{ $rev->author_name }}
+                                        </div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">
+                                            {{ $rev->relative_time ?? 'Verified Google Reviewer' }}
+                                        </div>
+                                    </div>
                                 </div>
-                                <span style="font-size: 0.75rem; color: #059669; font-weight: 700; background: rgba(16, 185, 129, 0.1); padding: 0.25rem 0.5rem; border-radius: var(--radius-pill);">
-                                    ✓ Verified Care
+
+                                <a href="{{ $googleStats['review_url'] }}" target="_blank" rel="noopener noreferrer" title="Verified Google Review" style="display: inline-flex; align-items: center; gap: 0.25rem; background: #f8fafc; border: 1px solid #e2e8f0; padding: 0.2rem 0.5rem; border-radius: 9999px; text-decoration: none;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+                                    <span style="font-size: 0.68rem; font-weight: 700; color: #475569;">Google</span>
+                                </a>
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 0.2rem; margin-bottom: 0.9rem; color: #f59e0b; font-size: 0.95rem;">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    ★
+                                @endfor
+                            </div>
+
+                            <p style="font-size: 0.92rem; color: #334155; line-height: 1.6; margin-bottom: 1.25rem; flex: 1;">
+                                "{{ $rev->comment }}"
+                            </p>
+
+                            <div style="border-top: 1px solid rgba(226, 232, 240, 0.7); padding-top: 0.75rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                                <span>Verified Client</span>
+                                <span style="color: #059669; font-weight: 700; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                    ✓ Verified on Google
                                 </span>
                             </div>
                         </div>
                     @endforeach
                 </div>
-            </div>
-        </section>
-    @endif
+
+                <!-- Mobile Dedicated Carousel View -->
+                <div class="g-reviews-mobile-carousel" id="gReviewsMobileCarousel">
+                    <div class="g-reviews-carousel-track-box">
+                        <div class="g-reviews-carousel-track" id="gReviewsMobileTrack">
+                            @foreach ($googleReviews as $index => $rev)
+                                <div class="g-review-slide-item" data-index="{{ $index }}">
+                                    <div class="glass-card" style="display: flex; flex-direction: column; padding: 1.6rem; border-radius: var(--radius-xl); position: relative; background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.9); box-shadow: 0 8px 24px rgba(10, 57, 74, 0.05); min-height: 270px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem;">
+                                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                                @php
+                                                    $bgColors = ['#0a394a', '#15798e', '#059669', '#d97706', '#7c3aed', '#db2777'];
+                                                    $initialColor = $bgColors[abs(crc32($rev->author_name)) % count($bgColors)];
+                                                @endphp
+                                                <div style="width: 44px; height: 44px; border-radius: 50%; background: {{ $initialColor }}; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                                    {{ strtoupper(substr($rev->author_name, 0, 1)) }}
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 800; color: #0f172a; font-size: 0.95rem; line-height: 1.2;">
+                                                        {{ $rev->author_name }}
+                                                    </div>
+                                                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">
+                                                        {{ $rev->relative_time ?? 'Verified Google Reviewer' }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <a href="{{ $googleStats['review_url'] }}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.25rem; background: #f8fafc; border: 1px solid #e2e8f0; padding: 0.2rem 0.5rem; border-radius: 9999px; text-decoration: none;">
+                                                <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+                                                <span style="font-size: 0.68rem; font-weight: 700; color: #475569;">Google</span>
+                                            </a>
+                                        </div>
+
+                                        <div style="display: flex; align-items: center; gap: 0.2rem; margin-bottom: 0.85rem; color: #f59e0b; font-size: 0.95rem;">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                ★
+                                            @endfor
+                                        </div>
+
+                                        <p style="font-size: 0.9rem; color: #334155; line-height: 1.6; margin-bottom: 1.25rem; flex: 1;">
+                                            "{{ $rev->comment }}"
+                                        </p>
+
+                                        <div style="border-top: 1px solid rgba(226, 232, 240, 0.7); padding-top: 0.75rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                                            <span>Verified Client</span>
+                                            <span style="color: #059669; font-weight: 700;">✓ Verified on Google</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Mobile Carousel Controls -->
+                    @if ($googleReviews->count() > 1)
+                        <div class="g-reviews-carousel-controls">
+                            <button type="button" class="g-rev-ctrl-btn" onclick="slideGReviews(-1)" aria-label="Previous Review">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                            </button>
+                            <div class="g-rev-dots-list" id="gReviewsDotsList">
+                                @foreach ($googleReviews as $index => $rev)
+                                    <button type="button" class="g-rev-dot-btn {{ $index === 0 ? 'active' : '' }}" onclick="goToGReview({{ $index }})" aria-label="Review {{ $index + 1 }}"></button>
+                                @endforeach
+                            </div>
+                            <button type="button" class="g-rev-ctrl-btn" onclick="slideGReviews(1)" aria-label="Next Review">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                            </button>
+                        </div>
+                    @endif
+                </div>
+            @endif
+        </div>
+    </section>
 
     <!-- Become a Caregiver CTA Banner -->
     <section style="margin-bottom: 5rem;">
@@ -685,8 +1046,9 @@
                         <p style="font-size: 0.95rem; color: #334155; line-height: 1.7; margin-bottom: 0.85rem;">
                             {{ __('Caregiver charges in Dhaka depend on the level of care required (basic elderly assistance, child supervision, or specialized post-surgery nursing) and shift duration:') }}
                         </p>
-                        <div style="overflow-x: auto;">
-                            <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
+                        <!-- Desktop Table View -->
+                        <div class="desktop-rates-table" style="overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <table style="width: 100%; min-width: 580px; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
                                 <thead>
                                     <tr style="border-bottom: 2px solid #e2e8f0; background: #f1f5f9;">
                                         <th style="padding: 0.75rem 1rem; color: #0a394a; font-weight: 700;">{{ __('Service Shift') }}</th>
@@ -716,6 +1078,48 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Mobile Cards View -->
+                        <div class="mobile-rates-cards">
+                            <div class="rate-card-item">
+                                <div class="rate-card-header">
+                                    <h4 class="rate-card-title">{{ __('Hourly / Short Visit') }}</h4>
+                                    <span class="rate-duration-badge">2 – 6 {{ __('Hours') }}</span>
+                                </div>
+                                <div class="rate-card-price">
+                                    ৳150 – ৳350 <span class="rate-price-unit">/ {{ __('hr') }}</span>
+                                </div>
+                                <div class="rate-card-desc">
+                                    <strong>{{ __('Best For:') }}</strong> {{ __('Doctor visits, wound dressing, companion walk') }}
+                                </div>
+                            </div>
+
+                            <div class="rate-card-item">
+                                <div class="rate-card-header">
+                                    <h4 class="rate-card-title">{{ __('Day Shift / Night Shift') }}</h4>
+                                    <span class="rate-duration-badge">10 – 12 {{ __('Hours') }}</span>
+                                </div>
+                                <div class="rate-card-price">
+                                    ৳800 – ৳1,800 <span class="rate-price-unit">/ {{ __('day') }}</span>
+                                </div>
+                                <div class="rate-card-desc">
+                                    <strong>{{ __('Best For:') }}</strong> {{ __('Working parents, post-discharge hospital recovery') }}
+                                </div>
+                            </div>
+
+                            <div class="rate-card-item">
+                                <div class="rate-card-header">
+                                    <h4 class="rate-card-title">{{ __('24/7 Live-In (Monthly)') }}</h4>
+                                    <span class="rate-duration-badge">{{ __('Full Time Monthly') }}</span>
+                                </div>
+                                <div class="rate-card-price">
+                                    ৳18,000 – ৳35,000 <span class="rate-price-unit">/ {{ __('mo') }}</span>
+                                </div>
+                                <div class="rate-card-desc">
+                                    <strong>{{ __('Best For:') }}</strong> {{ __('Bedridden seniors, Alzheimer\'s, continuous patient care') }}
+                                </div>
+                            </div>
                         </div>
                     </article>
 
@@ -838,6 +1242,78 @@
                 });
             }
         }
+
+        // ==========================================
+        // 2. Google Reviews Mobile Carousel Engine
+        // ==========================================
+        let gReviewCurrentSlide = 0;
+        const gReviewTotalSlides = {{ $googleReviews->count() }};
+        let gReviewTimer = null;
+
+        function goToGReview(index) {
+            const track = document.getElementById('gReviewsMobileTrack');
+            const dots = document.querySelectorAll('#gReviewsDotsList .g-rev-dot-btn');
+            if (!track || gReviewTotalSlides === 0) return;
+
+            gReviewCurrentSlide = (index + gReviewTotalSlides) % gReviewTotalSlides;
+            track.style.transform = `translateX(-${gReviewCurrentSlide * 100}%)`;
+
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === gReviewCurrentSlide);
+            });
+        }
+
+        function slideGReviews(direction) {
+            goToGReview(gReviewCurrentSlide + direction);
+        }
+
+        (function initGReviewsMobile() {
+            document.addEventListener('DOMContentLoaded', function() {
+                const carousel = document.getElementById('gReviewsMobileCarousel');
+                const track = document.getElementById('gReviewsMobileTrack');
+                if (!track || gReviewTotalSlides <= 1) return;
+
+                function startGReviewTimer() {
+                    stopGReviewTimer();
+                    gReviewTimer = setInterval(() => slideGReviews(1), 6000);
+                }
+                function stopGReviewTimer() {
+                    if (gReviewTimer) {
+                        clearInterval(gReviewTimer);
+                        gReviewTimer = null;
+                    }
+                }
+                startGReviewTimer();
+
+                if (carousel) {
+                    carousel.addEventListener('mouseenter', stopGReviewTimer);
+                    carousel.addEventListener('mouseleave', startGReviewTimer);
+                }
+
+                let touchStartX = 0;
+                let touchDiffX = 0;
+                track.addEventListener('touchstart', function(e) {
+                    stopGReviewTimer();
+                    touchStartX = e.touches[0].clientX;
+                    touchDiffX = 0;
+                }, { passive: true });
+
+                track.addEventListener('touchmove', function(e) {
+                    touchDiffX = e.touches[0].clientX - touchStartX;
+                }, { passive: true });
+
+                track.addEventListener('touchend', function() {
+                    if (Math.abs(touchDiffX) > 40) {
+                        if (touchDiffX < 0) {
+                            slideGReviews(1);
+                        } else {
+                            slideGReviews(-1);
+                        }
+                    }
+                    startGReviewTimer();
+                });
+            });
+        })();
 
         // ==========================================
         // 3. Pathao-Style Location Management

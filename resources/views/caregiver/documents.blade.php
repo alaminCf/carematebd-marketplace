@@ -3,11 +3,11 @@
     <x-slot:header>Identity & Compliance Documents</x-slot:header>
     <x-slot:subheading>Private encrypted document safe. Documents are inspected only by CareMate Admin and never exposed publicly.</x-slot:subheading>
 
-    <div style="display: grid; grid-template-columns: 1fr 360px; gap: 2rem; align-items: flex-start;" class="documents-layout">
+    <div class="documents-layout">
         <!-- Document Table -->
-        <div>
+        <div style="min-width: 0;">
             <!-- Identity Documents -->
-            <div class="glass-card" style="padding: 2rem; border-radius: var(--radius-xl); margin-bottom: 2rem;">
+            <div class="glass-card" style="padding: 1.75rem; border-radius: var(--radius-xl); margin-bottom: 1.75rem;">
                 <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem;">
                     Government NID & Police Clearances
                 </h3>
@@ -45,7 +45,7 @@
             </div>
 
             <!-- Certificates -->
-            <div class="glass-card" style="padding: 2rem; border-radius: var(--radius-xl);">
+            <div class="glass-card" style="padding: 1.75rem; border-radius: var(--radius-xl);">
                 <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem;">
                     Clinical & Nursing Certificates
                 </h3>

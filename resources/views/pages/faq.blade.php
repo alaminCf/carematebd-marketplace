@@ -144,7 +144,11 @@
                 {{ __('Still have a question?') }}
             </h3>
             <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-                {{ __('Our care specialists in Agargaon, Dhaka are on standby 24/7 to address any inquiry.') }}
+                @if ($siteSettings['office_address'] === 'E-14/X, ICT Tower (14th Floor), Agargaon, Dhaka-1207, Bangladesh')
+                    {{ __('Our care specialists in Agargaon, Dhaka are on standby 24/7 to address any inquiry.') }}
+                @else
+                    {{ __($siteSettings['office_address']) }} — {{ __('24/7 Care Coordination') }}
+                @endif
             </p>
             <a href="{{ route('contact') }}" class="btn btn-primary">{{ __('Reach Out to Care Desk') }}</a>
         </div>

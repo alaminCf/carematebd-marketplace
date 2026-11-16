@@ -78,8 +78,8 @@
                 {{ __('CareMate Operations Center') }}
             </h3>
             <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
-                {{ __('E-14/X, ICT Tower (14th Floor), Agargaon, Dhaka-1207, Bangladesh') }}<br>
-                {{ __('Contact: +880 1610-296460 (24/7 Hotline) • Email: contact@carematebd.com') }}
+                {{ __($siteSettings['office_address']) }}<br>
+                {{ __('Contact:') }} <a href="tel:{{ $siteSettings['emergency_hotline_tel'] }}" style="color: inherit; text-decoration: none; font-weight: 600;">{{ $siteSettings['emergency_hotline'] }}</a> ({{ __('24/7 Hotline') }}) • {{ __('Email:') }} <a href="mailto:{{ $siteSettings['contact_email'] }}" style="color: inherit; text-decoration: none; font-weight: 600;">{{ $siteSettings['contact_email'] }}</a>
             </p>
             <a href="{{ route('contact') }}" class="btn btn-primary" style="padding: 0.85rem 2rem;">{{ __('Contact Care Desk') }}</a>
         </div>

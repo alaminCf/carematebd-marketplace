@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminBookingController;
 use App\Http\Controllers\Admin\AdminCaregiverController;
 use App\Http\Controllers\Admin\AdminClientController;
+use App\Http\Controllers\Admin\AdminContactMessageController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminFinancialController;
 use App\Http\Controllers\Admin\AdminHiringRequestController;
@@ -11,6 +12,8 @@ use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminServiceController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminSupportController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Caregiver\CaregiverDashboardController;
 use App\Http\Controllers\CaregiverRegistrationController;
@@ -56,13 +59,28 @@ Route::middleware('guest')->group(function (): void {
 
     Route::get('/register/client', [AuthController::class, 'showClientRegister'])->name('register.client');
     Route::post('/register/client', [AuthController::class, 'registerClient'])->name('register.client.submit');
+
+    // Password Reset (Forgot Password Flow)
+    Route::get('/forgot-password', [PasswordResetController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetPassword'])->name('password.reset');
+    Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
+// Change Password (All Authenticated Users)
+Route::middleware('auth')->group(function (): void {
+    Route::get('/change-password', [PasswordResetController::class, 'showChangePassword'])->name('password.change');
+    Route::post('/change-password', [PasswordResetController::class, 'updatePassword'])->name('password.change.update');
+});
+
 // Caregiver Registration Wizard (Can be guest or draft caregiver)
 Route::get('/become-caregiver', [CaregiverRegistrationController::class, 'show'])->name('caregiver.register');
 Route::post('/become-caregiver', [CaregiverRegistrationController::class, 'saveStep'])->name('caregiver.register.step');
+Route::post('/become-caregiver/extract-document', [CaregiverRegistrationController::class, 'extractDocument'])
+    ->middleware('throttle:30,1')
+    ->name('caregiver.register.extract');
 
 /*
 |--------------------------------------------------------------------------
@@ -201,6 +219,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->as('admin.')->group(
     Route::post('/clients/{client}/suspend', [AdminClientController::class, 'suspend'])->name('clients.suspend');
     Route::post('/clients/{client}/reactivate', [AdminClientController::class, 'reactivate'])->name('clients.reactivate');
 
+    // Admin & Role-based Users Management
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+    Route::post('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('users.toggle-status');
+    Route::post('/users/{user}/password', [AdminUserController::class, 'updatePassword'])->name('users.password');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+
     // Services Catalog
     Route::get('/services', [AdminServiceController::class, 'index'])->name('services.index');
     Route::post('/services', [AdminServiceController::class, 'store'])->name('services.store');
@@ -230,9 +255,18 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->as('admin.')->group(
     Route::post('/disputes/{dispute}/resolve', [AdminSupportController::class, 'resolveDispute'])->name('disputes.resolve');
     Route::post('/disputes/{dispute}/note', [AdminSupportController::class, 'addDisputeNote'])->name('disputes.note');
 
+    // Care Desk Public Inquiries
+    Route::get('/contact-messages', [AdminContactMessageController::class, 'index'])->name('contact-messages.index');
+    Route::post('/contact-messages/{contactMessage}/toggle-read', [AdminContactMessageController::class, 'toggleRead'])->name('contact-messages.toggle-read');
+    Route::delete('/contact-messages/{contactMessage}', [AdminContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
+
     // Reports, Settings & Audit Logs
     Route::get('/reports', [AdminReportController::class, 'index'])->name('reports.index');
     Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
+    Route::post('/settings/sync-google-reviews', [AdminSettingController::class, 'syncGoogleReviews'])->name('settings.sync-google-reviews');
+    Route::post('/settings/google-reviews', [AdminSettingController::class, 'storeGoogleReview'])->name('settings.google-reviews.store');
+    Route::put('/settings/google-reviews/{googleReview}', [AdminSettingController::class, 'updateGoogleReview'])->name('settings.google-reviews.update');
+    Route::delete('/settings/google-reviews/{googleReview}', [AdminSettingController::class, 'destroyGoogleReview'])->name('settings.google-reviews.destroy');
     Route::get('/audit-logs', [AdminSettingController::class, 'auditLogs'])->name('audit-logs');
 });

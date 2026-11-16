@@ -11,6 +11,13 @@
     <meta name="robots" content="{{ $robots ?? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' }}">
     <link rel="canonical" href="{{ $canonical ?? url()->current() }}">
 
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+
     <!-- Alternate Language Hreflang Tags (Multilingual SEO) -->
     <link rel="alternate" hreflang="en" href="{{ route('locale.switch', 'en') }}">
     <link rel="alternate" hreflang="bn" href="{{ route('locale.switch', 'bn') }}">
@@ -46,7 +53,7 @@
             [
                 '@type' => 'Organization',
                 '@id' => url('/') . '/#organization',
-                'name' => 'CareMate BD',
+                'name' => $siteSettings['platform_name'],
                 'alternateName' => ['CareMate', 'কেয়ারমেট বিডি', 'CareMate Bangladesh'],
                 'url' => url('/'),
                 'logo' => [
@@ -57,11 +64,11 @@
                 ],
                 'image' => asset('images/hero_caregiver.jpg'),
                 'description' => "CareMate BD is Bangladesh's premier admin-mediated caregiver network providing verified, background-checked caregivers for elderly care, child supervision, clinical nursing, and patient medical transport.",
-                'telephone' => '+8801610296460',
-                'email' => 'contact@carematebd.com',
+                'telephone' => $siteSettings['contact_phone_tel'],
+                'email' => $siteSettings['contact_email'],
                 'address' => [
                     '@type' => 'PostalAddress',
-                    'streetAddress' => 'E-14/X, ICT Tower (14th Floor), Agargaon',
+                    'streetAddress' => $siteSettings['office_address'],
                     'addressLocality' => 'Dhaka',
                     'postalCode' => '1207',
                     'addressCountry' => 'BD',
@@ -88,7 +95,7 @@
                 '@type' => 'WebSite',
                 '@id' => url('/') . '/#website',
                 'url' => url('/'),
-                'name' => 'CareMate BD',
+                'name' => $siteSettings['platform_name'],
                 'publisher' => ['@id' => url('/') . '/#organization'],
                 'inLanguage' => ['en', 'bn'],
                 'potentialAction' => [
@@ -103,13 +110,13 @@
             [
                 '@type' => 'MedicalBusiness',
                 '@id' => url('/') . '/#localbusiness',
-                'name' => 'CareMate BD Care Coordination Desk',
+                'name' => $siteSettings['platform_name'] . ' Care Coordination Desk',
                 'image' => asset('images/hero_caregiver.jpg'),
-                'telephone' => '+8801610296460',
+                'telephone' => $siteSettings['contact_phone_tel'],
                 'priceRange' => '৳৳',
                 'address' => [
                     '@type' => 'PostalAddress',
-                    'streetAddress' => 'E-14/X, ICT Tower (14th Floor), Agargaon',
+                    'streetAddress' => $siteSettings['office_address'],
                     'addressLocality' => 'Dhaka',
                     'addressRegion' => 'Dhaka Division',
                     'postalCode' => '1207',
@@ -894,19 +901,19 @@
 
             <!-- Right: Contact info (Phone, Email, Address) -->
             <div class="topbar-contacts">
-                <a href="tel:+8801610296460" class="topbar-contact-item" title="{{ __('Call 24/7 Helpline') }}">
+                <a href="tel:{{ $siteSettings['contact_phone_tel'] }}" class="topbar-contact-item" title="{{ __('Call 24/7 Helpline') }}">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                    <span>+880 1610-296460</span>
+                    <span>{{ $siteSettings['contact_phone'] }}</span>
                 </a>
                 <span class="topbar-sep">•</span>
-                <a href="mailto:contact@carematebd.com" class="topbar-contact-item" title="{{ __('Email Us') }}">
+                <a href="mailto:{{ $siteSettings['contact_email'] }}" class="topbar-contact-item" title="{{ __('Email Us') }}">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                    <span>contact@carematebd.com</span>
+                    <span>{{ $siteSettings['contact_email'] }}</span>
                 </a>
                 <span class="topbar-sep">•</span>
                 <div class="topbar-contact-item topbar-address" title="{{ __('Office Location') }}">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <span>ICT Tower, Agargaon, Dhaka</span>
+                    <span>{{ __($siteSettings['office_address']) }}</span>
                 </div>
             </div>
         </div>
@@ -957,7 +964,7 @@
                 </div>
 
                 <!-- Quick WhatsApp Header Button (Both Mobile & Desktop) -->
-                <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" class="btn btn-sm header-whatsapp-btn" style="background: rgba(37, 211, 102, 0.14); color: #0d873d; border: 1px solid rgba(37, 211, 102, 0.35); font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;" title="Quick WhatsApp Chat">
+                <a href="https://wa.me/{{ $siteSettings['contact_phone_wa'] }}?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" class="btn btn-sm header-whatsapp-btn" style="background: rgba(37, 211, 102, 0.14); color: #0d873d; border: 1px solid rgba(37, 211, 102, 0.35); font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;" title="Quick WhatsApp Chat">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.516 2 2.031 6.484 2.031 12C2.031 13.805 2.508 15.5 3.336 16.969L2 22L7.172 20.688C8.594 21.461 10.258 21.906 12.031 21.906C17.547 21.906 22.031 17.422 22.031 12C22.031 6.484 17.547 2 12.031 2ZM12.031 20.156C10.453 20.156 8.969 19.719 7.688 18.969L7.375 18.781L4.312 19.562L5.125 16.578L4.922 16.25C4.109 14.953 3.672 13.5 3.672 12C3.672 7.391 7.422 3.641 12.031 3.641C16.641 3.641 20.391 7.391 20.391 12C20.391 16.609 16.641 20.156 12.031 20.156ZM16.609 14.547C16.359 14.422 15.125 13.812 14.891 13.734C14.656 13.656 14.484 13.609 14.312 13.859C14.141 14.109 13.656 14.688 13.5 14.859C13.344 15.031 13.188 15.047 12.938 14.922C12.688 14.797 11.875 14.531 10.922 13.68C10.172 13.008 9.672 12.18 9.516 11.93C9.359 11.68 9.5 11.539 9.625 11.414C9.734 11.305 9.875 11.125 10 10.984C10.125 10.844 10.172 10.734 10.25 10.578C10.328 10.422 10.281 10.281 10.219 10.156C10.156 10.031 9.656 8.812 9.453 8.312C9.25 7.828 9.047 7.891 8.891 7.891C8.75 7.891 8.578 7.875 8.406 7.875C8.234 7.875 7.953 7.938 7.719 8.188C7.484 8.438 6.828 9.047 6.828 10.281C6.828 11.516 7.734 12.703 7.859 12.875C7.984 13.047 9.641 15.609 12.188 16.703C12.797 16.969 13.266 17.125 13.641 17.25C14.25 17.438 14.812 17.406 15.25 17.344C15.75 17.266 16.781 16.719 17 16.109C17.219 15.5 17.219 14.984 17.156 14.859C17.094 14.734 16.859 14.672 16.609 14.547Z"/></svg>
                     <span class="header-whatsapp-text">WhatsApp</span>
                 </a>
@@ -1029,7 +1036,7 @@
                 <!-- 24/7 Helpline Card -->
                 <div style="background: rgba(10, 57, 74, 0.05); border: 1px solid rgba(10, 57, 74, 0.12); border-radius: var(--radius-md); padding: 0.85rem; margin-top: 0.5rem; text-align: center;">
                     <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">{{ __('24/7 Care Coordinator Hotline') }}</div>
-                    <a href="tel:+8801610296460" style="font-size: 1.05rem; font-weight: 800; color: #0a394a; text-decoration: none; display: block; margin-top: 0.2rem;">📞 +880 1610-296460</a>
+                    <a href="tel:{{ $siteSettings['emergency_hotline_tel'] }}" style="font-size: 1.05rem; font-weight: 800; color: #0a394a; text-decoration: none; display: block; margin-top: 0.2rem;">📞 {{ $siteSettings['emergency_hotline'] }}</a>
                 </div>
             </div>
         </div>
@@ -1121,20 +1128,20 @@
                 <div class="footer-contact-col">
                     <h4 class="footer-heading">{{ __('CareDesk Bangladesh') }}</h4>
                     <p class="footer-address-text">
-                        📍 {{ __('E-14/X, ICT Tower (14th Floor), Agargaon, Dhaka-1207, Bangladesh') }}
+                        📍 {{ __($siteSettings['office_address']) }}
                     </p>
                     <div class="footer-contact-chips-grid">
-                        <a href="tel:+8801610296460" class="footer-contact-chip">
+                        <a href="tel:{{ $siteSettings['contact_phone_tel'] }}" class="footer-contact-chip">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <span>+880 1610-296460</span>
+                            <span>{{ $siteSettings['contact_phone'] }}</span>
                         </a>
-                        <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" class="footer-contact-chip footer-chip-whatsapp">
+                        <a href="https://wa.me/{{ $siteSettings['contact_phone_wa'] }}?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" class="footer-contact-chip footer-chip-whatsapp">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.516 2 2.031 6.484 2.031 12C2.031 13.805 2.508 15.5 3.336 16.969L2 22L7.172 20.688C8.594 21.461 10.258 21.906 12.031 21.906C17.547 21.906 22.031 17.422 22.031 12C22.031 6.484 17.547 2 12.031 2ZM12.031 20.156C10.453 20.156 8.969 19.719 7.688 18.969L7.375 18.781L4.312 19.562L5.125 16.578L4.922 16.25C4.109 14.953 3.672 13.5 3.672 12C3.672 7.391 7.422 3.641 12.031 3.641C16.641 3.641 20.391 7.391 20.391 12C20.391 16.609 16.641 20.156 12.031 20.156ZM16.609 14.547C16.359 14.422 15.125 13.812 14.891 13.734C14.656 13.656 14.484 13.609 14.312 13.859C14.141 14.109 13.656 14.688 13.5 14.859C13.344 15.031 13.188 15.047 12.938 14.922C12.688 14.797 11.875 14.531 10.922 13.68C10.172 13.008 9.672 12.18 9.516 11.93C9.359 11.68 9.5 11.539 9.625 11.414C9.734 11.305 9.875 11.125 10 10.984C10.125 10.844 10.172 10.734 10.25 10.578C10.328 10.422 10.281 10.281 10.219 10.156C10.156 10.031 9.656 8.812 9.453 8.312C9.25 7.828 9.047 7.891 8.891 7.891C8.75 7.891 8.578 7.875 8.406 7.875C8.234 7.875 7.953 7.938 7.719 8.188C7.484 8.438 6.828 9.047 6.828 10.281C6.828 11.516 7.734 12.703 7.859 12.875C7.984 13.047 9.641 15.609 12.188 16.703C12.797 16.969 13.266 17.125 13.641 17.25C14.25 17.438 14.812 17.406 15.25 17.344C15.75 17.266 16.781 16.719 17 16.109C17.219 15.5 17.219 14.984 17.156 14.859C17.094 14.734 16.859 14.672 16.609 14.547Z"/></svg>
                             <span>WhatsApp 24/7</span>
                         </a>
-                        <a href="mailto:contact@carematebd.com" class="footer-contact-chip">
+                        <a href="mailto:{{ $siteSettings['contact_email'] }}" class="footer-contact-chip">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                            <span>contact@carematebd.com</span>
+                            <span>{{ $siteSettings['contact_email'] }}</span>
                         </a>
                     </div>
                     <div class="footer-operating-hours">
@@ -1309,6 +1316,21 @@
                 });
             }
         });
+
+        window.togglePasswordVisibility = function(inputId, btn) {
+            var input = document.getElementById(inputId);
+            if (!input) return;
+            var isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            var eyeOpen = btn.querySelector('.eye-open');
+            var eyeClosed = btn.querySelector('.eye-closed');
+            if (eyeOpen && eyeClosed) {
+                eyeOpen.style.display = isPassword ? 'none' : 'block';
+                eyeClosed.style.display = isPassword ? 'block' : 'none';
+            }
+            btn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+            btn.setAttribute('title', isPassword ? 'Hide password' : 'Show password');
+        };
     </script>
 
     @stack('scripts')

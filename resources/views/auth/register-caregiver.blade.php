@@ -10,10 +10,10 @@
                     <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" style="height: 48px; width: auto; object-fit: contain;">
                 </a>
                 <h1 style="font-size: 2.2rem; font-weight: 800; color: #092632; margin-top: 0.25rem;">
-                    Caregiver Verification Academy
+                    Become a Caregiver at CareMate BD
                 </h1>
-                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.35rem;">
-                    Complete our accredited 9-step verification to receive continuous family care assignments.
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.35rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Join CareMate BD verified caregiver network. Complete the 9-step accredited onboarding with dignity and guaranteed payouts.
                 </p>
             </div>
 
@@ -41,7 +41,7 @@
             </div>
 
             <!-- Form Card -->
-            <div class="glass-card" style="padding: 2.5rem; border-radius: var(--radius-xl); box-shadow: var(--glass-shadow-lg);">
+            <div id="registrationForm" class="glass-card" style="padding: 2.5rem; border-radius: var(--radius-xl); box-shadow: var(--glass-shadow-lg);">
                 <form method="POST" action="{{ route('caregiver.register.step') }}" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="step" value="{{ $step }}">
@@ -61,21 +61,28 @@
                         <!-- STEP 1: ACCOUNT -->
                         <h3 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 1.5rem;">Step 1: Basic Account & Personal Info</h3>
                         
-                        <div style="margin-bottom: 1.25rem;">
-                            <label class="form-label">Full Name (as per National ID) <span style="color: #ef4444;">*</span></label>
-                            <input type="text" name="name" value="{{ old('name', $caregiver?->user?->name) }}" required placeholder="e.g. Nusrat Jahan" class="glass-input">
-                            @error('name') <span class="form-error">{{ $message }}</span> @enderror
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                            <div>
+                                <label class="form-label">Full Name in English (as per NID) <span style="color: #ef4444;">*</span></label>
+                                <input type="text" id="input_name" name="name" value="{{ old('name', $caregiver?->user?->name) }}" required placeholder="e.g. Nusrat Jahan" class="glass-input">
+                                @error('name') <span class="form-error">{{ $message }}</span> @enderror
+                            </div>
+                            <div>
+                                <label class="form-label">বাংলা নাম (জাতীয় পরিচয়পত্র অনুযায়ী)</label>
+                                <input type="text" id="input_name_bn" name="name_bn" value="{{ old('name_bn', $caregiver?->name_bn) }}" placeholder="যেমন: নুসরাত জাহান" class="glass-input">
+                                @error('name_bn') <span class="form-error">{{ $message }}</span> @enderror
+                            </div>
                         </div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
                             <div>
                                 <label class="form-label">Email Address <span style="color: #ef4444;">*</span></label>
-                                <input type="email" name="email" value="{{ old('email', $caregiver?->user?->email) }}" required placeholder="nusrat@example.com" class="glass-input">
+                                <input type="email" id="input_email" name="email" value="{{ old('email', $caregiver?->user?->email) }}" required placeholder="nusrat@example.com" class="glass-input">
                                 @error('email') <span class="form-error">{{ $message }}</span> @enderror
                             </div>
                             <div>
                                 <label class="form-label">Mobile Phone Number <span style="color: #ef4444;">*</span></label>
-                                <input type="tel" name="phone" value="{{ old('phone', $caregiver?->user?->phone) }}" required placeholder="+880 1712-000000" class="glass-input">
+                                <input type="tel" id="input_phone" name="phone" value="{{ old('phone', $caregiver?->user?->phone) }}" required placeholder="+880 1712-000000" class="glass-input">
                                 @error('phone') <span class="form-error">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -83,7 +90,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
                             <div>
                                 <label class="form-label">Gender <span style="color: #ef4444;">*</span></label>
-                                <select name="gender" required class="glass-input">
+                                <select name="gender" id="input_gender" required class="glass-input">
                                     <option value="">Select Gender</option>
                                     <option value="female" {{ old('gender', $caregiver?->gender) === 'female' ? 'selected' : '' }}>Female</option>
                                     <option value="male" {{ old('gender', $caregiver?->gender) === 'male' ? 'selected' : '' }}>Male</option>
@@ -93,7 +100,7 @@
                             </div>
                             <div>
                                 <label class="form-label">Date of Birth (Must be 18+) <span style="color: #ef4444;">*</span></label>
-                                <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $caregiver?->date_of_birth?->format('Y-m-d')) }}" required class="glass-input">
+                                <input type="date" name="date_of_birth" id="input_date_of_birth" value="{{ old('date_of_birth', $caregiver?->date_of_birth?->format('Y-m-d')) }}" required class="glass-input">
                                 @error('date_of_birth') <span class="form-error">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -101,19 +108,52 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
                             <div>
                                 <label class="form-label">Password {{ Auth::check() ? '(Leave blank to keep unchanged)' : '*' }}</label>
-                                <input type="password" name="password" {{ Auth::check() ? '' : 'required' }} placeholder="Min 6 characters" class="glass-input">
+                                <div class="password-input-group">
+                                    <input type="password" id="cgPassword" name="password" {{ Auth::check() ? '' : 'required' }} placeholder="Min 6 characters" class="glass-input">
+                                    <button type="button" onclick="togglePasswordVisibility('cgPassword', this)" aria-label="Show password" title="Show password" class="password-toggle-btn">
+                                        <svg class="eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <svg class="eye-closed" style="display: none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    </button>
+                                </div>
                                 @error('password') <span class="form-error">{{ $message }}</span> @enderror
                             </div>
                             <div>
                                 <label class="form-label">Confirm Password</label>
-                                <input type="password" name="password_confirmation" {{ Auth::check() ? '' : 'required' }} placeholder="Repeat password" class="glass-input">
+                                <div class="password-input-group">
+                                    <input type="password" id="cgPasswordConfirm" name="password_confirmation" {{ Auth::check() ? '' : 'required' }} placeholder="Repeat password" class="glass-input">
+                                    <button type="button" onclick="togglePasswordVisibility('cgPasswordConfirm', this)" aria-label="Show password" title="Show password" class="password-toggle-btn">
+                                        <svg class="eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <svg class="eye-closed" style="display: none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
                         <div style="margin-bottom: 1.5rem;">
                             <label class="form-label">Professional Profile Photo (Clear headshot)</label>
-                            <input type="file" name="profile_photo" accept="image/*" class="glass-input">
-                            <span style="font-size: 0.78rem; color: var(--text-muted);">Please upload a friendly, high-resolution front-facing photo in professional attire.</span>
+                            
+                            <div id="profilePhotoPreviewBox" style="display: flex; align-items: center; gap: 1.25rem; margin-bottom: 0.5rem; padding: 0.85rem; background: rgba(255, 255, 255, 0.7); border-radius: var(--radius-md); border: 1px solid rgba(226, 232, 240, 0.9);">
+                                <img id="imgAvatarPreview" src="{{ $caregiver?->user?->avatar_url ?? asset('images/avatar-placeholder.png') }}" alt="Profile Preview" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--brand-primary); background: #f1f5f9; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
+                                <div style="flex: 1;">
+                                    <input type="file" id="input_profile_photo" name="profile_photo" accept="image/*" class="glass-input" onchange="previewSelectedAvatar(this)">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+                                        <span style="font-size: 0.76rem; color: var(--text-muted);">Clear front-facing portrait photo in professional attire.</span>
+                                        <button type="button" id="btnRemoveAvatarPreview" onclick="resetAvatarPreview()" style="display: none; background: none; border: none; color: #ef4444; font-size: 0.76rem; font-weight: 700; cursor: pointer;">✕ Remove</button>
+                                    </div>
+                                </div>
+                            </div>
                             @error('profile_photo') <span class="form-error">{{ $message }}</span> @enderror
                         </div>
 
@@ -126,7 +166,7 @@
 
                         <div style="margin-bottom: 1.5rem;">
                             <label class="form-label">Government NID Number (Smart Card or 17-digit) <span style="color: #ef4444;">*</span></label>
-                            <input type="text" name="nid_number" value="{{ old('nid_number', $caregiver?->nid_number) }}" required placeholder="e.g. 199226955000000" class="glass-input">
+                            <input type="text" id="input_nid_number" name="nid_number" value="{{ old('nid_number', $caregiver?->nid_number) }}" required placeholder="e.g. 199226955000000" class="glass-input">
                             @error('nid_number') <span class="form-error">{{ $message }}</span> @enderror
                         </div>
 
@@ -134,13 +174,13 @@
                             <div style="background: rgba(255, 255, 255, 0.6); border: 2px dashed rgba(203, 213, 225, 0.9); padding: 1.5rem; border-radius: var(--radius-md); text-align: center;">
                                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🪪</div>
                                 <label class="form-label">NID Front Scan / Photo <span style="color: #ef4444;">*</span></label>
-                                <input type="file" name="nid_front" accept="image/*,.pdf" class="glass-input" style="font-size: 0.8rem;">
+                                <input type="file" id="input_nid_front" name="nid_front" accept="image/*,.pdf" class="glass-input" style="font-size: 0.8rem;">
                                 @error('nid_front') <span class="form-error">{{ $message }}</span> @enderror
                             </div>
                             <div style="background: rgba(255, 255, 255, 0.6); border: 2px dashed rgba(203, 213, 225, 0.9); padding: 1.5rem; border-radius: var(--radius-md); text-align: center;">
                                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🪪</div>
                                 <label class="form-label">NID Back Scan / Photo <span style="color: #ef4444;">*</span></label>
-                                <input type="file" name="nid_back" accept="image/*,.pdf" class="glass-input" style="font-size: 0.8rem;">
+                                <input type="file" id="input_nid_back" name="nid_back" accept="image/*,.pdf" class="glass-input" style="font-size: 0.8rem;">
                                 @error('nid_back') <span class="form-error">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -151,13 +191,13 @@
 
                         <div style="margin-bottom: 1.25rem;">
                             <label class="form-label">Present Address (Where you currently live in Bangladesh) <span style="color: #ef4444;">*</span></label>
-                            <input type="text" name="present_address" value="{{ old('present_address', $caregiver?->present_address) }}" required placeholder="House, Road, Area..." class="glass-input">
+                            <input type="text" id="input_present_address" name="present_address" value="{{ old('present_address', $caregiver?->present_address) }}" required placeholder="House, Road, Area..." class="glass-input">
                             @error('present_address') <span class="form-error">{{ $message }}</span> @enderror
                         </div>
 
                         <div style="margin-bottom: 1.25rem;">
                             <label class="form-label">Permanent Address (Village/Thana as per NID) <span style="color: #ef4444;">*</span></label>
-                            <input type="text" name="permanent_address" value="{{ old('permanent_address', $caregiver?->permanent_address) }}" required placeholder="Permanent address..." class="glass-input">
+                            <input type="text" id="input_permanent_address" name="permanent_address" value="{{ old('permanent_address', $caregiver?->permanent_address) }}" required placeholder="Permanent address..." class="glass-input">
                             @error('permanent_address') <span class="form-error">{{ $message }}</span> @enderror
                         </div>
 
@@ -287,17 +327,17 @@
 
                         <div style="margin-bottom: 1.25rem;">
                             <label class="form-label">Highest Educational Qualification <span style="color: #ef4444;">*</span></label>
-                            <input type="text" name="education_qualification" value="{{ old('education_qualification', $caregiver?->education_qualification) }}" required placeholder="e.g. Diploma in Nursing / B.Sc in Nursing / HSC" class="glass-input">
+                            <input type="text" id="input_education_qualification" name="education_qualification" value="{{ old('education_qualification', $caregiver?->education_qualification) }}" required placeholder="e.g. Diploma in Nursing / B.Sc in Nursing / HSC" class="glass-input">
                         </div>
 
                         <div style="margin-bottom: 1.25rem;">
                             <label class="form-label">Institution / College / University <span style="color: #ef4444;">*</span></label>
-                            <input type="text" name="education_institution" value="{{ old('education_institution', $caregiver?->education_institution) }}" required placeholder="e.g. Dhaka Nursing College" class="glass-input">
+                            <input type="text" id="input_education_institution" name="education_institution" value="{{ old('education_institution', $caregiver?->education_institution) }}" required placeholder="e.g. Dhaka Nursing College" class="glass-input">
                         </div>
 
                         <div style="margin-bottom: 1.5rem;">
                             <label class="form-label">Passing Year</label>
-                            <input type="number" name="education_passing_year" value="{{ old('education_passing_year', $caregiver?->education_passing_year) }}" min="1980" max="{{ date('Y') }}" placeholder="e.g. 2020" class="glass-input">
+                            <input type="number" id="input_education_passing_year" name="education_passing_year" value="{{ old('education_passing_year', $caregiver?->education_passing_year) }}" min="1980" max="{{ date('Y') }}" placeholder="e.g. 2020" class="glass-input">
                         </div>
 
                     @elseif ($step === 6)
@@ -309,17 +349,17 @@
 
                         <div style="margin-bottom: 1.25rem;">
                             <label class="form-label">Certificate Title</label>
-                            <input type="text" name="cert_name" placeholder="e.g. Certified Geriatric Care Nurse" class="glass-input">
+                            <input type="text" id="input_cert_name" name="cert_name" placeholder="e.g. Certified Geriatric Care Nurse" class="glass-input">
                         </div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
                             <div>
                                 <label class="form-label">Issuing Authority / Body</label>
-                                <input type="text" name="cert_institution" placeholder="e.g. Bangladesh Nursing Council" class="glass-input">
+                                <input type="text" id="input_cert_institution" name="cert_institution" placeholder="e.g. Bangladesh Nursing Council" class="glass-input">
                             </div>
                             <div>
                                 <label class="form-label">Registration / Certificate Number</label>
-                                <input type="text" name="cert_number" placeholder="Optional" class="glass-input">
+                                <input type="text" id="input_cert_number" name="cert_number" placeholder="Optional" class="glass-input">
                             </div>
                         </div>
 
@@ -460,12 +500,35 @@
 
     @push('scripts')
     <script>
+    function previewSelectedAvatar(input) {
+        if (input && input.files && input.files[0]) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.getElementById('imgAvatarPreview');
+                if (img) img.src = e.target.result;
+                const removeBtn = document.getElementById('btnRemoveAvatarPreview');
+                if (removeBtn) removeBtn.style.display = 'inline-block';
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function resetAvatarPreview() {
+        const input = document.getElementById('input_profile_photo');
+        if (input) input.value = '';
+        const img = document.getElementById('imgAvatarPreview');
+        if (img) img.src = "{{ $caregiver?->user?->avatar_url ?? asset('images/avatar-placeholder.png') }}";
+        const removeBtn = document.getElementById('btnRemoveAvatarPreview');
+        if (removeBtn) removeBtn.style.display = 'none';
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
+        // Division & District chained selects
         const divisionSelect = document.getElementById('divisionSelect');
         const districtSelect = document.getElementById('districtSelect');
 
         if (divisionSelect && districtSelect) {
-            // Collect all district options with their division mapping
             const options = Array.from(districtSelect.querySelectorAll('option')).filter(function (opt) {
                 return opt.value !== '';
             });
@@ -483,9 +546,7 @@
                 defaultOpt.textContent = selectedDivisionId ? 'Select District' : 'Select Division First';
                 districtSelect.appendChild(defaultOpt);
 
-                if (!selectedDivisionId) {
-                    return;
-                }
+                if (!selectedDivisionId) return;
 
                 let matchFound = false;
                 options.forEach(function (opt) {
@@ -508,7 +569,6 @@
                 filterDistricts(true);
             });
 
-            // Run initial filter on load if division is chosen
             if (divisionSelect.value) {
                 filterDistricts(false);
             }

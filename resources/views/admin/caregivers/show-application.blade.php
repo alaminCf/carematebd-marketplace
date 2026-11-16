@@ -24,21 +24,62 @@
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; border-top: 1px solid rgba(226, 232, 240, 0.8); padding-top: 1rem; font-size: 0.85rem;">
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; border-top: 1px solid rgba(226, 232, 240, 0.8); padding-top: 1rem; font-size: 0.85rem;">
                     <div>
-                        <span style="color: var(--text-muted); display: block;">National ID (Encrypted):</span>
+                        <span style="color: var(--text-muted); display: block;">National ID:</span>
                         <strong style="color: #0f172a; font-family: monospace;">{{ $caregiver->nid_number }}</strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); display: block;">বাংলা নাম:</span>
+                        <strong style="color: #0f172a;">{{ $caregiver->name_bn ?? '—' }}</strong>
                     </div>
                     <div>
                         <span style="color: var(--text-muted); display: block;">Gender / Age:</span>
                         <strong style="color: #0f172a;">{{ ucfirst($caregiver->gender ?? 'Not Specified') }} ({{ $caregiver->age() ? $caregiver->age().' yrs' : 'N/A' }})</strong>
                     </div>
                     <div>
-                        <span style="color: var(--text-muted); display: block;">Requested Daily Rate:</span>
+                        <span style="color: var(--text-muted); display: block;">Daily Rate / Auto-Fill:</span>
                         <strong style="color: #059669;">৳{{ number_format($caregiver->daily_rate) }}/day</strong>
+                        @if ($caregiver->auto_fill_status)
+                            <span style="display: block; font-size: 0.72rem; color: #0284c7;">⚡ Auto-Fill: {{ ucfirst($caregiver->auto_fill_status) }}</span>
+                        @endif
                     </div>
                 </div>
             </div>
+
+            <!-- OCR & Document Data Extraction Audit Panel -->
+            @if ($caregiver->extracted_profile_data || $caregiver->documents->whereNotNull('extraction_status')->isNotEmpty())
+                <div class="glass-card" style="padding: 2rem; border-radius: var(--radius-xl); margin-bottom: 2rem; border: 1.5px solid rgba(14, 165, 233, 0.35); background: linear-gradient(135deg, rgba(240, 249, 255, 0.8) 0%, rgba(248, 250, 252, 0.95) 100%);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                            <span>🔍</span> OCR & Document Extraction Audit
+                        </h3>
+                        <span style="font-size: 0.76rem; background: rgba(14, 165, 233, 0.15); color: #0369a1; padding: 0.25rem 0.65rem; border-radius: 999px; font-weight: 700;">
+                            Status: {{ ucfirst($caregiver->auto_fill_status ?? 'Processed') }}
+                        </span>
+                    </div>
+
+                    <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.25rem;">
+                        ⚠️ <strong>Verification Policy:</strong> Document OCR extraction helps caregivers auto-fill registration forms. It does <em>not</em> constitute identity authentication or credential approval. Verify all uploaded files manually against the submitted profile.
+                    </p>
+
+                    @if ($caregiver->extracted_profile_data)
+                        <div style="background: rgba(255, 255, 255, 0.85); border-radius: var(--radius-md); padding: 1rem; border: 1px solid rgba(226, 232, 240, 0.9); margin-bottom: 1rem;">
+                            <h4 style="font-size: 0.88rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">Extracted vs Submitted Form Data</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; font-size: 0.82rem;">
+                                @foreach ($caregiver->extracted_profile_data as $field => $val)
+                                    @if (!empty($val) && !is_array($val))
+                                        <div style="padding: 0.4rem 0.6rem; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                            <span style="color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; display: block;">{{ str_replace('_', ' ', $field) }}</span>
+                                            <strong style="color: #0f172a;">{{ $val }}</strong>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            @endif
 
             <!-- Uploaded Verification Documents Streamer -->
             <div class="glass-card" style="padding: 2rem; border-radius: var(--radius-xl); margin-bottom: 2rem;">
@@ -55,6 +96,9 @@
                                     <div style="font-weight: 700; color: #0f172a;">{{ $doc->title }}</div>
                                     <div style="font-size: 0.75rem; color: var(--text-muted);">
                                         Type: {{ strtoupper(str_replace('_', ' ', $doc->type->value)) }} • Uploaded: {{ $doc->created_at->format('M d, Y') }}
+                                        @if ($doc->extraction_status)
+                                            • <span style="color: #0284c7; font-weight: 600;">OCR: {{ ucfirst($doc->extraction_status) }}</span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

@@ -24,9 +24,9 @@
         </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 380px; gap: 2rem; align-items: flex-start;" class="earnings-layout">
+    <div class="earnings-layout">
         <!-- Earnings Ledger -->
-        <div>
+        <div style="min-width: 0;">
             <!-- Job Earnings Table -->
             <div class="glass-card" style="padding: 1.75rem; border-radius: var(--radius-xl); margin-bottom: 2rem;">
                 <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem;">

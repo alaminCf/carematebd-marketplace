@@ -4,18 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Enums\BookingStatus;
 use App\Enums\CaregiverStatus;
+use App\Mail\ContactInquiryMail;
 use App\Models\Booking;
 use App\Models\Caregiver;
 use App\Models\ContactMessage;
 use App\Models\Faq;
 use App\Models\Review;
 use App\Models\Service;
+use App\Models\Setting;
 use App\Models\User;
+use App\Services\GoogleReviewService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -59,7 +64,12 @@ class HomeController extends Controller
             'Mohammadpur', 'Bashundhara', 'Banasree', 'Sylhet', 'Chittagong',
         ];
 
-        return view('pages.home', compact('services', 'featuredCaregivers', 'stats', 'faqs', 'testimonials', 'popularAreas'));
+        $googleReviewService = app(GoogleReviewService::class);
+        $googleReviews = $googleReviewService->getReviews(6);
+        $googleStats = $googleReviewService->getStats();
+        $googleReviewsEmbed = Setting::get('google_reviews_embed_code');
+
+        return view('pages.home', compact('services', 'featuredCaregivers', 'stats', 'faqs', 'testimonials', 'popularAreas', 'googleReviews', 'googleStats', 'googleReviewsEmbed'));
     }
 
     public function howItWorks(): View
@@ -101,9 +111,16 @@ class HomeController extends Controller
             'message' => ['required', 'string', 'max:2000'],
         ]);
 
-        ContactMessage::create(array_merge($validated, [
+        $contactMessage = ContactMessage::create(array_merge($validated, [
             'ip_address' => $request->ip(),
         ]));
+
+        try {
+            $recipient = Setting::get('contact_email', 'contact@carematebd.com') ?: 'contact@carematebd.com';
+            Mail::to($recipient)->send(new ContactInquiryMail($contactMessage));
+        } catch (\Throwable $e) {
+            Log::error('Failed to dispatch contact inquiry email: '.$e->getMessage());
+        }
 
         return back()->with('success', 'Thank you! Your message has been sent to CareMate Support. Our care coordinator will respond promptly.');
     }

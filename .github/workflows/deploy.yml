@@ -1,0 +1,122 @@
+name: Deploy to CareMate BD Live Server
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Sync Files & Clear View Cache via FTP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Upload changed files and clear compiled Blade views
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST || 'drh3.hostwhitelabel.com' }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          REMOTE_BASE: /domains/carematebd.com
+        run: |
+          python3 - << 'EOF'
+          import ftplib
+          import os
+          import subprocess
+          import sys
+
+          host = os.environ.get('FTP_HOST') or 'drh3.hostwhitelabel.com'
+          user = os.environ.get('FTP_USERNAME')
+          password = os.environ.get('FTP_PASSWORD')
+          remote_base = os.environ.get('REMOTE_BASE', '/domains/carematebd.com')
+
+          if not user or not password:
+              print("Error: FTP_USERNAME and FTP_PASSWORD secrets must be configured in GitHub repository settings.")
+              sys.exit(1)
+
+          # Determine changed files in latest push, plus always ensure core contact/settings files are synced
+          changed = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'], text=True).splitlines()
+          core_sync = [
+              'app/Http/Controllers/Admin/AdminSettingController.php',
+              'app/Models/Setting.php',
+              'app/Providers/AppServiceProvider.php',
+              'resources/views/admin/settings/index.blade.php',
+              'resources/views/admin/contact-messages/index.blade.php',
+              'resources/views/components/layouts/guest.blade.php',
+              'resources/views/layouts/guest.blade.php',
+              'resources/views/pages/contact.blade.php',
+              'resources/views/pages/about.blade.php',
+              'resources/views/pages/home.blade.php',
+              'resources/views/pages/faq.blade.php',
+              'resources/views/pages/how-it-works.blade.php',
+              'resources/views/pages/marketplace/show.blade.php',
+              'resources/views/emails/contact-inquiry.blade.php',
+          ]
+          files_to_sync = sorted(set(changed + core_sync))
+
+          allowed_prefixes = (
+              'app/',
+              'bootstrap/',
+              'config/',
+              'database/migrations/',
+              'database/seeders/',
+              'lang/',
+              'public/',
+              'resources/',
+              'routes/',
+          )
+
+          def ensure_remote_dir(ftp, path):
+              parts = [p for p in path.split('/') if p]
+              curr = ''
+              for p in parts:
+                  curr += '/' + p
+                  try:
+                      ftp.cwd(curr)
+                  except ftplib.error_perm:
+                      ftp.mkd(curr)
+
+          ftp = ftplib.FTP()
+          ftp.connect(host, 21, timeout=30)
+          ftp.login(user, password)
+          print(f"Connected to {host} as {user}")
+
+          for rel_path in files_to_sync:
+              if not os.path.isfile(rel_path):
+                  continue
+              if not rel_path.startswith(allowed_prefixes):
+                  continue
+
+              remote_file = f"{remote_base}/{rel_path}"
+              ensure_remote_dir(ftp, os.path.dirname(remote_file))
+              with open(rel_path, 'rb') as f:
+                  ftp.storbinary(f"STOR {remote_file}", f)
+              print(f"Uploaded: {remote_file}")
+
+              # Mirror public/ assets into public_html/ as well
+              if rel_path.startswith('public/') and rel_path != 'public/index.php':
+                  sub_path = rel_path[len('public/'):]
+                  remote_pub_html = f"{remote_base}/public_html/{sub_path}"
+                  ensure_remote_dir(ftp, os.path.dirname(remote_pub_html))
+                  with open(rel_path, 'rb') as f:
+                      ftp.storbinary(f"STOR {remote_pub_html}", f)
+                  print(f"Uploaded: {remote_pub_html}")
+
+          # Clear compiled Blade views so changes take effect immediately
+          try:
+              ftp.cwd(f"{remote_base}/storage/framework/views")
+              for name in ftp.nlst():
+                  if name.endswith('.php'):
+                      ftp.delete(name)
+              print("Cleared compiled Blade views on live server.")
+          except Exception as e:
+              print(f"Note while clearing views: {e}")
+
+          ftp.quit()
+          EOF
+

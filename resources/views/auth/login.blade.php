@@ -30,7 +30,19 @@
                         <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.35rem;">
                             <label class="form-label" for="loginPassword" style="margin-bottom: 0;">Password</label>
                         </div>
-                        <input type="password" id="loginPassword" name="password" required placeholder="••••••••" class="glass-input">
+                        <div class="password-input-group" style="position: relative; display: flex; align-items: center; width: 100%;">
+                            <input type="password" id="loginPassword" name="password" required placeholder="••••••••" class="glass-input" style="padding-right: 2.75rem;">
+                            <button type="button" onclick="togglePasswordVisibility('loginPassword', this)" aria-label="Show password" title="Show password" class="password-toggle-btn" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; padding: 0.25rem; margin: 0; cursor: pointer; color: #64748b; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; box-shadow: none; line-height: 1; z-index: 2;">
+                                <svg class="eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="eye-closed" style="display: none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                        </div>
                         @error('password')
                             <span class="form-error">{{ $message }}</span>
                         @enderror
@@ -41,6 +53,9 @@
                             <input type="checkbox" name="remember" style="accent-color: var(--brand-primary); width: 16px; height: 16px;">
                             <span>Keep me signed in</span>
                         </label>
+                        <a href="{{ route('password.request') }}" style="color: var(--primary, #0a394a); font-size: 0.85rem; font-weight: 700; text-decoration: none;">
+                            Forgot Password?
+                        </a>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-bottom: 1.25rem;">
@@ -48,23 +63,6 @@
                     </button>
                 </form>
 
-                <!-- Quick Test Credentials Demo Bar -->
-                <div style="border-top: 1px solid rgba(226, 232, 240, 0.8); padding-top: 1.25rem; margin-top: 1rem;">
-                    <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em; text-align: center; margin-bottom: 0.75rem;">
-                        Quick Test Profiles (Click to fill)
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
-                        <button type="button" onclick="fillCreds('admin@caremate.com', 'password')" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 0.35rem 0.5rem;">
-                            👑 Admin
-                        </button>
-                        <button type="button" onclick="fillCreds('client@caremate.com', 'password')" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 0.35rem 0.5rem;">
-                            👨‍👩‍👧 Client
-                        </button>
-                        <button type="button" onclick="fillCreds('nusrat@caremate.com', 'password')" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 0.35rem 0.5rem;">
-                            🩺 Caregiver
-                        </button>
-                    </div>
-                </div>
             </div>
 
             <!-- Footer Links -->
@@ -81,9 +79,19 @@
 
     @push('scripts')
     <script>
-        function fillCreds(email, pass) {
-            document.getElementById('loginEmail').value = email;
-            document.getElementById('loginPassword').value = pass;
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            const eyeOpen = btn.querySelector('.eye-open');
+            const eyeClosed = btn.querySelector('.eye-closed');
+            if (eyeOpen && eyeClosed) {
+                eyeOpen.style.display = isPassword ? 'none' : 'block';
+                eyeClosed.style.display = isPassword ? 'block' : 'none';
+            }
+            btn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+            btn.setAttribute('title', isPassword ? 'Hide password' : 'Show password');
         }
     </script>
     @endpush

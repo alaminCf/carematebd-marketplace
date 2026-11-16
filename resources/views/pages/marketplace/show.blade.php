@@ -430,7 +430,7 @@
                                         </a>
                                     @endauth
 
-                                    <a href="https://wa.me/8801610296460?text={{ urlencode('Hello CareMate BD, I would like to inquire about caregiver: ' . $caregiver->user->name . ' (' . $caregiver->slug . ')') }}" 
+                                    <a href="https://wa.me/{{ $siteSettings['contact_phone_wa'] }}?text={{ urlencode('Hello CareMate BD, I would like to inquire about caregiver: ' . $caregiver->user->name . ' (' . $caregiver->slug . ')') }}" 
                                        target="_blank" 
                                        rel="noopener noreferrer" 
                                        class="btn mobile-whatsapp-btn">
@@ -581,7 +581,7 @@
 
                     <!-- WhatsApp Quick Inquire CTA -->
                     <div style="margin-top: 0.85rem;">
-                        <a href="https://wa.me/8801610296460?text={{ urlencode('Hello CareMate BD, I would like to inquire about caregiver: ' . $caregiver->user->name . ' (' . $caregiver->slug . ')') }}" 
+                        <a href="https://wa.me/{{ $siteSettings['contact_phone_wa'] }}?text={{ urlencode('Hello CareMate BD, I would like to inquire about caregiver: ' . $caregiver->user->name . ' (' . $caregiver->slug . ')') }}" 
                            target="_blank" 
                            rel="noopener noreferrer" 
                            class="btn" 

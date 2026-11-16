@@ -3,9 +3,9 @@
     <x-slot:header>Ticket #{{ $ticket->ticket_number }}</x-slot:header>
     <x-slot:subheading>{{ $ticket->subject }}</x-slot:subheading>
 
-    <div style="display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: flex-start;" class="ticket-layout">
+    <div class="ticket-layout">
         <!-- Thread Area -->
-        <div>
+        <div style="min-width: 0;">
             <!-- Conversation Thread -->
             <div class="glass-card" style="padding: 2rem; border-radius: var(--radius-xl); margin-bottom: 2rem;">
                 <div style="display: flex; flex-direction: column; gap: 1.5rem;">

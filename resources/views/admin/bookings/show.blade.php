@@ -3,9 +3,9 @@
     <x-slot:header>Booking #{{ $booking->booking_reference }} Supervision</x-slot:header>
     <x-slot:subheading>{{ $booking->service->name }} • Client: {{ $booking->client->user->name }} • Caregiver: {{ $booking->caregiver->user->name }}</x-slot:subheading>
 
-    <div style="display: grid; grid-template-columns: 1fr 360px; gap: 2rem; align-items: flex-start;" class="booking-admin-layout">
+    <div class="booking-admin-layout">
         <!-- Main Details -->
-        <div>
+        <div style="min-width: 0;">
             <!-- Top Status Strip -->
             <div class="glass-card" style="padding: 1.75rem; border-radius: var(--radius-xl); margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
                 <div>

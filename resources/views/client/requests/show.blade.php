@@ -3,9 +3,9 @@
     <x-slot:header>Request #{{ $request->request_reference }}</x-slot:header>
     <x-slot:subheading>Submitted on {{ $request->created_at->format('M d, Y h:i A') }} • Status: {{ $request->status->label() }}</x-slot:subheading>
 
-    <div style="display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: flex-start;" class="request-grid">
+    <div class="request-grid">
         <!-- Main Details -->
-        <div>
+        <div style="min-width: 0;">
             <!-- Status Card -->
             <div class="glass-card" style="padding: 1.75rem; margin-bottom: 2rem; border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
                 <div>

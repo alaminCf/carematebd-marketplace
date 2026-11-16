@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\LocationType;
+use App\Enums\UserRole;
 use App\Models\Caregiver;
 use App\Models\Location;
 use App\Models\Service;
@@ -60,6 +61,7 @@ class PlatformSmokeTest extends TestCase
             '/admin/hiring-requests',
             '/admin/bookings',
             '/admin/clients',
+            '/admin/users',
             '/admin/payments',
             '/admin/payouts',
             '/admin/services',
@@ -329,5 +331,171 @@ class PlatformSmokeTest extends TestCase
             'city' => 'Dhaka',
             'display' => 'Dhanmondi, Dhaka',
         ]);
+    }
+
+    public function test_admin_can_create_and_manage_users_with_roles(): void
+    {
+        $admin = User::where('email', 'admin@caremate.com')->firstOrFail();
+
+        // 1. Create a new Admin user
+        $response = $this->actingAs($admin)->post(route('admin.users.store'), [
+            'name' => 'Support Manager',
+            'email' => 'manager@caremate.com',
+            'role' => 'admin',
+            'password' => 'SecurePass123!',
+            'password_confirmation' => 'SecurePass123!',
+        ]);
+
+        $response->assertRedirect(route('admin.users.index'));
+        $this->assertDatabaseHas('users', [
+            'email' => 'manager@caremate.com',
+            'name' => 'Support Manager',
+        ]);
+
+        $newUser = User::where('email', 'manager@caremate.com')->firstOrFail();
+        $this->assertEquals('admin', $newUser->role->value);
+
+        // 2. Toggle status
+        $this->actingAs($admin)->post(route('admin.users.toggle-status', $newUser))
+            ->assertRedirect(route('admin.users.index'));
+        $this->assertEquals('suspended', $newUser->fresh()->status->value);
+
+        // 3. Delete user
+        $this->actingAs($admin)->delete(route('admin.users.destroy', $newUser))
+            ->assertRedirect(route('admin.users.index'));
+        $this->assertSoftDeleted('users', [
+            'id' => $newUser->id,
+        ]);
+    }
+
+    public function test_user_can_request_password_reset_and_reset_password(): void
+    {
+        $user = User::where('email', 'client@caremate.com')->firstOrFail();
+
+        // 1. View forgot password page
+        $this->get(route('password.request'))->assertStatus(200);
+
+        // 2. Request reset link
+        $resp = $this->post(route('password.email'), [
+            'email' => $user->email,
+        ]);
+        $resp->assertSessionHas('status');
+        $this->assertDatabaseHas('password_reset_tokens', [
+            'email' => $user->email,
+        ]);
+
+        $directUrl = session('direct_reset_url');
+        $this->assertNotEmpty($directUrl);
+
+        // Extract token from direct URL
+        parse_str(parse_url($directUrl, PHP_URL_QUERY), $queryParams);
+        $token = basename(parse_url($directUrl, PHP_URL_PATH));
+
+        // 3. View reset password form
+        $this->get(route('password.reset', ['token' => $token, 'email' => $user->email]))
+            ->assertStatus(200);
+
+        // 4. Submit new password
+        $resetResp = $this->post(route('password.update'), [
+            'token' => $token,
+            'email' => $user->email,
+            'password' => 'NewSecret2026!',
+            'password_confirmation' => 'NewSecret2026!',
+        ]);
+
+        $resetResp->assertRedirect(route('login'));
+        $this->assertDatabaseMissing('password_reset_tokens', [
+            'email' => $user->email,
+        ]);
+
+        // 5. Verify user can login with new password
+        $this->post(route('login.submit'), [
+            'email' => $user->email,
+            'password' => 'NewSecret2026!',
+        ])->assertRedirect(route('client.dashboard'));
+    }
+
+    public function test_authenticated_user_can_change_password(): void
+    {
+        $admin = User::where('email', 'admin@caremate.com')->firstOrFail();
+
+        $this->actingAs($admin)->get(route('password.change'))->assertStatus(200);
+
+        $response = $this->actingAs($admin)->post(route('password.change.update'), [
+            'current_password' => 'password',
+            'password' => 'BrandNewAdminPass!',
+            'password_confirmation' => 'BrandNewAdminPass!',
+        ]);
+
+        $response->assertSessionHas('success');
+
+        // Logout and confirm new password works
+        $this->post(route('logout'));
+        $this->post(route('login.submit'), [
+            'email' => 'admin@caremate.com',
+            'password' => 'BrandNewAdminPass!',
+        ])->assertRedirect(route('admin.dashboard'));
+    }
+
+    public function test_admin_can_update_another_user_password(): void
+    {
+        $admin = User::where('email', 'admin@caremate.com')->firstOrFail();
+        $targetUser = User::where('role', UserRole::Caregiver)->firstOrFail();
+
+        $response = $this->actingAs($admin)->post(route('admin.users.password', $targetUser), [
+            'password' => 'ResetByAdmin999!',
+            'password_confirmation' => 'ResetByAdmin999!',
+        ]);
+
+        $response->assertRedirect(route('admin.users.index'));
+        $response->assertSessionHas('success');
+
+        // Logout and confirm caregiver can login with admin-set password
+        $this->post(route('logout'));
+        $this->post(route('login.submit'), [
+            'email' => $targetUser->email,
+            'password' => 'ResetByAdmin999!',
+        ])->assertRedirect(route('caregiver.dashboard'));
+    }
+
+    public function test_admin_can_update_contact_settings_and_changes_reflect_on_public_pages(): void
+    {
+        $admin = User::where('email', 'admin@caremate.com')->firstOrFail();
+
+        $newAddress = 'House 42, Road 11, Banani, Dhaka-1213, Bangladesh';
+        $newPhone = '+880 1711-998877';
+        $newHotline = '+880 1811-223344';
+        $newEmail = 'support@carematebd.com';
+
+        $response = $this->actingAs($admin)->post(route('admin.settings.update'), [
+            'platform_name' => 'CareMate BD',
+            'platform_commission_rate' => 15.0,
+            'min_payout_amount' => 1000,
+            'office_address' => $newAddress,
+            'contact_phone' => $newPhone,
+            'emergency_hotline' => $newHotline,
+            'contact_email' => $newEmail,
+        ]);
+
+        $response->assertSessionHas('success');
+
+        $this->get(route('home'))
+            ->assertStatus(200)
+            ->assertSee($newAddress)
+            ->assertSee($newPhone)
+            ->assertSee($newEmail);
+
+        $this->get(route('contact'))
+            ->assertStatus(200)
+            ->assertSee($newAddress)
+            ->assertSee($newPhone)
+            ->assertSee($newHotline)
+            ->assertSee($newEmail);
+
+        $this->get(route('about'))
+            ->assertStatus(200)
+            ->assertSee($newAddress)
+            ->assertSee($newHotline)
+            ->assertSee($newEmail);
     }
 }

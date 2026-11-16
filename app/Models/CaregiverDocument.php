@@ -24,6 +24,10 @@ class CaregiverDocument extends Model
         'mime_type',
         'size',
         'status',
+        'extraction_status',
+        'extracted_data',
+        'extraction_notes',
+        'extracted_at',
         'verified_by',
         'verified_at',
         'notes',
@@ -34,6 +38,8 @@ class CaregiverDocument extends Model
         return [
             'type' => DocumentType::class,
             'status' => DocumentStatus::class,
+            'extracted_data' => 'array',
+            'extracted_at' => 'datetime',
             'verified_at' => 'datetime',
             'size' => 'integer',
         ];

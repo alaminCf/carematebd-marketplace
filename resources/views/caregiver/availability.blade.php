@@ -3,9 +3,9 @@
     <x-slot:header>Availability & Duty Schedule</x-slot:header>
     <x-slot:subheading>Control your weekly shift days and mark blackout dates when you are unavailable.</x-slot:subheading>
 
-    <div style="display: grid; grid-template-columns: 1fr 380px; gap: 2rem; align-items: flex-start;" class="schedule-layout">
+    <div class="schedule-layout">
         <!-- Left: Weekly Schedule & Live Status -->
-        <div>
+        <div style="min-width: 0;">
             <!-- Live Availability Toggle Card -->
             <div class="glass-card" style="padding: 2rem; border-radius: var(--radius-xl); margin-bottom: 2rem;">
                 <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(226, 232, 240, 0.8); padding-bottom: 0.5rem;">

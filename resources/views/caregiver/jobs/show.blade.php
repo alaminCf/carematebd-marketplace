@@ -3,9 +3,9 @@
     <x-slot:header>Care Job #{{ $booking->booking_reference }}</x-slot:header>
     <x-slot:subheading>{{ $booking->service->name }} • {{ $booking->start_date->format('M d') }} to {{ $booking->end_date->format('M d, Y') }}</x-slot:subheading>
 
-    <div style="display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: flex-start;" class="job-layout">
+    <div class="job-layout">
         <!-- Main Duty Instructions -->
-        <div>
+        <div style="min-width: 0;">
             <!-- Top Status Strip -->
             <div class="glass-card" style="padding: 1.5rem; border-radius: var(--radius-xl); margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
                 <div>

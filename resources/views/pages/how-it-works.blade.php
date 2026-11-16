@@ -27,7 +27,11 @@
                         {{ __('Rigorous 9-Step Verification & Clinical Screening') }}
                     </h3>
                     <p>
-                        {{ __('Before any caregiver appears on our marketplace, their government National ID card is cross-referenced with national databases. We verify local police clearance certificates, clinical nurse diplomas, reference checks with past employers, and in-person interviews at our Care Operations Center in ICT Tower, Agargaon.') }}
+                        @if ($siteSettings['office_address'] === 'E-14/X, ICT Tower (14th Floor), Agargaon, Dhaka-1207, Bangladesh')
+                            {{ __('Before any caregiver appears on our marketplace, their government National ID card is cross-referenced with national databases. We verify local police clearance certificates, clinical nurse diplomas, reference checks with past employers, and in-person interviews at our Care Operations Center in ICT Tower, Agargaon.') }}
+                        @else
+                            {{ __('Before any caregiver appears on our marketplace, their government National ID card is cross-referenced with national databases. We verify local police clearance certificates, clinical nurse diplomas, reference checks with past employers, and in-person interviews at our Care Operations Center:') }} {{ __($siteSettings['office_address']) }}
+                        @endif
                     </p>
                     <div class="step-checklist" style="color: #059669;">
                         <span>✓ {{ __('Government NID verification') }}</span>

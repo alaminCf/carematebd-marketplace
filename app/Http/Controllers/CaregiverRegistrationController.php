@@ -13,7 +13,9 @@ use App\Models\Location;
 use App\Models\Service;
 use App\Models\User;
 use App\Notifications\CareMateDatabaseNotification;
+use App\Services\DocumentExtractionService;
 use App\Services\SecureDocumentService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +26,106 @@ use Illuminate\View\View;
 class CaregiverRegistrationController extends Controller
 {
     public function __construct(
-        public SecureDocumentService $documentService
+        public SecureDocumentService $documentService,
+        public DocumentExtractionService $extractionService
     ) {}
+
+    /**
+     * AJAX endpoint: Upload a document (NID, Certificate, Academic) and perform real-time extraction
+     */
+    public function extractDocument(Request $request): JsonResponse
+    {
+        $request->validate([
+            'document' => ['required', 'file', 'mimes:jpeg,png,jpg,webp,pdf', 'max:10240'],
+            'doc_type' => ['required', 'string', 'in:nid_front,nid_back,academic,certificate,profile_photo'],
+        ]);
+
+        $file = $request->file('document');
+        $docType = $request->input('doc_type');
+        $clientText = $request->input('client_text');
+
+        // If doc_type is profile_photo, store temporary preview
+        if ($docType === 'profile_photo') {
+            $path = $file->store('temp_avatars', 'public');
+
+            return response()->json([
+                'status' => 'success',
+                'doc_type' => 'profile_photo',
+                'preview_url' => asset('storage/'.$path),
+                'temp_path' => $path,
+                'extracted' => [
+                    'avatar_path' => $path,
+                ],
+                'notes' => 'Profile photo selected and ready for registration.',
+            ]);
+        }
+
+        $result = $this->extractionService->extract($file, $docType, $clientText);
+
+        // If authenticated caregiver, securely store document and link extraction data
+        if (Auth::check() && Auth::user()->isCaregiver() && Auth::user()->caregiver) {
+            $caregiver = Auth::user()->caregiver;
+
+            if ($docType === 'nid_front') {
+                $doc = $this->documentService->storePrivateDocument(
+                    $caregiver,
+                    $file,
+                    DocumentType::NidFront,
+                    'National ID (Front)'
+                );
+                $doc->update([
+                    'extraction_status' => $result['status'] ?? 'none',
+                    'extracted_data' => $result['extracted'] ?? [],
+                    'extraction_notes' => $result['notes'] ?? null,
+                    'extracted_at' => now(),
+                ]);
+            } elseif ($docType === 'nid_back') {
+                $doc = $this->documentService->storePrivateDocument(
+                    $caregiver,
+                    $file,
+                    DocumentType::NidBack,
+                    'National ID (Back)'
+                );
+                $doc->update([
+                    'extraction_status' => $result['status'] ?? 'none',
+                    'extracted_data' => $result['extracted'] ?? [],
+                    'extraction_notes' => $result['notes'] ?? null,
+                    'extracted_at' => now(),
+                ]);
+
+                if (! empty($result['extracted']['permanent_address'])) {
+                    $caregiver->update([
+                        'permanent_address' => $result['extracted']['permanent_address'],
+                    ]);
+                }
+            } elseif ($docType === 'certificate' && ! empty($result['extracted']['cert_name'])) {
+                $this->documentService->storeCertificate($caregiver, $file, [
+                    'name' => $result['extracted']['cert_name'],
+                    'institution' => $result['extracted']['cert_institution'] ?? 'Accredited Institute',
+                    'certificate_number' => $result['extracted']['cert_number'] ?? null,
+                    'issue_year' => $result['extracted']['cert_year'] ?? null,
+                    'is_public' => true,
+                ]);
+            }
+
+            // Update caregiver tracking
+            $existingExtracted = $caregiver->extracted_profile_data ?? [];
+            $merged = array_merge($existingExtracted, $result['extracted'] ?? []);
+            $caregiver->update([
+                'auto_fill_status' => $result['status'] ?? 'extracted',
+                'extracted_profile_data' => $merged,
+                'extracted_at' => now(),
+            ]);
+        }
+
+        return response()->json([
+            'status' => $result['status'] ?? 'success',
+            'doc_type' => $docType,
+            'extracted' => $result['extracted'] ?? [],
+            'confidence' => $result['confidence'] ?? [],
+            'notes' => $result['notes'] ?? '',
+        ]);
+    }
 
     public function show(Request $request): View|RedirectResponse
     {
@@ -80,6 +180,7 @@ class CaregiverRegistrationController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:120'],
+            'name_bn' => ['nullable', 'string', 'max:120'],
             'email' => ['required', 'email', 'max:150', 'unique:users,email,'.($userId ?: 'NULL')],
             'phone' => ['required', 'string', 'max:20', 'unique:users,phone,'.($userId ?: 'NULL')],
             'gender' => ['required', 'in:female,male,other'],
@@ -120,6 +221,7 @@ class CaregiverRegistrationController extends Controller
             $caregiver = Caregiver::updateOrCreate(
                 ['user_id' => $user->id],
                 [
+                    'name_bn' => $validated['name_bn'] ?? null,
                     'gender' => $validated['gender'],
                     'date_of_birth' => $validated['date_of_birth'],
                     'status' => CaregiverStatus::Draft,

@@ -3,7 +3,7 @@
     <x-slot:header>Submit Care Booking Request</x-slot:header>
     <x-slot:subheading>CareMate Admin will review patient requirements, verify schedule, and confirm caregiver assignment.</x-slot:subheading>
 
-    <div style="display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: flex-start;" class="request-grid">
+    <div class="request-grid">
         <!-- Main Form -->
         <div class="glass-card" style="padding: 2.25rem; border-radius: var(--radius-xl);">
             <form method="POST" action="{{ route('client.requests.store', $caregiver->id) }}">

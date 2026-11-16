@@ -6,14 +6,87 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'CareMate BD Dashboard' }}</title>
 
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=2.9.0">
+    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v={{ file_exists(public_path('css/caremate.css')) ? filemtime(public_path('css/caremate.css')) : '3.1.0' }}">
     <style>
+        /* Prevent CSS Grid items from expanding beyond container width */
+        .dashboard-main {
+            min-width: 0 !important;
+            overflow-x: hidden !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        .dashboard-main > *,
+        .documents-layout > *,
+        .earnings-layout > *,
+        .schedule-layout > *,
+        .support-layout > *,
+        .request-grid > *,
+        .booking-layout > *,
+        .booking-admin-layout > *,
+        .ticket-layout > *,
+        .job-layout > *,
+        .triage-layout > *,
+        .profile-layout > *,
+        .caregiver-admin-layout > *,
+        .hiring-admin-layout > * {
+            min-width: 0 !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .glass-card {
+            min-width: 0 !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        .table-container {
+            min-width: 0 !important;
+            max-width: 100% !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            box-sizing: border-box !important;
+        }
+        .glass-table {
+            min-width: 540px !important;
+            width: 100% !important;
+        }
+
+        /* 2-Column Responsive Layouts for Desktops */
+        .documents-layout,
+        .earnings-layout,
+        .schedule-layout,
+        .support-layout,
+        .request-grid,
+        .booking-layout,
+        .booking-admin-layout,
+        .ticket-layout,
+        .job-layout,
+        .triage-layout,
+        .dashboard-grid-2,
+        .caregiver-admin-layout,
+        .hiring-admin-layout {
+            display: grid !important;
+            grid-template-columns: minmax(0, 1fr) clamp(280px, 25vw, 340px) !important;
+            gap: 1.5rem !important;
+            align-items: flex-start !important;
+            max-width: 100% !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
         /* Base Desktop KPI Stats Grid */
         .stats-grid {
             display: grid !important;
@@ -29,12 +102,34 @@
             }
         }
 
+        /* Responsive Breakpoint for Laptop, MacBook, and Tablet Screens (<= 1250px) */
+        @media (max-width: 1250px) {
+            .documents-layout,
+            .earnings-layout,
+            .schedule-layout,
+            .support-layout,
+            .request-grid,
+            .booking-layout,
+            .booking-admin-layout,
+            .ticket-layout,
+            .job-layout,
+            .triage-layout,
+            .profile-layout,
+            .dashboard-grid-2,
+            .caregiver-admin-layout,
+            .hiring-admin-layout,
+            .dashboard-main [style*="1fr 340px"],
+            .dashboard-main [style*="1fr 360px"],
+            .dashboard-main [style*="1fr 380px"],
+            .dashboard-main [style*="1fr 320px"],
+            .dashboard-main [style*="2fr 1fr"] {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem !important;
+            }
+        }
+
         @media (max-width: 900px) {
             .dashboard-layout { display: block !important; }
-            .dashboard-grid-2, .booking-layout, .booking-admin-layout, .earnings-layout, .request-grid, .support-layout, .ticket-layout, .job-layout, .schedule-layout, .edit-layout, .documents-layout {
-                grid-template-columns: 1fr !important;
-                gap: 1.25rem !important;
-            }
             .dashboard-sidebar {
                 position: fixed !important;
                 top: 0 !important;
@@ -224,6 +319,10 @@
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         <span>{{ __('Clients') }}</span>
                     </a>
+                    <a href="{{ route('admin.users.index') }}" class="sidebar-nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                        <span>{{ __('Admin Users') }}</span>
+                    </a>
 
                     <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.06em; margin: 1.25rem 0.75rem 0.5rem 0.75rem;">{{ __('Finance & Service') }}</div>
                     <a href="{{ route('admin.payments.index') }}" class="sidebar-nav-item {{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
@@ -251,6 +350,10 @@
                     <a href="{{ route('admin.disputes.index') }}" class="sidebar-nav-item {{ request()->routeIs('admin.disputes.*') ? 'active' : '' }}">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                         <span>{{ __('Disputes') }}</span>
+                    </a>
+                    <a href="{{ route('admin.contact-messages.index') }}" class="sidebar-nav-item {{ request()->routeIs('admin.contact-messages.*') ? 'active' : '' }}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <span>{{ __('Care Desk Inquiries') }}</span>
                     </a>
                     <a href="{{ route('admin.reports.index') }}" class="sidebar-nav-item {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
@@ -342,12 +445,17 @@
                         <div style="font-size: 0.72rem; color: var(--text-muted);">{{ ucfirst($role) }}</div>
                     </div>
                 </div>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" title="Logout" style="background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 0.4rem;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                    </button>
-                </form>
+                <div style="display: flex; align-items: center; gap: 0.25rem;">
+                    <a href="{{ route('password.change') }}" title="{{ __('Change Password') }}" style="background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 0.4rem; display: inline-flex; text-decoration: none;">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-2-2l2 2m0 0l-7.5 7.5a4.95 4.95 0 0 0-1.4 2.8L10 17l2.7-.1a4.95 4.95 0 0 0 2.8-1.4L23 8l-2-2m-2-2l2 2"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" title="Logout" style="background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 0.4rem;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        </button>
+                    </form>
+                </div>
             </div>
         </aside>
 
@@ -570,6 +678,21 @@
                 });
             }
         });
+
+        window.togglePasswordVisibility = function(inputId, btn) {
+            var input = document.getElementById(inputId);
+            if (!input) return;
+            var isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            var eyeOpen = btn.querySelector('.eye-open');
+            var eyeClosed = btn.querySelector('.eye-closed');
+            if (eyeOpen && eyeClosed) {
+                eyeOpen.style.display = isPassword ? 'none' : 'block';
+                eyeClosed.style.display = isPassword ? 'block' : 'none';
+            }
+            btn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+            btn.setAttribute('title', isPassword ? 'Hide password' : 'Show password');
+        };
     </script>
 
     @stack('scripts')

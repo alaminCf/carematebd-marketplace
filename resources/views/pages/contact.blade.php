@@ -1,6 +1,6 @@
 <x-layouts.guest>
-    <x-slot:title>Contact Care Coordination Desk — CareMate BD</x-slot:title>
-    <x-slot:description>Contact CareMate BD at ICT Tower, Agargaon, Dhaka. 24/7 care hotline, emergency caregiver dispatch, and customer support.</x-slot:description>
+    <x-slot:title>Contact Care Coordination Desk — {{ $siteSettings['platform_name'] }}</x-slot:title>
+    <x-slot:description>Contact {{ $siteSettings['platform_name'] }} at {{ $siteSettings['office_address'] }}. 24/7 care hotline, emergency caregiver dispatch, and customer support.</x-slot:description>
 
     <div class="container" style="padding: 3rem 1.25rem 5rem 1.25rem;">
         <div class="page-intro-header">
@@ -34,7 +34,7 @@
                             <div>
                                 <div style="font-weight: 700; color: #0f172a; font-size: 0.95rem;">{{ __('Dhaka Headquarters') }}</div>
                                 <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-top: 0.2rem;">
-                                    {{ __('E-14/X, ICT Tower (14th Floor), Agargaon, Dhaka-1207, Bangladesh') }}
+                                    {{ __($siteSettings['office_address']) }}
                                 </div>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                             <div>
                                 <div style="font-weight: 700; color: #0f172a; font-size: 0.95rem;">{{ __('Emergency Care Hotline') }}</div>
                                 <div style="font-size: 1.1rem; font-weight: 800; color: #0a394a; margin-top: 0.2rem;">
-                                    <a href="tel:+8801610296460" style="color: inherit; text-decoration: none;">+880 1610-296460</a>
+                                    <a href="tel:{{ $siteSettings['emergency_hotline_tel'] }}" style="color: inherit; text-decoration: none;">{{ $siteSettings['emergency_hotline'] }}</a>
                                 </div>
                                 <div style="font-size: 0.8rem; color: var(--text-muted);">{{ __('24/7 direct caregiver dispatch across Dhaka') }}</div>
                             </div>
@@ -59,10 +59,10 @@
                             <div>
                                 <div style="font-weight: 700; color: #0f172a; font-size: 0.95rem;">{{ __('Instant WhatsApp Support') }}</div>
                                 <div style="font-size: 1.05rem; font-weight: 800; color: #0d873d; margin-top: 0.2rem;">
-                                    <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">+880 1610-296460</a>
+                                    <a href="https://wa.me/{{ $siteSettings['contact_phone_wa'] }}?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">{{ $siteSettings['contact_phone'] }}</a>
                                 </div>
                                 <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
-                                    <a href="https://wa.me/8801610296460?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" style="color: #075E54; font-weight: 700;">{{ __('Chat on WhatsApp with Care Coordinator →') }}</a>
+                                    <a href="https://wa.me/{{ $siteSettings['contact_phone_wa'] }}?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" style="color: #075E54; font-weight: 700;">{{ __('Chat on WhatsApp with Care Coordinator →') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                             <div>
                                 <div style="font-weight: 700; color: #0f172a; font-size: 0.95rem;">{{ __('Official Inquiries') }}</div>
                                 <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.2rem;">
-                                    <a href="mailto:contact@carematebd.com" style="color: inherit; text-decoration: none;">contact@carematebd.com</a>
+                                    <a href="mailto:{{ $siteSettings['contact_email'] }}" style="color: inherit; text-decoration: none;">{{ $siteSettings['contact_email'] }}</a>
                                 </div>
                             </div>
                         </div>
