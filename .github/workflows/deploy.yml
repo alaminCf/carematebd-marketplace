@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   deploy:
@@ -21,15 +21,13 @@ jobs:
           fetch-depth: 20
 
       - name: Upload changed files and clear compiled Blade views
-        id: ftp_sync
-        continue-on-error: true
         env:
           FTP_HOST: ${{ secrets.FTP_HOST || vars.FTP_HOST || 'drh3.hostwhitelabel.com' }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME || vars.FTP_USERNAME || 'techbolo' }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD || vars.FTP_PASSWORD }}
           REMOTE_BASE: /domains/carematebd.com
         run: |
-          python3 -u - << 'EOF' > /tmp/deploy.log 2>&1
+          python3 -u - << 'EOF'
           import ftplib
           import os
           import subprocess
@@ -134,32 +132,9 @@ jobs:
                   except Exception as e:
                       print(f"Note while clearing views in {target_base}: {e}")
 
-              try:
-                  import io
-                  buf = io.BytesIO()
-                  ftp.retrbinary(f"RETR {remote_base}/storage/logs/laravel.log", buf.write)
-                  log_lines = buf.getvalue().decode('utf-8', errors='replace').splitlines()[-90:]
-                  print("--- Recent laravel.log ---")
-                  for line in log_lines:
-                      print(line[:300])
-              except Exception as e:
-                  print(f"Note reading laravel.log: {e}")
-
               ftp.quit()
               print("DEPLOY SUCCESS")
           except Exception as e:
               traceback.print_exc()
               sys.exit(1)
           EOF
-
-      - name: Publish deploy log to deploy-log branch
-        if: always()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout --orphan deploy-log-temp
-          git rm -rf . >/dev/null 2>&1 || true
-          cp /tmp/deploy.log ./deploy.log
-          git add deploy.log
-          git commit -m "Update deploy log"
-          git push -f origin deploy-log-temp:deploy-log
