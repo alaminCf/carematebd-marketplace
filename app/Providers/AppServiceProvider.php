@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('*', function (\Illuminate\View\View $view): void {
+        View::composer('*', function ($view): void {
             $view->with('siteSettings', Setting::contactInfo());
         });
     }

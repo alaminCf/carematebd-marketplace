@@ -18,7 +18,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 5
+          fetch-depth: 20
 
       - name: Upload changed files and clear compiled Blade views
         id: ftp_sync
@@ -48,7 +48,7 @@ jobs:
               sys.exit(1)
 
           try:
-              changed = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD~3', 'HEAD'], text=True).splitlines()
+              changed = subprocess.check_output(['git', 'diff', '--name-only', 'ce33c7a', 'HEAD'], text=True).splitlines()
           except Exception:
               changed = []
 
@@ -132,6 +132,17 @@ jobs:
                   print(f"Cleared {cleared} compiled Blade views on live server.")
               except Exception as e:
                   print(f"Note while clearing views: {e}")
+
+              try:
+                  import io
+                  buf = io.BytesIO()
+                  ftp.retrbinary(f"RETR {remote_base}/storage/logs/laravel.log", buf.write)
+                  log_lines = buf.getvalue().decode('utf-8', errors='replace').splitlines()[-35:]
+                  print("--- Recent laravel.log ---")
+                  for line in log_lines:
+                      print(line)
+              except Exception as e:
+                  print(f"Note reading laravel.log: {e}")
 
               ftp.quit()
               print("DEPLOY SUCCESS")
