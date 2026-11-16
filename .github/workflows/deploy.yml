@@ -24,9 +24,9 @@ jobs:
         id: ftp_sync
         continue-on-error: true
         env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_HOST: ${{ secrets.FTP_HOST || vars.FTP_HOST || 'drh3.hostwhitelabel.com' }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME || vars.FTP_USERNAME || 'techbolo' }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD || vars.FTP_PASSWORD }}
           REMOTE_BASE: /domains/carematebd.com
         run: |
           python3 -u - << 'EOF' > /tmp/deploy.log 2>&1
