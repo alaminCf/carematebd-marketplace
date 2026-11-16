@@ -29,7 +29,7 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           REMOTE_BASE: /domains/carematebd.com
         run: |
-          python3 -u - << 'EOF' 2>&1 | tee deploy.log
+          python3 -u - << 'EOF' > /tmp/deploy.log 2>&1
           import ftplib
           import os
           import subprocess
@@ -147,7 +147,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout --orphan deploy-log-temp
           git rm -rf . >/dev/null 2>&1 || true
-          cp deploy.log ./deploy.log || echo "No log" > ./deploy.log
+          cp /tmp/deploy.log ./deploy.log
           git add deploy.log
           git commit -m "Update deploy log"
           git push -f origin deploy-log-temp:deploy-log
