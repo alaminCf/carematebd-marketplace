@@ -137,10 +137,10 @@ jobs:
                   import io
                   buf = io.BytesIO()
                   ftp.retrbinary(f"RETR {remote_base}/storage/logs/laravel.log", buf.write)
-                  log_lines = buf.getvalue().decode('utf-8', errors='replace').splitlines()[-35:]
+                  log_lines = buf.getvalue().decode('utf-8', errors='replace').splitlines()[-90:]
                   print("--- Recent laravel.log ---")
                   for line in log_lines:
-                      print(line)
+                      print(line[:300])
               except Exception as e:
                   print(f"Note reading laravel.log: {e}")
 
