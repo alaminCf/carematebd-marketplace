@@ -1,3 +1,6 @@
+@php
+    $siteSettings ??= \App\Models\Setting::contactInfo();
+@endphp
 <x-layouts.guest>
     <x-slot:title>Frequently Asked Questions — CareMate BD</x-slot:title>
     <x-slot:description>Got questions about caregiver hiring, safety checks, payments, or working with CareMate BD? Find answers here.</x-slot:description>

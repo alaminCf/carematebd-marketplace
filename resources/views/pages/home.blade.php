@@ -1,3 +1,6 @@
+@php
+    $siteSettings ??= \App\Models\Setting::contactInfo();
+@endphp
 <x-layouts.guest>
     <x-slot:title>CareMate BD — Trusted Caregivers for Elderly, Child, & Nursing Care in Bangladesh</x-slot:title>
     <x-slot:description>Find background-verified caregivers in Dhaka and across Bangladesh. Admin-coordinated care for your loved ones with total safety, privacy, and peace of mind.</x-slot:description>

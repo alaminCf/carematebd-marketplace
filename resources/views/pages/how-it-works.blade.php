@@ -1,3 +1,6 @@
+@php
+    $siteSettings ??= \App\Models\Setting::contactInfo();
+@endphp
 <x-layouts.guest>
     <x-slot:title>How CareMate BD Works — Safe, Admin-Mediated Caregiving in Bangladesh</x-slot:title>
     <x-slot:description>Learn why CareMate BD is Bangladesh's most trusted caregiver network. Discover our background verification, escrow model, and dedicated Care Managers.</x-slot:description>

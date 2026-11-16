@@ -1,3 +1,6 @@
+@php
+    $siteSettings ??= \App\Models\Setting::contactInfo();
+@endphp
 <x-layouts.guest>
     <x-slot:title>{{ $profile['name'] }} — Verified Caregiver | CareMate BD</x-slot:title>
     <x-slot:description>{{ Str::limit($profile['about'] ?? 'Professional verified caregiver on CareMate BD', 150) }}</x-slot:description>

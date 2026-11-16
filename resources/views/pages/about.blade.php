@@ -1,3 +1,6 @@
+@php
+    $siteSettings ??= \App\Models\Setting::contactInfo();
+@endphp
 <x-layouts.guest>
     <x-slot:title>About Us — CareMate BD | Transforming Family Care in Bangladesh</x-slot:title>
     <x-slot:description>CareMate BD was founded with a mission to bring dignity, safety, and reliability to caregiver recruitment across Bangladesh.</x-slot:description>

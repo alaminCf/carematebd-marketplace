@@ -102,36 +102,37 @@ jobs:
               ftp.set_pasv(True)
               print(f"Connected to {host} as {user}, PWD={ftp.pwd()}")
 
-              for rel_path in files_to_sync:
-                  if not os.path.isfile(rel_path):
-                      continue
-                  if not rel_path.startswith(allowed_prefixes):
-                      continue
+              for target_base in [remote_base, '/domains/beta.carematebd.com']:
+                  for rel_path in files_to_sync:
+                      if not os.path.isfile(rel_path):
+                          continue
+                      if not rel_path.startswith(allowed_prefixes):
+                          continue
 
-                  remote_file = f"{remote_base}/{rel_path}"
-                  ensure_remote_dir(ftp, os.path.dirname(remote_file))
-                  with open(rel_path, 'rb') as f:
-                      ftp.storbinary(f"STOR {remote_file}", f)
-                  print(f"Uploaded: {remote_file}")
-
-                  if rel_path.startswith('public/') and rel_path != 'public/index.php':
-                      sub_path = rel_path[len('public/'):]
-                      remote_pub_html = f"{remote_base}/public_html/{sub_path}"
-                      ensure_remote_dir(ftp, os.path.dirname(remote_pub_html))
+                      remote_file = f"{target_base}/{rel_path}"
+                      ensure_remote_dir(ftp, os.path.dirname(remote_file))
                       with open(rel_path, 'rb') as f:
-                          ftp.storbinary(f"STOR {remote_pub_html}", f)
-                      print(f"Uploaded: {remote_pub_html}")
+                          ftp.storbinary(f"STOR {remote_file}", f)
+                      print(f"Uploaded: {remote_file}")
 
-              try:
-                  ftp.cwd(f"{remote_base}/storage/framework/views")
-                  cleared = 0
-                  for name in ftp.nlst():
-                      if name.endswith('.php'):
-                          ftp.delete(name)
-                          cleared += 1
-                  print(f"Cleared {cleared} compiled Blade views on live server.")
-              except Exception as e:
-                  print(f"Note while clearing views: {e}")
+                      if rel_path.startswith('public/') and rel_path != 'public/index.php':
+                          sub_path = rel_path[len('public/'):]
+                          remote_pub_html = f"{target_base}/public_html/{sub_path}"
+                          ensure_remote_dir(ftp, os.path.dirname(remote_pub_html))
+                          with open(rel_path, 'rb') as f:
+                              ftp.storbinary(f"STOR {remote_pub_html}", f)
+                          print(f"Uploaded: {remote_pub_html}")
+
+                  try:
+                      ftp.cwd(f"{target_base}/storage/framework/views")
+                      cleared = 0
+                      for name in ftp.nlst():
+                          if name.endswith('.php'):
+                              ftp.delete(name)
+                              cleared += 1
+                      print(f"Cleared {cleared} compiled Blade views in {target_base}.")
+                  except Exception as e:
+                      print(f"Note while clearing views in {target_base}: {e}")
 
               try:
                   import io

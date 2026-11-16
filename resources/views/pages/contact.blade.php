@@ -1,3 +1,6 @@
+@php
+    $siteSettings ??= \App\Models\Setting::contactInfo();
+@endphp
 <x-layouts.guest>
     <x-slot:title>Contact Care Coordination Desk — {{ $siteSettings['platform_name'] }}</x-slot:title>
     <x-slot:description>Contact {{ $siteSettings['platform_name'] }} at {{ $siteSettings['office_address'] }}. 24/7 care hotline, emergency caregiver dispatch, and customer support.</x-slot:description>

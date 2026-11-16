@@ -1,3 +1,6 @@
+@php
+    $siteSettings ??= \App\Models\Setting::contactInfo();
+@endphp
 <x-layouts.dashboard>
     <x-slot:title>Care Desk Inquiries — Admin | CareMate BD</x-slot:title>
     <x-slot:header>Care Desk Inquiries</x-slot:header>
