@@ -26,7 +26,7 @@ class CaregiverAutoFillRegistrationTest extends TestCase
         $response = $this->get(route('caregiver.register'));
 
         $response->assertStatus(200);
-        $response->assertSee('Become a Caregiver at CareMate BD');
+        $response->assertSee('Become a Caregiver / Nurse at CareMate BD');
         $response->assertSee('Step 1 of 9');
         $response->assertDontSee('Upload Documents for Auto Form Fill');
     }

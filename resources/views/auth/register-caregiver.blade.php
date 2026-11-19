@@ -10,7 +10,7 @@
                     <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" style="height: 48px; width: auto; object-fit: contain;">
                 </a>
                 <h1 style="font-size: 2.2rem; font-weight: 800; color: #092632; margin-top: 0.25rem;">
-                    Become a Caregiver at CareMate BD
+                    Become a Caregiver / Nurse at CareMate BD
                 </h1>
                 <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.35rem; max-width: 600px; margin-left: auto; margin-right: auto;">
                     Join CareMate BD verified caregiver network. Complete the 9-step accredited onboarding with dignity and guaranteed payouts.

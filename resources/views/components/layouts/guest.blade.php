@@ -276,12 +276,72 @@
                 display: inline-flex !important;
             }
         }
+        @media (max-width: 768px) {
+            .header-whatsapp-btn {
+                display: none !important;
+            }
+        }
 
-        /* Auto-hide bottom dock when typing or keyboard is open */
+        /* Floating WhatsApp Button (Mobile & Desktop) */
+        .floating-whatsapp-fab {
+            position: fixed !important;
+            bottom: 24px !important;
+            right: 20px !important;
+            width: 52px !important;
+            height: 52px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%) !important;
+            color: #ffffff !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-shadow: 0 8px 24px rgba(18, 140, 126, 0.38), 0 0 0 3px rgba(255, 255, 255, 0.9) !important;
+            z-index: 9990 !important;
+            text-decoration: none !important;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease !important;
+        }
+        .floating-whatsapp-fab:hover,
+        .floating-whatsapp-fab:active {
+            transform: scale(1.08) !important;
+            color: #ffffff !important;
+            box-shadow: 0 12px 28px rgba(18, 140, 126, 0.5), 0 0 0 3px #ffffff !important;
+        }
+        @media (max-width: 900px) {
+            .floating-whatsapp-fab {
+                bottom: calc(72px + env(safe-area-inset-bottom, 8px)) !important;
+                right: 16px !important;
+                width: 48px !important;
+                height: 48px !important;
+            }
+        }
+
+        /* Active Bottom Dock Styling (No Underline, Distinct Color & Bold) */
+        .mobile-app-dock-item.active {
+            color: #0d9488 !important;
+            font-weight: 800 !important;
+            background: rgba(13, 148, 136, 0.1) !important;
+        }
+        .mobile-app-dock-item.active svg {
+            stroke: #0d9488 !important;
+            stroke-width: 2.5px !important;
+        }
+        .mobile-app-dock-item.active span {
+            color: #0d9488 !important;
+            font-weight: 800 !important;
+        }
+        .mobile-app-dock-item.active::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        /* Auto-hide bottom dock & floating button when typing or keyboard is open */
         .mobile-app-dock.dock-keyboard-hidden,
         body:has(input:focus):not(:has(input[type="checkbox"]:focus)):not(:has(input[type="radio"]:focus)) .mobile-app-dock,
         body:has(textarea:focus) .mobile-app-dock,
-        body:has(select:focus) .mobile-app-dock {
+        body:has(select:focus) .mobile-app-dock,
+        body:has(input:focus):not(:has(input[type="checkbox"]:focus)):not(:has(input[type="radio"]:focus)) .floating-whatsapp-fab,
+        body:has(textarea:focus) .floating-whatsapp-fab,
+        body:has(select:focus) .floating-whatsapp-fab {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
@@ -961,7 +1021,7 @@
                         </form>
                     @else
                         <a href="{{ route('login') }}" class="btn btn-secondary btn-sm" style="font-weight: 600;">{{ __('Login') }}</a>
-                        <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 600;">{{ __('Become Caregiver') }}</a>
+                        <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 600;">{{ __('Become Caregiver / Nurse') }}</a>
                         <a href="{{ route('marketplace.index') }}" class="btn btn-primary btn-sm" style="font-weight: 700;">{{ __('Find Caregiver') }}</a>
                     @endauth
                 </div>
@@ -1031,7 +1091,7 @@
                         <span>{{ __('Find a Verified Caregiver') }}</span>
                     </a>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-                        <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 600; text-align: center;">{{ __('Become Caregiver') }}</a>
+                        <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 600; text-align: center;">{{ __('Become Caregiver / Nurse') }}</a>
                         <a href="{{ route('login') }}" class="btn btn-secondary btn-sm" style="font-weight: 600; text-align: center;">{{ __('Login') }}</a>
                     </div>
                 @endauth
@@ -1239,6 +1299,16 @@
         });
     </script>
 
+    <!-- Floating WhatsApp Quick Chat Button -->
+    <a href="https://wa.me/{{ $siteSettings['contact_phone_wa'] }}?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services."
+       target="_blank"
+       rel="noopener noreferrer"
+       class="floating-whatsapp-fab"
+       aria-label="Chat on WhatsApp"
+       title="{{ __('Chat on WhatsApp') }}">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 2C6.516 2 2.031 6.484 2.031 12C2.031 13.805 2.508 15.5 3.336 16.969L2 22L7.172 20.688C8.594 21.461 10.258 21.906 12.031 21.906C17.547 21.906 22.031 17.422 22.031 12C22.031 6.484 17.547 2 12.031 2ZM12.031 20.156C10.453 20.156 8.969 19.719 7.688 18.969L7.375 18.781L4.312 19.562L5.125 16.578L4.922 16.25C4.109 14.953 3.672 13.5 3.672 12C3.672 7.391 7.422 3.641 12.031 3.641C16.641 3.641 20.391 7.391 20.391 12C20.391 16.609 16.641 20.156 12.031 20.156ZM16.609 14.547C16.359 14.422 15.125 13.812 14.891 13.734C14.656 13.656 14.484 13.609 14.312 13.859C14.141 14.109 13.656 14.688 13.5 14.859C13.344 15.031 13.188 15.047 12.938 14.922C12.688 14.797 11.875 14.531 10.922 13.68C10.172 13.008 9.672 12.18 9.516 11.93C9.359 11.68 9.5 11.539 9.625 11.414C9.734 11.305 9.875 11.125 10 10.984C10.125 10.844 10.172 10.734 10.25 10.578C10.328 10.422 10.281 10.281 10.219 10.156C10.156 10.031 9.656 8.812 9.453 8.312C9.25 7.828 9.047 7.891 8.891 7.891C8.75 7.891 8.578 7.875 8.406 7.875C8.234 7.875 7.953 7.938 7.719 8.188C7.484 8.438 6.828 9.047 6.828 10.281C6.828 11.516 7.734 12.703 7.859 12.875C7.984 13.047 9.641 15.609 12.188 16.703C12.797 16.969 13.266 17.125 13.641 17.25C14.25 17.438 14.812 17.406 15.25 17.344C15.75 17.266 16.781 16.719 17 16.109C17.219 15.5 17.219 14.984 17.156 14.859C17.094 14.734 16.859 14.672 16.609 14.547Z"/></svg>
+    </a>
+
     <!-- Mobile Native App Bottom Navigation Dock for Public/Guests -->
     <nav class="mobile-app-dock" aria-label="Mobile Bottom Navigation">
         <a href="{{ route('home') }}" class="mobile-app-dock-item {{ request()->routeIs('home') ? 'active' : '' }}">
@@ -1253,9 +1323,9 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/></svg>
             <span>{{ __('Services') }}</span>
         </a>
-        <a href="{{ route('how-it-works') }}" class="mobile-app-dock-item {{ request()->routeIs('how-it-works') ? 'active' : '' }}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            <span>{{ __('How It Works') }}</span>
+        <a href="{{ route('caregiver.register') }}" class="mobile-app-dock-item {{ request()->routeIs('caregiver.register*') ? 'active' : '' }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            <span>{{ __('Join Us') }}</span>
         </a>
         @auth
             @php $authRole = auth()->user()->role->value; @endphp

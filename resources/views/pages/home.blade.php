@@ -51,6 +51,100 @@
             }
         }
 
+        /* Clean Mobile Location Row & Hero Slider Caption Overrides */
+        .hero-slide img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            display: block !important;
+        }
+        .hero-slide-overlay {
+            background: linear-gradient(180deg, rgba(9, 38, 50, 0) 32%, rgba(9, 38, 50, 0.68) 64%, rgba(9, 38, 50, 0.94) 100%) !important;
+        }
+        .hero-slide-caption {
+            position: absolute !important;
+            bottom: 1.35rem !important;
+            left: 1.35rem !important;
+            right: 1.35rem !important;
+            z-index: 6 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 0.3rem !important;
+            text-align: left !important;
+        }
+        .hero-slide-badge {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.3rem !important;
+            background: rgba(16, 185, 129, 0.22) !important;
+            border: 1px solid rgba(52, 211, 153, 0.45) !important;
+            color: #6ee7b7 !important;
+            font-size: 0.7rem !important;
+            font-weight: 700 !important;
+            padding: 0.18rem 0.55rem !important;
+            border-radius: 9999px !important;
+            letter-spacing: 0.02em !important;
+            backdrop-filter: blur(6px) !important;
+            -webkit-backdrop-filter: blur(6px) !important;
+        }
+        .hero-slide-title {
+            font-size: 1.25rem !important;
+            font-weight: 800 !important;
+            color: #ffffff !important;
+            margin: 0 !important;
+            line-height: 1.25 !important;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+        }
+        .hero-slide-desc {
+            font-size: 0.84rem !important;
+            color: rgba(241, 245, 249, 0.92) !important;
+            line-height: 1.45 !important;
+            margin: 0 !important;
+            max-width: 90% !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            overflow: hidden !important;
+        }
+        @media (max-width: 768px) {
+            .pathao-loc-sub {
+                overflow: visible !important;
+                flex-wrap: nowrap !important;
+                gap: 0.3rem !important;
+            }
+            .pathao-loc-label {
+                font-size: 0.64rem !important;
+                letter-spacing: 0.02em !important;
+            }
+            .pathao-status-tag {
+                font-size: 0.6rem !important;
+                padding: 0.06rem 0.42rem !important;
+                flex-shrink: 0 !important;
+            }
+            .hero-slider-wrapper {
+                height: 300px !important;
+                min-height: 300px !important;
+            }
+            .hero-slide-caption {
+                bottom: 1.75rem !important;
+                left: 1rem !important;
+                right: 1rem !important;
+                gap: 0.22rem !important;
+            }
+            .hero-slide-title {
+                font-size: 1.1rem !important;
+            }
+            .hero-slide-desc {
+                font-size: 0.78rem !important;
+                max-width: 100% !important;
+            }
+            .hero-slider-dots {
+                bottom: 10px !important;
+                right: 14px !important;
+            }
+        }
+
         /* Google Reviews Header CTAs */
         .google-header-ctas {
             display: flex;
@@ -238,7 +332,7 @@
                                         </div>
                                         <div class="pathao-loc-details">
                                             <div class="pathao-loc-sub">
-                                                <span class="pathao-loc-label">{{ __('Care Location') }}</span>
+                                                <span class="pathao-loc-label">{{ __('My Location') }}</span>
                                                 <span id="pathaoLocStatus" class="pathao-status-tag">
                                                     <span class="pathao-status-dot"></span>
                                                     <span class="pathao-status-text">{{ __('Detecting...') }}</span>
@@ -371,7 +465,8 @@
                                     <img src="{{ $service->imageUrl() }}" alt="{{ $service->name }} in Bangladesh" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
                                     <div class="hero-slide-overlay"></div>
                                     <div class="hero-slide-caption">
-                                        <div class="hero-slide-title">Care Coordinator Verified • {{ __($service->name) }}</div>
+                                        <span class="hero-slide-badge">✓ {{ __('Care Coordinator Verified') }}</span>
+                                        <div class="hero-slide-title">{{ __($service->name) }}</div>
                                         <div class="hero-slide-desc">{{ __($service->short_description ?? $service->description) }}</div>
                                     </div>
                                 </div>
@@ -391,29 +486,6 @@
                             @foreach ($services as $index => $service)
                                 <button type="button" class="hero-slider-dot {{ $index === 0 ? 'active' : '' }}" onclick="goToHeroSlide({{ $index }})" aria-label="Slide {{ $index + 1 }}"></button>
                             @endforeach
-                        </div>
-                    </div>
-
-                    <!-- Floating Badge Card 1 -->
-                    <div class="glass-card" style="position: absolute; top: -15px; right: -15px; padding: 0.85rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; border-radius: var(--radius-md); box-shadow: var(--glass-shadow-lg); z-index: 15;">
-                        <div style="width: 38px; height: 38px; border-radius: 50%; background: #dcfce7; display: flex; align-items: center; justify-content: center; color: #15803d; font-size: 1.2rem;">
-                            🛡️
-                        </div>
-                        <div>
-                            <div style="font-size: 0.85rem; font-weight: 800; color: #0f172a;">100% Verified</div>
-                            <div style="font-size: 0.72rem; color: var(--text-muted);">CareMate Safety Stamp</div>
-                        </div>
-                    </div>
-
-                    <!-- Floating Badge Card 2 -->
-                    <div class="glass-card" style="position: absolute; bottom: -20px; left: -20px; padding: 0.85rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; border-radius: var(--radius-md); box-shadow: var(--glass-shadow-lg); z-index: 15;">
-                        <div style="display: flex; gap: 2px;">
-                            @for ($i = 0; $i < 5; $i++)
-                                <span style="color: #f59e0b; font-size: 0.9rem;">★</span>
-                            @endfor
-                        </div>
-                        <div style="font-size: 0.85rem; font-weight: 800; color: #0f172a;">
-                            {{ $stats['satisfaction_rate'] }}/5.0 <span style="font-weight: 500; font-size: 0.75rem; color: var(--text-muted);">Family Rating</span>
                         </div>
                     </div>
                 </div>
@@ -968,10 +1040,10 @@
                         </p>
                         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                             <a href="{{ route('caregiver.register') }}" class="btn" style="background: #fff; color: #0a394a !important; font-weight: 700; padding: 0.85rem 1.8rem;">
-                                Apply as Caregiver →
+                                {{ __('Become Caregiver / Nurse') }} →
                             </a>
                             <a href="{{ route('how-it-works') }}" class="btn btn-secondary" style="background: rgba(255, 255, 255, 0.15); color: #fff !important; border-color: rgba(255, 255, 255, 0.3);">
-                                Learn How It Works
+                                {{ __('Learn How It Works') }}
                             </a>
                         </div>
                     </div>
