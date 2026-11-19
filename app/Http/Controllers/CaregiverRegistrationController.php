@@ -51,7 +51,7 @@ class CaregiverRegistrationController extends Controller
             return response()->json([
                 'status' => 'success',
                 'doc_type' => 'profile_photo',
-                'preview_url' => asset('storage/'.$path),
+                'preview_url' => url('/media/'.$path),
                 'temp_path' => $path,
                 'extracted' => [
                     'avatar_path' => $path,

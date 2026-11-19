@@ -88,7 +88,9 @@ class User extends Authenticatable
                 return asset(ltrim($this->avatar_path, '/'));
             }
 
-            return asset('storage/'.ltrim($this->avatar_path, '/'));
+            $cleanPath = ltrim((string) preg_replace('#^/?(storage|media)/#', '', $this->avatar_path), '/');
+
+            return url('/media/'.$cleanPath);
         }
 
         // Return a clean UI avatar fallback with user initials

@@ -60,7 +60,17 @@ class Service extends Model
     public function imageUrl(): string
     {
         if ($this->image_path) {
-            return str_starts_with($this->image_path, 'http') ? $this->image_path : asset(ltrim($this->image_path, '/'));
+            if (str_starts_with($this->image_path, 'http')) {
+                return $this->image_path;
+            }
+
+            if (str_starts_with($this->image_path, '/storage/') || str_starts_with($this->image_path, 'storage/')) {
+                $cleanPath = ltrim((string) preg_replace('#^/?storage/#', '', $this->image_path), '/');
+
+                return url('/media/'.$cleanPath);
+            }
+
+            return asset(ltrim($this->image_path, '/'));
         }
 
         return match ($this->slug) {

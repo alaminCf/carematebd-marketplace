@@ -48,7 +48,10 @@ Route::get('/caregivers/{slug}', [MarketplaceController::class, 'show'])->name('
 Route::get('/sitemap.xml', [HomeController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [HomeController::class, 'robots'])->name('robots');
 
-// Public Storage Fallback Route (serves avatars & service images when storage symlink is absent on shared hosting)
+// Public Storage & Media Fallback Routes (serves avatars & service images when storage symlink is absent on shared hosting)
+Route::get('/media/{path}', [DocumentController::class, 'showPublicStorage'])
+    ->where('path', '.*')
+    ->name('media.public');
 Route::get('/storage/{path}', [DocumentController::class, 'showPublicStorage'])
     ->where('path', '.*')
     ->name('storage.public');

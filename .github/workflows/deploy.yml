@@ -132,6 +132,15 @@ jobs:
                   except Exception as e:
                       print(f"Note while clearing views in {target_base}: {e}")
 
+                  try:
+                      ftp.cwd(f"{target_base}/bootstrap/cache")
+                      for name in ftp.nlst():
+                          if name.startswith('routes') and name.endswith('.php'):
+                              ftp.delete(name)
+                              print(f"Cleared cached route file {name} in {target_base}.")
+                  except Exception as e:
+                      print(f"Note while clearing route cache in {target_base}: {e}")
+
               ftp.quit()
               print("DEPLOY SUCCESS")
           except Exception as e:
