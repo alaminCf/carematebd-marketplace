@@ -46,7 +46,7 @@ class CaregiverRegistrationController extends Controller
 
         // If doc_type is profile_photo, store temporary preview
         if ($docType === 'profile_photo') {
-            $path = $file->store('temp_avatars', 'public');
+            $path = User::storePublicAvatar($file, 'temp_avatars');
 
             return response()->json([
                 'status' => 'success',
@@ -200,6 +200,7 @@ class CaregiverRegistrationController extends Controller
                 if (! empty($validated['password'])) {
                     $userData['password'] = Hash::make($validated['password']);
                 }
+                $user->update($userData);
             } else {
                 $user = User::create([
                     'name' => $validated['name'],
@@ -214,7 +215,7 @@ class CaregiverRegistrationController extends Controller
             }
 
             if ($request->hasFile('profile_photo')) {
-                $photoPath = $request->file('profile_photo')->store('avatars', 'public');
+                $photoPath = User::storePublicAvatar($request->file('profile_photo'), 'avatars');
                 $user->update(['avatar_path' => $photoPath]);
             }
 

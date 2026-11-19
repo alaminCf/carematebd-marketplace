@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\File;
 
 class User extends Authenticatable
 {
@@ -90,7 +92,27 @@ class User extends Authenticatable
         }
 
         // Return a clean UI avatar fallback with user initials
-        return 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&background=0ea5e9&color=fff&bold=true';
+        return 'https://ui-avatars.com/api/?name='.urlencode($this->name ?: 'CareMate').'&background=0ea5e9&color=fff&bold=true';
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        return $this->avatarUrl();
+    }
+
+    public static function storePublicAvatar(UploadedFile $file, string $folder = 'avatars'): string
+    {
+        $path = $file->store($folder, 'public');
+
+        try {
+            $publicTarget = public_path('storage/'.$path);
+            File::ensureDirectoryExists(dirname($publicTarget));
+            File::copy(storage_path('app/public/'.$path), $publicTarget);
+        } catch (\Throwable) {
+            // Ignore if public_path('storage') is a symlink or read-only
+        }
+
+        return $path;
     }
 
     /**

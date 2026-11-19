@@ -145,7 +145,7 @@
                             <label class="form-label">Professional Profile Photo (Clear headshot)</label>
                             
                             <div id="profilePhotoPreviewBox" style="display: flex; align-items: center; gap: 1.25rem; margin-bottom: 0.5rem; padding: 0.85rem; background: rgba(255, 255, 255, 0.7); border-radius: var(--radius-md); border: 1px solid rgba(226, 232, 240, 0.9);">
-                                <img id="imgAvatarPreview" src="{{ $caregiver?->user?->avatar_url ?? asset('images/avatar-placeholder.png') }}" alt="Profile Preview" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--brand-primary); background: #f1f5f9; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
+                                <img id="imgAvatarPreview" src="{{ $caregiver?->avatarUrl() ?? 'https://ui-avatars.com/api/?name=Caregiver&background=0ea5e9&color=fff&bold=true' }}" alt="Profile Preview" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--brand-primary); background: #f1f5f9; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
                                 <div style="flex: 1;">
                                     <input type="file" id="input_profile_photo" name="profile_photo" accept="image/*" class="glass-input" onchange="previewSelectedAvatar(this)">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
@@ -518,7 +518,7 @@
         const input = document.getElementById('input_profile_photo');
         if (input) input.value = '';
         const img = document.getElementById('imgAvatarPreview');
-        if (img) img.src = "{{ $caregiver?->user?->avatar_url ?? asset('images/avatar-placeholder.png') }}";
+        if (img) img.src = "{{ $caregiver?->avatarUrl() ?? 'https://ui-avatars.com/api/?name=Caregiver&background=0ea5e9&color=fff&bold=true' }}";
         const removeBtn = document.getElementById('btnRemoveAvatarPreview');
         if (removeBtn) removeBtn.style.display = 'none';
     }

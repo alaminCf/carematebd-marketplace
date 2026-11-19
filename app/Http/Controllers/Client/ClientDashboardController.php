@@ -392,6 +392,7 @@ class ClientDashboardController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:120'],
             'phone' => ['required', 'string', 'max:20', 'unique:users,phone,'.$user->id],
+            'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
             'present_address' => ['required', 'string', 'max:255'],
             'division_id' => ['nullable', 'exists:locations,id'],
             'district_id' => ['nullable', 'exists:locations,id'],
@@ -402,10 +403,16 @@ class ClientDashboardController extends Controller
             'emergency_contact_relationship' => ['nullable', 'string', 'max:50'],
         ]);
 
-        $user->update([
+        $userData = [
             'name' => $validated['name'],
             'phone' => $validated['phone'],
-        ]);
+        ];
+
+        if ($request->hasFile('profile_photo')) {
+            $userData['avatar_path'] = User::storePublicAvatar($request->file('profile_photo'), 'avatars');
+        }
+
+        $user->update($userData);
 
         $client->update([
             'present_address' => $validated['present_address'],

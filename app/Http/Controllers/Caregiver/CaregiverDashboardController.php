@@ -505,7 +505,7 @@ class CaregiverDashboardController extends Controller
 
         $photoFile = $request->file('profile_photo') ?? $request->file('avatar');
         if ($photoFile) {
-            $path = $photoFile->store('avatars', 'public');
+            $path = User::storePublicAvatar($photoFile, 'avatars');
             $user->update(['avatar_path' => $path]);
         }
 

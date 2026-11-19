@@ -426,7 +426,7 @@ class AdminCaregiverController extends Controller
                 $userData['password'] = Hash::make($validated['password']);
             }
             if ($request->hasFile('profile_photo')) {
-                $userData['avatar_path'] = $request->file('profile_photo')->store('avatars', 'public');
+                $userData['avatar_path'] = User::storePublicAvatar($request->file('profile_photo'), 'avatars');
             }
             $caregiver->user->update($userData);
 

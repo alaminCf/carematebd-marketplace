@@ -161,6 +161,11 @@ class Caregiver extends Model
         return $this->user?->avatarUrl() ?? 'https://ui-avatars.com/api/?name=Caregiver&background=0ea5e9&color=fff&bold=true';
     }
 
+    public function getAvatarUrlAttribute(): string
+    {
+        return $this->avatarUrl();
+    }
+
     public function isPublic(): bool
     {
         return $this->status === CaregiverStatus::Published;
