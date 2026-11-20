@@ -135,69 +135,92 @@
         </div>
     @endif
 
-    <!-- Quick Action / Triage Grids -->
+    <!-- Quick Action / Triage Grids (Equal 50/50 Columns) -->
     <div class="dashboard-grid-2">
         <!-- Verification Queue (Pending Caregivers) -->
-        <div class="glass-card" style="padding: 1.75rem; border-radius: var(--radius-xl);">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a;">Verification Queue</h3>
-                    <x-badge tone="warning">{{ $pendingApplications->count() }} Pending</x-badge>
+        <div class="glass-card" style="padding: 1.5rem; border-radius: var(--radius-xl); display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 1.15rem; padding-bottom: 0.85rem; border-bottom: 1px solid rgba(226, 232, 240, 0.8);">
+                <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+                    <h3 style="font-size: 1.12rem; font-weight: 800; color: #0f172a; margin: 0;">Verification Queue</h3>
+                    <span style="display: inline-flex; align-items: center; padding: 0.22rem 0.65rem; border-radius: 999px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; background: #fef3c7; color: #b45309; border: 1px solid rgba(245, 158, 11, 0.3); white-space: nowrap;">
+                        {{ $pendingApplications->count() }} Pending
+                    </span>
                 </div>
-                <a href="{{ route('admin.applications.index') }}" style="font-size: 0.82rem; font-weight: 700; color: var(--brand-primary);">View All →</a>
+                <a href="{{ route('admin.applications.index') }}" style="font-size: 0.82rem; font-weight: 700; color: var(--brand-primary); text-decoration: none; white-space: nowrap; flex-shrink: 0;">View All →</a>
             </div>
 
-            @forelse ($pendingApplications as $app)
-                <div style="background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(226, 232, 240, 0.9); padding: 1rem 1.25rem; border-radius: var(--radius-md); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
-                    <div style="display: flex; align-items: center; gap: 0.85rem;">
-                        <img src="{{ $app->avatarUrl() }}" alt="" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover;">
-                        <div>
-                            <div style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">{{ $app->user->name }}</div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted);">
-                                {{ $app->caregiver_type }} • {{ $app->years_experience }}y Exp
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; flex: 1;">
+                @forelse ($pendingApplications as $app)
+                    <div style="background: #f8fafc; border: 1px solid rgba(226, 232, 240, 0.95); padding: 0.9rem 1.05rem; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; gap: 0.85rem; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 0.8rem; min-width: 0; flex: 1;">
+                            <img src="{{ $app->avatarUrl() }}" alt="{{ $app->user->name }}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid #ffffff; box-shadow: 0 2px 6px rgba(10,57,74,0.08);">
+                            <div style="min-width: 0;">
+                                <div style="font-weight: 800; font-size: 0.94rem; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $app->user->name }}</div>
+                                <div style="font-size: 0.78rem; color: #64748b; margin-top: 0.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    {{ ucfirst($app->caregiver_type ?: 'Caregiver') }} • {{ (int) $app->years_experience }}y Exp {{ $app->district?->name ? '• '.$app->district->name : '' }}
+                                </div>
                             </div>
                         </div>
+                        <a href="{{ route('admin.applications.show', $app->id) }}" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; font-weight: 700; padding: 0.42rem 0.9rem; min-height: 36px; white-space: nowrap; flex-shrink: 0;">
+                            Inspect Application →
+                        </a>
                     </div>
-                    <a href="{{ route('admin.applications.show', $app->id) }}" class="btn btn-secondary btn-sm" style="font-size: 0.8rem;">
-                        Inspect Application →
-                    </a>
-                </div>
-            @empty
-                <div style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
-                    <p>✓ All caregiver verification applications have been reviewed.</p>
-                </div>
-            @endforelse
+                @empty
+                    <div style="text-align: center; padding: 2rem 1rem; color: var(--text-muted); background: #f8fafc; border: 1px dashed rgba(203, 213, 225, 0.9); border-radius: 14px; margin: auto 0;">
+                        <p style="margin: 0; font-size: 0.88rem; font-weight: 600;">✓ All caregiver verification applications have been reviewed.</p>
+                    </div>
+                @endforelse
+            </div>
         </div>
 
         <!-- Pending Hiring Requests (Client Triage) -->
-        <div class="glass-card" style="padding: 1.75rem; border-radius: var(--radius-xl);">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a;">Incoming Care Requests</h3>
-                    <x-badge tone="primary">{{ $pendingRequests->count() }} Incoming</x-badge>
+        <div class="glass-card" style="padding: 1.5rem; border-radius: var(--radius-xl); display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 1.15rem; padding-bottom: 0.85rem; border-bottom: 1px solid rgba(226, 232, 240, 0.8);">
+                <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+                    <h3 style="font-size: 1.12rem; font-weight: 800; color: #0f172a; margin: 0;">Incoming Care Requests</h3>
+                    <span style="display: inline-flex; align-items: center; padding: 0.22rem 0.65rem; border-radius: 999px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; background: rgba(13, 148, 136, 0.12); color: #0f766e; border: 1px solid rgba(13, 148, 136, 0.28); white-space: nowrap;">
+                        {{ $pendingRequests->count() }} Incoming
+                    </span>
                 </div>
-                <a href="{{ route('admin.hiring-requests.index') }}" style="font-size: 0.82rem; font-weight: 700; color: var(--brand-primary);">View All →</a>
+                <a href="{{ route('admin.hiring-requests.index') }}" style="font-size: 0.82rem; font-weight: 700; color: var(--brand-primary); text-decoration: none; white-space: nowrap; flex-shrink: 0;">View All →</a>
             </div>
 
-            @forelse ($pendingRequests as $hr)
-                <div style="background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(226, 232, 240, 0.9); padding: 1rem 1.25rem; border-radius: var(--radius-md); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
-                    <div>
-                        <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a;">
-                            #{{ $hr->request_reference }} • {{ $hr->service->name }}
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; flex: 1;">
+                @forelse ($pendingRequests as $hr)
+                    <div style="background: #f8fafc; border: 1px solid rgba(226, 232, 240, 0.95); padding: 0.9rem 1.05rem; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; gap: 0.85rem; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 0.8rem; min-width: 0; flex: 1;">
+                            <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(10, 57, 74, 0.08); color: #0a394a; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">
+                                🩺
+                            </div>
+                            <div style="min-width: 0;">
+                                <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+                                    <span style="font-size: 0.7rem; font-weight: 800; color: #0284c7; background: rgba(14, 165, 233, 0.12); padding: 0.1rem 0.45rem; border-radius: 6px;">
+                                        #{{ $hr->reference ?: ('REQ-'.$hr->id) }}
+                                    </span>
+                                    <span style="font-weight: 800; font-size: 0.92rem; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        {{ $hr->service?->name ?? 'Care Service' }}
+                                    </span>
+                                </div>
+                                <div style="font-size: 0.78rem; color: #64748b; margin-top: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    Client: <strong style="color: #334155;">{{ $hr->client?->user?->name ?? 'Family Client' }}</strong>
+                                    @if ($hr->patient_name)
+                                        • Patient: {{ $hr->patient_name }}
+                                    @elseif ($hr->district?->name || $hr->area?->name)
+                                        • 📍 {{ $hr->area?->name ?? $hr->district?->name }}
+                                    @endif
+                                </div>
+                            </div>
                         </div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">
-                            Client: {{ $hr->client->user->name }} • {{ $hr->care_recipient_relationship }}
-                        </div>
+                        <a href="{{ route('admin.hiring-requests.show', $hr->id) }}" class="btn btn-primary btn-sm" style="font-size: 0.78rem; font-weight: 700; padding: 0.42rem 0.95rem; min-height: 36px; white-space: nowrap; flex-shrink: 0;">
+                            Triage Request →
+                        </a>
                     </div>
-                    <a href="{{ route('admin.hiring-requests.show', $hr->id) }}" class="btn btn-primary btn-sm" style="font-size: 0.8rem;">
-                        Triage Request
-                    </a>
-                </div>
-            @empty
-                <div style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
-                    <p>No new hiring requests pending admin action.</p>
-                </div>
-            @endforelse
+                @empty
+                    <div style="text-align: center; padding: 2rem 1rem; color: var(--text-muted); background: #f8fafc; border: 1px dashed rgba(203, 213, 225, 0.9); border-radius: 14px; margin: auto 0;">
+                        <p style="margin: 0; font-size: 0.88rem; font-weight: 600;">No new hiring requests pending admin action.</p>
+                    </div>
+                @endforelse
+            </div>
         </div>
     </div>
 

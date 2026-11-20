@@ -64,7 +64,7 @@
             width: 100% !important;
         }
 
-        /* 2-Column Responsive Layouts for Desktops */
+        /* 2-Column Responsive Layouts for Desktops (Main + Sidebar) */
         .documents-layout,
         .earnings-layout,
         .schedule-layout,
@@ -75,13 +75,24 @@
         .ticket-layout,
         .job-layout,
         .triage-layout,
-        .dashboard-grid-2,
         .caregiver-admin-layout,
         .hiring-admin-layout {
             display: grid !important;
             grid-template-columns: minmax(0, 1fr) clamp(280px, 25vw, 340px) !important;
             gap: 1.5rem !important;
             align-items: flex-start !important;
+            max-width: 100% !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Equal 50/50 2-Column Dashboard Panels */
+        .dashboard-grid-2 {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 1.35rem !important;
+            align-items: stretch !important;
+            margin-bottom: 1.5rem !important;
             max-width: 100% !important;
             width: 100% !important;
             box-sizing: border-box !important;

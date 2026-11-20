@@ -167,4 +167,23 @@ class HiringRequest extends Model
 
         return count($parts) ? implode(', ', $parts) : 'Dhaka';
     }
+
+    public function getRequestReferenceAttribute(): string
+    {
+        return $this->reference ?: 'REQ-'.$this->id;
+    }
+
+    public function getReferenceCodeAttribute(): string
+    {
+        return $this->reference ?: 'REQ-'.$this->id;
+    }
+
+    public function getCareRecipientRelationshipAttribute(): string
+    {
+        if (! empty($this->patient_name)) {
+            return 'Patient: '.$this->patient_name.($this->patient_age ? ' ('.$this->patient_age.'y)' : '');
+        }
+
+        return $this->generalLocation();
+    }
 }
