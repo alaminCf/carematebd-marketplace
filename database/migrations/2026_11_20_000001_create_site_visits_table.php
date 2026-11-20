@@ -13,6 +13,9 @@ return new class extends Migration
                 $table->id();
                 $table->string('visitor_hash', 64)->index();
                 $table->string('ip_address', 45)->nullable();
+                $table->string('country', 80)->nullable()->index();
+                $table->string('country_code', 10)->nullable();
+                $table->string('region', 100)->nullable()->index();
                 $table->foreignId('user_id')->nullable()->index();
                 $table->string('path', 255)->index();
                 $table->string('route_name', 120)->nullable()->index();

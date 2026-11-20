@@ -157,6 +157,83 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Visitor Countries, Regions/Cities & Live Visitor Feed -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin-top: 1.25rem;">
+                <!-- Top Countries -->
+                <div class="glass-card" style="padding: 1.35rem; border-radius: var(--radius-xl);">
+                    <h4 style="font-size: 0.98rem; font-weight: 800; color: #0f172a; margin: 0 0 0.85rem 0;">
+                        🌍 Visitors by Country
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                        @forelse ($traffic['countries'] ?? [] as $c)
+                            <div>
+                                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.2rem;">
+                                    <span style="color: #0f172a;">{{ $c['flag'] }} {{ $c['country'] }}</span>
+                                    <span style="color: #0a394a;">{{ number_format($c['views']) }} views <span style="color: #64748b; font-weight: 600;">({{ $c['unique_visitors'] }} uniq • {{ $c['percentage'] }}%)</span></span>
+                                </div>
+                                <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
+                                    <div style="width: {{ max(4, $c['percentage']) }}%; height: 100%; background: #0284c7; border-radius: 999px;"></div>
+                                </div>
+                            </div>
+                        @empty
+                            <div style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.84rem;">
+                                Country data will appear as visitors browse.
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
+                <!-- Top Regions / Cities -->
+                <div class="glass-card" style="padding: 1.35rem; border-radius: var(--radius-xl);">
+                    <h4 style="font-size: 0.98rem; font-weight: 800; color: #0f172a; margin: 0 0 0.85rem 0;">
+                        📍 Visitors by Region / City
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                        @forelse ($traffic['regions'] ?? [] as $r)
+                            <div>
+                                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.2rem;">
+                                    <span style="color: #0f172a;">{{ $r['flag'] }} {{ $r['region'] }} <span style="color: #64748b; font-weight: 600; font-size: 0.74rem;">({{ $r['country'] }})</span></span>
+                                    <span style="color: #059669;">{{ number_format($r['views']) }} views <span style="color: #64748b; font-weight: 600;">({{ $r['unique_visitors'] }} uniq • {{ $r['percentage'] }}%)</span></span>
+                                </div>
+                                <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
+                                    <div style="width: {{ max(4, $r['percentage']) }}%; height: 100%; background: #10b981; border-radius: 999px;"></div>
+                                </div>
+                            </div>
+                        @empty
+                            <div style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.84rem;">
+                                Region & city data will appear as visitors browse.
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
+                <!-- Recent Live Visitors Activity Feed -->
+                <div class="glass-card" style="padding: 1.35rem; border-radius: var(--radius-xl);">
+                    <h4 style="font-size: 0.98rem; font-weight: 800; color: #0f172a; margin: 0 0 0.85rem 0;">
+                        🕒 Recent Visitor Stream
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        @forelse (collect($traffic['recent_visits'] ?? [])->take(6) as $rv)
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.5rem 0.7rem; background: #f8fafc; border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 10px; font-size: 0.78rem;">
+                                <div style="min-width: 0;">
+                                    <div style="font-weight: 800; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        {{ $rv['flag'] }} {{ $rv['region'] }}, {{ $rv['country'] }}
+                                    </div>
+                                    <div style="color: #64748b; font-size: 0.72rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        Page: <strong style="color: #0a394a;">{{ $rv['path'] }}</strong> • {{ ucfirst($rv['device_type']) }} • {{ $rv['referrer_source'] }}
+                                    </div>
+                                </div>
+                                <span style="font-size: 0.7rem; color: #64748b; font-weight: 600; white-space: nowrap; flex-shrink: 0;">{{ $rv['time_ago'] }}</span>
+                            </div>
+                        @empty
+                            <div style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.84rem;">
+                                No recent visits logged yet.
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
         </div>
     @endif
 

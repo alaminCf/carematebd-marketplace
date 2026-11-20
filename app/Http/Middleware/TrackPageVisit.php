@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TrackPageVisit
 {
     /**
-     * Record public and portal page visits for built-in traffic analytics.
+     * Record public and portal page visits with Country & Region/City geolocation.
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -26,15 +26,21 @@ class TrackPageVisit
             }
 
             $userAgent = strtolower((string) $request->userAgent());
-            $ip = (string) $request->ip();
+            $ip = $this->extractClientIp($request);
             $today = now()->toDateString();
 
             $visitorHash = substr(hash('sha256', $ip.'|'.$userAgent.'|'.config('app.key')), 0, 40);
             $path = '/'.ltrim($request->path(), '/');
 
+            $headerHints = $this->extractHeaderGeoHints($request);
+            $geo = SiteVisit::resolveGeoFromIp($ip, $headerHints);
+
             SiteVisit::create([
                 'visitor_hash' => $visitorHash,
                 'ip_address' => substr($ip, 0, 45),
+                'country' => $geo['country'],
+                'country_code' => $geo['country_code'],
+                'region' => $geo['region'],
                 'user_id' => $request->user()?->id,
                 'path' => substr($path, 0, 255),
                 'route_name' => $request->route()?->getName() ? substr((string) $request->route()->getName(), 0, 120) : null,
@@ -48,6 +54,51 @@ class TrackPageVisit
         }
 
         return $response;
+    }
+
+    protected function extractClientIp(Request $request): string
+    {
+        foreach (['CF-Connecting-IP', 'X-Real-IP', 'X-Forwarded-For'] as $header) {
+            $val = trim((string) $request->headers->get($header, ''));
+            if ($val !== '') {
+                $firstIp = trim(explode(',', $val)[0]);
+                if (filter_var($firstIp, FILTER_VALIDATE_IP)) {
+                    return $firstIp;
+                }
+            }
+        }
+
+        return (string) $request->ip();
+    }
+
+    /**
+     * @return array{country?: string, country_code?: string, region?: string}
+     */
+    protected function extractHeaderGeoHints(Request $request): array
+    {
+        $hints = [];
+
+        $countryCode = $request->headers->get('CF-IPCountry')
+            ?: $request->headers->get('X-Vercel-IP-Country')
+            ?: $request->headers->get('X-Country-Code');
+
+        if ($countryCode && strtoupper($countryCode) !== 'XX') {
+            $hints['country_code'] = strtoupper($countryCode);
+            if ($hints['country_code'] === 'BD') {
+                $hints['country'] = 'Bangladesh';
+            }
+        }
+
+        $city = $request->headers->get('CF-IPCity')
+            ?: $request->headers->get('X-Vercel-IP-City');
+        $region = $request->headers->get('CF-Region')
+            ?: $request->headers->get('X-Vercel-IP-Country-Region');
+
+        if ($city || $region) {
+            $hints['region'] = trim($city.($city && $region && $city !== $region ? ', '.$region : $region));
+        }
+
+        return $hints;
     }
 
     protected function shouldTrack(Request $request, Response $response): bool

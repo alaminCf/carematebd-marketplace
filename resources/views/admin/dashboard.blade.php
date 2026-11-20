@@ -111,6 +111,27 @@
                     <div style="font-size: 0.72rem; color: rgba(255,255,255,0.8);">📱 {{ $traffic['devices']['mobile']['percentage'] ?? 0 }}% Mobile • 💻 {{ $traffic['devices']['desktop']['percentage'] ?? 0 }}% Desktop</div>
                 </div>
             </div>
+
+            @if (!empty($traffic['countries']) || !empty($traffic['regions']))
+                <div style="margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.65rem; font-size: 0.78rem;">
+                    <div style="display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;">
+                        <span style="font-weight: 800; color: rgba(255,255,255,0.85);">🌍 Top Countries:</span>
+                        @foreach (collect($traffic['countries'])->take(4) as $c)
+                            <span style="background: rgba(255,255,255,0.14); padding: 0.2rem 0.55rem; border-radius: 999px; font-weight: 700;">
+                                {{ $c['flag'] }} {{ $c['country'] }} ({{ $c['percentage'] }}%)
+                            </span>
+                        @endforeach
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;">
+                        <span style="font-weight: 800; color: rgba(255,255,255,0.85);">📍 Top Regions:</span>
+                        @foreach (collect($traffic['regions'])->take(4) as $r)
+                            <span style="background: rgba(16, 185, 129, 0.22); border: 1px solid rgba(110, 231, 183, 0.3); padding: 0.2rem 0.55rem; border-radius: 999px; font-weight: 700; color: #ecfdf5;">
+                                {{ $r['region'] }} ({{ $r['views'] }})
+                            </span>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
     @endif
 
