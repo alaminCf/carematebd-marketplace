@@ -3538,7 +3538,7 @@ html, body {
 
     /* Dashboard Main Container & Header */
     .dashboard-main {
-        padding: 1.25rem 0.85rem calc(95px + env(safe-area-inset-bottom)) 0.85rem !important;
+        padding: 0.9rem 0.85rem calc(92px + env(safe-area-inset-bottom)) 0.85rem !important;
     }
 
     body {
@@ -3548,25 +3548,23 @@ html, body {
     .dashboard-content-header {
         flex-direction: column !important;
         align-items: flex-start !important;
-        gap: 0.85rem !important;
-        margin-bottom: 1.5rem !important;
+        gap: 0.25rem !important;
+        margin-bottom: 0.95rem !important;
     }
 
     .dashboard-content-header h1 {
-        font-size: 1.45rem !important;
+        font-size: 1.35rem !important;
         line-height: 1.2 !important;
     }
 
     .dashboard-content-header p {
-        font-size: 0.85rem !important;
-        margin-top: 0.2rem !important;
+        font-size: 0.82rem !important;
+        margin-top: 0.15rem !important;
     }
 
-    .dashboard-content-header > div:last-child {
-        width: 100% !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
+    .dashboard-content-header > div.dashboard-header-actions,
+    .dashboard-header-actions {
+        display: none !important;
     }
 
     /* Dashboard KPI / Stat Cards (Compact Native App 2x2 Grid) */

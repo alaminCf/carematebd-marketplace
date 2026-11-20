@@ -268,11 +268,14 @@
             white-space: nowrap !important;
             font-size: 0.83rem !important;
         }
+        .mobile-only-avatar {
+            display: none !important;
+        }
         @media (max-width: 1180px) {
             .desktop-nav, .desktop-actions {
                 display: none !important;
             }
-            .mobile-menu-btn {
+            .mobile-menu-btn, .mobile-only-avatar {
                 display: inline-flex !important;
             }
         }
@@ -1011,9 +1014,16 @@
                 <!-- Desktop-only Action buttons -->
                 <div class="desktop-actions" style="display: flex; align-items: center; gap: 0.45rem; flex-shrink: 0;">
                     @auth
+                        @php
+                            $guestProfileUrl = auth()->user()->role->value === 'caregiver'
+                                ? route('caregiver.profile')
+                                : (auth()->user()->role->value === 'client' ? route('client.profile') : route('admin.settings.index'));
+                        @endphp
                         <a href="{{ route(auth()->user()->role->dashboardRoute()) }}" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 0.4rem;">
-                            <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" style="width: 24px; height: 24px; border-radius: 50%;">
                             <span>{{ __('Dashboard') }}</span>
+                        </a>
+                        <a href="{{ $guestProfileUrl }}" title="{{ __('My Profile') }}" style="display: inline-flex; align-items: center; border-radius: 50%; padding: 2px; border: 2px solid rgba(13, 148, 136, 0.35);">
+                            <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; display: block;">
                         </a>
                         <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                             @csrf
@@ -1025,6 +1035,17 @@
                         <a href="{{ route('marketplace.index') }}" class="btn btn-primary btn-sm" style="font-weight: 700;">{{ __('Find Caregiver') }}</a>
                     @endauth
                 </div>
+
+                @auth
+                    @php
+                        $mobileGuestProfileUrl = auth()->user()->role->value === 'caregiver'
+                            ? route('caregiver.profile')
+                            : (auth()->user()->role->value === 'client' ? route('client.profile') : route('admin.settings.index'));
+                    @endphp
+                    <a href="{{ $mobileGuestProfileUrl }}" class="mobile-only-avatar" title="{{ __('My Profile') }}" style="display: inline-flex; align-items: center; border-radius: 50%; padding: 1.5px; border: 2px solid rgba(13, 148, 136, 0.35);">
+                        <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; display: block;">
+                    </a>
+                @endauth
 
                 <!-- Quick WhatsApp Header Button (Both Mobile & Desktop) -->
                 <a href="https://wa.me/{{ $siteSettings['contact_phone_wa'] }}?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" class="btn btn-sm header-whatsapp-btn" style="background: rgba(37, 211, 102, 0.14); color: #0d873d; border: 1px solid rgba(37, 211, 102, 0.35); font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;" title="Quick WhatsApp Chat">

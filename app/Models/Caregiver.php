@@ -221,6 +221,14 @@ class Caregiver extends Model
             ->withTimestamps();
     }
 
+    /**
+     * @return BelongsToMany<Service, $this>
+     */
+    public function serviceCategories(): BelongsToMany
+    {
+        return $this->services();
+    }
+
     public function primaryService(): ?Service
     {
         return $this->services()->wherePivot('is_primary', true)->first()
@@ -351,5 +359,94 @@ class Caregiver extends Model
         $this->rating_count = $published->count();
         $this->rating_avg = $this->rating_count > 0 ? (float) $published->avg('rating') : 0;
         $this->saveQuietly();
+    }
+
+    /**
+     * Calculate profile completion percentage and checklist items.
+     *
+     * @return array{
+     *     percentage: int,
+     *     completed_count: int,
+     *     total_count: int,
+     *     missing_items: list<array{label: string, completed: bool, weight: int, url: string, hint: string}>,
+     *     items: list<array{label: string, completed: bool, weight: int, url: string, hint: string}>
+     * }
+     */
+    public function profileCompletion(): array
+    {
+        $hasPhoto = ! empty($this->user?->avatar_path);
+        $hasBasic = ! empty($this->user?->name) && ! empty($this->user?->phone) && ! empty($this->gender);
+        $hasLocation = ! empty($this->division_id) && ! empty($this->district_id) && (! empty($this->city) || ! empty($this->present_address));
+        $hasRates = (float) $this->daily_rate > 0 && ! empty($this->employment_type) && ! empty($this->live_type);
+        $servicesCount = $this->relationLoaded('services') ? $this->services->count() : $this->services()->count();
+        $hasBioAndServices = ! empty($this->caregiver_type) && ! empty($this->about) && $servicesCount > 0;
+        $docsCount = $this->relationLoaded('documents') ? $this->documents->count() : $this->documents()->count();
+        $hasNidAndDocs = ! empty($this->nid_number) && ($docsCount > 0 || $this->isVerified());
+
+        $items = [
+            [
+                'label' => 'Professional Headshot Photo',
+                'completed' => $hasPhoto,
+                'weight' => 15,
+                'url' => route('caregiver.profile').'#section-personal',
+                'hint' => 'Upload a clear portrait photo to build family trust',
+            ],
+            [
+                'label' => 'Personal Identity & Contact',
+                'completed' => $hasBasic,
+                'weight' => 15,
+                'url' => route('caregiver.profile').'#section-personal',
+                'hint' => 'Full name, active phone number & gender',
+            ],
+            [
+                'label' => 'Location & Service Territory',
+                'completed' => $hasLocation,
+                'weight' => 15,
+                'url' => route('caregiver.profile').'#section-location',
+                'hint' => 'Division, district, city & present address',
+            ],
+            [
+                'label' => 'Service Rates & Shift Preferences',
+                'completed' => $hasRates,
+                'weight' => 15,
+                'url' => route('caregiver.profile').'#section-rates',
+                'hint' => 'Daily BDT rate, duty type & living arrangement',
+            ],
+            [
+                'label' => 'Experience, Bio & Care Categories',
+                'completed' => $hasBioAndServices,
+                'weight' => 20,
+                'url' => route('caregiver.profile').'#section-experience',
+                'hint' => 'Professional designation, summary & offered services',
+            ],
+            [
+                'label' => 'NID & Verification Documents',
+                'completed' => $hasNidAndDocs,
+                'weight' => 20,
+                'url' => route('caregiver.documents'),
+                'hint' => 'National ID & clinical certificates for verified badge',
+            ],
+        ];
+
+        $percentage = 0;
+        $completedCount = 0;
+        $missingItems = [];
+
+        foreach ($items as $item) {
+            if ($item['completed']) {
+                $percentage += $item['weight'];
+                $completedCount++;
+            } else {
+                $missingItems[] = $item;
+            }
+        }
+
+        return [
+            'percentage' => min(100, $percentage),
+            'completed_count' => $completedCount,
+            'total_count' => count($items),
+            'missing_items' => $missingItems,
+            'items' => $items,
+        ];
     }
 }

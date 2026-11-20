@@ -157,10 +157,51 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v={{ file_exists(public_path('css/caremate.css')) ? filemtime(public_path('css/caremate.css')) : '3.1.0' }}">
+    <link rel="stylesheet" href="{{ asset('css/caremate.css') }}?v=3.1.0.{{ file_exists(public_path('css/caremate.css')) ? filemtime(public_path('css/caremate.css')) : '3.1.0' }}">
     <style>
         html, body {
             overflow-x: clip !important;
+        }
+        /* Hero Section Spacing - Remove excessive gap between header and find caregiver card */
+        .hero-section {
+            padding-top: 0.75rem !important;
+            padding-bottom: 2.5rem !important;
+        }
+        @media (max-width: 900px) {
+            .hero-section {
+                padding-top: 0.25rem !important;
+                padding-bottom: 2rem !important;
+            }
+        }
+        @media (max-width: 768px) {
+            .hero-section {
+                padding-top: 0.15rem !important;
+                padding-bottom: 1.5rem !important;
+            }
+            .hero-find-care-col {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+            }
+            .pathao-find-card {
+                margin-top: 0 !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-section {
+                padding-top: 0.05rem !important;
+            }
+        }
+
+        /* Responsive utilities */
+        .d-none { display: none !important; }
+        .d-inline { display: inline !important; }
+        @media (min-width: 576px) {
+            .d-sm-inline { display: inline !important; }
+            .d-sm-none { display: none !important; }
+        }
+        @media (max-width: 575.98px) {
+            .d-sm-inline { display: none !important; }
+            .d-sm-none { display: inline !important; }
         }
         .glass-header {
             position: sticky !important;
@@ -227,11 +268,14 @@
             white-space: nowrap !important;
             font-size: 0.83rem !important;
         }
+        .mobile-only-avatar {
+            display: none !important;
+        }
         @media (max-width: 1180px) {
             .desktop-nav, .desktop-actions {
                 display: none !important;
             }
-            .mobile-menu-btn {
+            .mobile-menu-btn, .mobile-only-avatar {
                 display: inline-flex !important;
             }
         }
@@ -970,9 +1014,16 @@
                 <!-- Desktop-only Action buttons -->
                 <div class="desktop-actions" style="display: flex; align-items: center; gap: 0.45rem; flex-shrink: 0;">
                     @auth
+                        @php
+                            $guestProfileUrl = auth()->user()->role->value === 'caregiver'
+                                ? route('caregiver.profile')
+                                : (auth()->user()->role->value === 'client' ? route('client.profile') : route('admin.settings.index'));
+                        @endphp
                         <a href="{{ route(auth()->user()->role->dashboardRoute()) }}" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 0.4rem;">
-                            <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" style="width: 24px; height: 24px; border-radius: 50%;">
                             <span>{{ __('Dashboard') }}</span>
+                        </a>
+                        <a href="{{ $guestProfileUrl }}" title="{{ __('My Profile') }}" style="display: inline-flex; align-items: center; border-radius: 50%; padding: 2px; border: 2px solid rgba(13, 148, 136, 0.35);">
+                            <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; display: block;">
                         </a>
                         <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                             @csrf
@@ -984,6 +1035,17 @@
                         <a href="{{ route('marketplace.index') }}" class="btn btn-primary btn-sm" style="font-weight: 700;">{{ __('Find Caregiver') }}</a>
                     @endauth
                 </div>
+
+                @auth
+                    @php
+                        $mobileGuestProfileUrl = auth()->user()->role->value === 'caregiver'
+                            ? route('caregiver.profile')
+                            : (auth()->user()->role->value === 'client' ? route('client.profile') : route('admin.settings.index'));
+                    @endphp
+                    <a href="{{ $mobileGuestProfileUrl }}" class="mobile-only-avatar" title="{{ __('My Profile') }}" style="display: inline-flex; align-items: center; border-radius: 50%; padding: 1.5px; border: 2px solid rgba(13, 148, 136, 0.35);">
+                        <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; display: block;">
+                    </a>
+                @endauth
 
                 <!-- Quick WhatsApp Header Button (Both Mobile & Desktop) -->
                 <a href="https://wa.me/{{ $siteSettings['contact_phone_wa'] }}?text=Hello%20CareMate%20BD%2C%20I%20would%20like%20to%20inquire%20about%20caregiver%20services." target="_blank" rel="noopener noreferrer" class="btn btn-sm header-whatsapp-btn" style="background: rgba(37, 211, 102, 0.14); color: #0d873d; border: 1px solid rgba(37, 211, 102, 0.35); font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;" title="Quick WhatsApp Chat">
@@ -1065,32 +1127,34 @@
     </header>
 
     <!-- Global Flash Messages -->
-    <div class="container" style="margin-top: 1rem;">
-        @if (session('success'))
-            <div class="alert alert-success">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                <span>{{ session('success') }}</span>
-            </div>
-        @endif
-        @if (session('error'))
-            <div class="alert alert-error">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                <span>{{ session('error') }}</span>
-            </div>
-        @endif
-        @if (session('warning'))
-            <div class="alert alert-warning">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                <span>{{ session('warning') }}</span>
-            </div>
-        @endif
-        @if (session('info'))
-            <div class="alert alert-info">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                <span>{{ session('info') }}</span>
-            </div>
-        @endif
-    </div>
+    @if (session('success') || session('error') || session('warning') || session('info'))
+        <div class="container" style="margin-top: 1rem;">
+            @if (session('success'))
+                <div class="alert alert-success">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-error">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
+            @if (session('warning'))
+                <div class="alert alert-warning">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    <span>{{ session('warning') }}</span>
+                </div>
+            @endif
+            @if (session('info'))
+                <div class="alert alert-info">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    <span>{{ session('info') }}</span>
+                </div>
+            @endif
+        </div>
+    @endif
 
     <!-- Main Content -->
     <main>

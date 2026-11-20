@@ -144,8 +144,10 @@
             }
             .dashboard-sidebar.mobile-open { left: 0 !important; }
             .dashboard-mobile-topbar { display: flex !important; }
-            .dashboard-main { padding: 1rem 0.85rem calc(95px + env(safe-area-inset-bottom)) 0.85rem !important; }
-            .dashboard-header-actions { display: none !important; }
+            .dashboard-main { padding: 0.85rem 0.85rem calc(92px + env(safe-area-inset-bottom)) 0.85rem !important; }
+            .dashboard-content-header { margin-bottom: 0.9rem !important; gap: 0.2rem !important; }
+            .dashboard-header-actions,
+            .dashboard-content-header > div.dashboard-header-actions { display: none !important; }
 
             /* Responsive Form Cards & Action Buttons */
             .profile-form-card { padding: 1.25rem 0.85rem !important; }
@@ -247,21 +249,26 @@
     @php
         $user = auth()->user();
         $role = $user->role->value;
+        $profileUrl = $role === 'caregiver'
+            ? route('caregiver.profile')
+            : ($role === 'client' ? route('client.profile') : route('admin.settings.index'));
     @endphp
 
     <div class="dashboard-backdrop" id="dashboardBackdrop"></div>
 
     <div class="dashboard-layout">
         <!-- Mobile Topbar -->
-        <div class="dashboard-mobile-topbar" style="display: none; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: #ffffff; border-bottom: 1px solid rgba(210, 228, 233, 0.8); width: 100%;">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <button type="button" class="btn btn-secondary btn-sm" id="dashboardMobileMenuBtn" aria-label="Toggle Dashboard Menu" style="padding: 0.4rem 0.65rem;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                </button>
+        <div class="dashboard-mobile-topbar" style="display: none; align-items: center; justify-content: space-between; padding: 0.65rem 0.9rem; background: #ffffff; border-bottom: 1px solid rgba(210, 228, 233, 0.85); width: 100%; position: sticky; top: 0; z-index: 950;">
+            <div style="display: flex; align-items: center; gap: 0.65rem;">
+                @if ($role === 'admin')
+                    <button type="button" class="btn btn-secondary btn-sm" id="dashboardMobileMenuBtn" aria-label="Toggle Dashboard Menu" style="padding: 0.4rem 0.65rem;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                @endif
                 <a href="{{ route('home') }}" style="display: flex; align-items: center; text-decoration: none;">
                     <img src="{{ asset('images/logo.png') }}" alt="CareMate BD" style="height: 32px; width: auto; object-fit: contain;">
                 </a>
@@ -274,7 +281,9 @@
                 <x-badge :tone="$role === 'admin' ? 'danger' : ($role === 'caregiver' ? 'success' : 'primary')">
                     {{ strtoupper($role) }}
                 </x-badge>
-                <img src="{{ $user->avatarUrl() }}" alt="{{ $user->name }}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                <a href="{{ $profileUrl }}" title="{{ __('Go to My Profile') }}" aria-label="{{ __('Go to My Profile') }}" style="display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; padding: 2px; border: 2px solid {{ request()->routeIs('caregiver.profile*', 'client.profile*') ? '#0d9488' : 'rgba(13, 148, 136, 0.28)' }}; transition: transform 0.15s ease;">
+                    <img src="{{ $user->avatarUrl() }}" alt="{{ $user->name }}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: block;">
+                </a>
             </div>
         </div>
 
@@ -442,13 +451,13 @@
 
             <!-- Bottom User Profile snippet -->
             <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(226, 232, 240, 0.8); display: flex; align-items: center; justify-content: space-between;">
-                <div style="display: flex; align-items: center; gap: 0.65rem;">
-                    <img src="{{ $user->avatarUrl() }}" alt="{{ $user->name }}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+                <a href="{{ $profileUrl }}" title="{{ __('Go to My Profile') }}" style="display: flex; align-items: center; gap: 0.65rem; text-decoration: none;">
+                    <img src="{{ $user->avatarUrl() }}" alt="{{ $user->name }}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(13, 148, 136, 0.25);">
                     <div style="line-height: 1.2;">
                         <div style="font-weight: 700; font-size: 0.88rem; color: var(--text-primary); max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $user->name }}</div>
                         <div style="font-size: 0.72rem; color: var(--text-muted);">{{ ucfirst($role) }}</div>
                     </div>
-                </div>
+                </a>
                 <div style="display: flex; align-items: center; gap: 0.25rem;">
                     <a href="{{ route('password.change') }}" title="{{ __('Change Password') }}" style="background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 0.4rem; display: inline-flex; text-decoration: none;">
                         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-2-2l2 2m0 0l-7.5 7.5a4.95 4.95 0 0 0-1.4 2.8L10 17l2.7-.1a4.95 4.95 0 0 0 2.8-1.4L23 8l-2-2m-2-2l2 2"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>
@@ -466,13 +475,13 @@
         <!-- Main Content Area -->
         <div class="dashboard-main">
             <!-- Header bar inside dashboard -->
-            <header class="dashboard-content-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+            <header class="dashboard-content-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
                 <div>
-                    <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a;">{{ $header ?? 'Dashboard' }}</h1>
-                    <p style="color: var(--text-muted); font-size: 0.92rem;">{{ $subheading ?? 'Welcome to CareMate BD management center.' }}</p>
+                    <h1 style="font-size: 1.65rem; font-weight: 800; color: #0f172a; line-height: 1.2;">{{ $header ?? 'Dashboard' }}</h1>
+                    <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 0.15rem;">{{ $subheading ?? 'Welcome to CareMate BD management center.' }}</p>
                 </div>
 
-                <div class="dashboard-header-actions" style="display: flex; align-items: center; gap: 1rem;">
+                <div class="dashboard-header-actions" style="display: flex; align-items: center; gap: 0.75rem;">
                     <!-- Public site link -->
                     <a href="{{ route('home') }}" class="btn btn-secondary btn-sm" style="font-size: 0.85rem;">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
@@ -483,6 +492,11 @@
                     <x-badge :tone="$role === 'admin' ? 'danger' : ($role === 'caregiver' ? 'success' : 'primary')">
                         {{ strtoupper($role) }}
                     </x-badge>
+
+                    <!-- Clickable Header Profile Avatar -->
+                    <a href="{{ $profileUrl }}" title="{{ __('Go to My Profile') }}" style="display: inline-flex; align-items: center; border-radius: 50%; padding: 2px; border: 2px solid rgba(13, 148, 136, 0.3);">
+                        <img src="{{ $user->avatarUrl() }}" alt="{{ $user->name }}" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; display: block;">
+                    </a>
                 </div>
             </header>
 
@@ -606,7 +620,7 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                     <span>{{ __('Earnings') }}</span>
                 </a>
-                <a href="{{ route('caregiver.profile') }}" class="mobile-app-dock-item {{ request()->routeIs('caregiver.profile*') ? 'active' : '' }}">
+                <a href="{{ route('caregiver.profile') }}" class="mobile-app-dock-item {{ request()->routeIs('caregiver.profile*', 'caregiver.availability*', 'caregiver.documents*', 'caregiver.support*', 'password.change') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     <span>{{ __('Profile') }}</span>
                 </a>
@@ -627,9 +641,9 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>
                     <span>{{ __('Bookings') }}</span>
                 </a>
-                <a href="{{ route('client.support.index') }}" class="mobile-app-dock-item {{ request()->routeIs('client.support.*') ? 'active' : '' }}">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                    <span>{{ __('Support') }}</span>
+                <a href="{{ route('client.profile') }}" class="mobile-app-dock-item {{ request()->routeIs('client.profile*', 'client.favorites*', 'client.support*', 'password.change') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span>{{ __('Profile') }}</span>
                 </a>
             @endif
         </nav>

@@ -109,4 +109,76 @@ class Client extends Model
     {
         return $this->favoriteCaregivers()->where('caregivers.id', $caregiverId)->exists();
     }
+
+    /**
+     * Calculate client profile completion percentage and missing items checklist.
+     *
+     * @return array{percentage: int, completed_count: int, total_count: int, missing_items: array<int, array{key: string, label: string, description: string, action_url: string, action_label: string, weight: int}>, items: array<int, array{key: string, label: string, completed: bool, weight: int, action_url: string}>}
+     */
+    public function profileCompletion(): array
+    {
+        $user = $this->user;
+
+        $hasPersonal = filled($user?->name) && filled($user?->phone);
+        $hasAddress = filled($this->present_address) && filled($this->division_id) && filled($this->district_id);
+        $hasEmergency = filled($this->emergency_contact_name) && filled($this->emergency_contact_phone);
+
+        $checks = [
+            [
+                'key' => 'personal',
+                'label' => 'Personal Identity & Contact',
+                'description' => 'Ensure your full name and primary phone number are set.',
+                'completed' => $hasPersonal,
+                'weight' => 40,
+                'action_url' => route('client.profile').'#client-personal',
+                'action_label' => 'Update Info',
+            ],
+            [
+                'key' => 'address',
+                'label' => 'Care Residence Address',
+                'description' => 'Add your residence address, division, and district for caregiver matching.',
+                'completed' => $hasAddress,
+                'weight' => 35,
+                'action_url' => route('client.profile').'#client-address',
+                'action_label' => 'Set Address',
+            ],
+            [
+                'key' => 'emergency',
+                'label' => 'Emergency Family Contact',
+                'description' => 'Provide an emergency family contact person and phone number.',
+                'completed' => $hasEmergency,
+                'weight' => 25,
+                'action_url' => route('client.profile').'#client-emergency',
+                'action_label' => 'Add Contact',
+            ],
+        ];
+
+        $percentage = 0;
+        $completedCount = 0;
+        $missingItems = [];
+
+        foreach ($checks as $item) {
+            if ($item['completed']) {
+                $percentage += $item['weight'];
+                $completedCount++;
+            } else {
+                $missingItems[] = [
+                    'key' => $item['key'],
+                    'label' => $item['label'],
+                    'description' => $item['description'],
+                    'action_url' => $item['action_url'],
+                    'action_label' => $item['action_label'],
+                    'weight' => $item['weight'],
+                ];
+            }
+        }
+
+        return [
+            'percentage' => min(100, $percentage),
+            'completed_count' => $completedCount,
+            'total_count' => count($checks),
+            'missing_items' => $missingItems,
+            'items' => $checks,
+        ];
+    }
 }

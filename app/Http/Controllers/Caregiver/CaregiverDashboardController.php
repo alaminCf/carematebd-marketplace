@@ -22,6 +22,7 @@ use App\Models\Service;
 use App\Models\Setting;
 use App\Models\SupportMessage;
 use App\Models\SupportTicket;
+use App\Models\User;
 use App\Services\HiringWorkflowService;
 use App\Services\PrivacyFilterService;
 use App\Services\SecureDocumentService;
@@ -456,8 +457,9 @@ class CaregiverDashboardController extends Controller
         $districts = Location::where('type', 'district')->where('is_active', true)->orderBy('name')->get();
         $areas = Location::where('type', 'area')->where('is_active', true)->orderBy('name')->get();
         $services = Service::where('is_active', true)->orderBy('sort_order')->get();
+        $serviceCategories = $services;
 
-        return view('caregiver.profile', compact('caregiver', 'divisions', 'districts', 'areas', 'services'));
+        return view('caregiver.profile', compact('caregiver', 'divisions', 'districts', 'areas', 'services', 'serviceCategories'));
     }
 
     public function updateProfile(Request $request): RedirectResponse
@@ -472,24 +474,31 @@ class CaregiverDashboardController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:120'],
             'phone' => ['required', 'string', 'max:25', 'unique:users,phone,'.$user->id],
+            'gender' => ['nullable', 'string', 'in:male,female,other'],
+            'date_of_birth' => ['nullable', 'date'],
             'caregiver_type' => ['nullable', 'string', 'max:100'],
             'years_experience' => ['nullable', 'integer', 'min:0', 'max:60'],
+            'qualification_summary' => ['nullable', 'string', 'max:255'],
             'daily_rate' => ['required', 'numeric', 'min:100', 'max:1000000'],
             'hourly_rate' => ['nullable', 'numeric', 'min:0'],
             'weekly_rate' => ['nullable', 'numeric', 'min:0'],
             'monthly_rate' => ['nullable', 'numeric', 'min:0'],
             'employment_type' => ['nullable', 'in:full_time,part_time,both'],
             'live_type' => ['nullable', 'in:live_in,live_out,both'],
+            'preferred_shift' => ['nullable', 'string', 'max:40'],
+            'work_arrangement' => ['nullable', 'string', 'max:40'],
             'preferred_client_gender' => ['nullable', 'in:any,female,male'],
             'about' => ['nullable', 'string', 'max:1500'],
             'bio' => ['nullable', 'string', 'max:3000'],
             'skills' => ['nullable', 'string'],
             'specializations' => ['nullable', 'string'],
-            'languages' => ['nullable', 'string'],
+            'languages' => ['nullable'],
             'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
             'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
             'service_ids' => ['nullable', 'array'],
             'service_ids.*' => ['exists:services,id'],
+            'service_categories' => ['nullable', 'array'],
+            'service_categories.*' => ['exists:services,id'],
             'division_id' => ['nullable', 'exists:locations,id'],
             'district_id' => ['nullable', 'exists:locations,id'],
             'area_id' => ['nullable', 'exists:locations,id'],
@@ -517,19 +526,26 @@ class CaregiverDashboardController extends Controller
             ? array_values(array_filter(array_map('trim', explode(',', $validated['specializations']))))
             : ($caregiver->specializations ?? []);
 
-        $langArray = ! empty($validated['languages'])
-            ? array_values(array_filter(array_map('trim', explode(',', $validated['languages']))))
-            : ($caregiver->languages ?? []);
+        if (is_array($validated['languages'] ?? null)) {
+            $langArray = array_values(array_filter($validated['languages']));
+        } elseif (! empty($validated['languages']) && is_string($validated['languages'])) {
+            $langArray = array_values(array_filter(array_map('trim', explode(',', $validated['languages']))));
+        } else {
+            $langArray = $caregiver->languages ?? [];
+        }
 
         $caregiver->update([
+            'gender' => $validated['gender'] ?? $caregiver->gender,
+            'date_of_birth' => $validated['date_of_birth'] ?? $caregiver->date_of_birth,
             'caregiver_type' => $validated['caregiver_type'] ?? $caregiver->caregiver_type,
             'years_experience' => isset($validated['years_experience']) && $validated['years_experience'] !== '' ? (int) $validated['years_experience'] : $caregiver->years_experience,
+            'education_qualification' => $validated['qualification_summary'] ?? $caregiver->education_qualification,
             'daily_rate' => $validated['daily_rate'],
             'hourly_rate' => ! empty($validated['hourly_rate']) ? $validated['hourly_rate'] : null,
             'weekly_rate' => ! empty($validated['weekly_rate']) ? $validated['weekly_rate'] : null,
             'monthly_rate' => ! empty($validated['monthly_rate']) ? $validated['monthly_rate'] : null,
             'employment_type' => $validated['employment_type'] ?? $caregiver->employment_type,
-            'live_type' => $validated['live_type'] ?? $caregiver->live_type,
+            'live_type' => $validated['work_arrangement'] ?? $validated['live_type'] ?? $caregiver->live_type,
             'preferred_client_gender' => $validated['preferred_client_gender'] ?? $caregiver->preferred_client_gender,
             'division_id' => array_key_exists('division_id', $validated) ? $validated['division_id'] : $caregiver->division_id,
             'district_id' => array_key_exists('district_id', $validated) ? $validated['district_id'] : $caregiver->district_id,
@@ -546,6 +562,8 @@ class CaregiverDashboardController extends Controller
 
         if ($request->has('service_ids')) {
             $caregiver->services()->sync($request->input('service_ids', []));
+        } elseif ($request->has('service_categories')) {
+            $caregiver->services()->sync($request->input('service_categories', []));
         }
 
         return back()->with('success', 'Caregiver profile, service rates, and details updated successfully.');
