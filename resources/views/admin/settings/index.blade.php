@@ -141,6 +141,49 @@
                 </div>
             </div>
 
+            <!-- Website Traffic Tracking, SEO & Marketing Pixels -->
+            <div class="glass-card" style="padding: 2rem; border-radius: var(--radius-xl); margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin: 0 0 0.35rem 0;">
+                            📈 Traffic Tracking, Google Analytics (GA4) & Meta Pixel
+                        </h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                            Built-in traffic tracking is active automatically. Optionally connect Google Analytics, Search Console, Facebook Pixel, or Microsoft Clarity below.
+                        </p>
+                    </div>
+                    <a href="{{ route('admin.reports.index') }}" class="btn btn-secondary btn-sm" style="font-size: 0.8rem;">
+                        View Built-in Traffic Analytics →
+                    </a>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.25rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">Google Analytics 4 (GA4) Measurement ID</label>
+                        <input type="text" name="google_analytics_id" placeholder="G-XXXXXXXXXX" value="{{ old('google_analytics_id', $settings['google_analytics_id']->value ?? '') }}" class="glass-input" style="width: 100%;">
+                        <span style="font-size: 0.73rem; color: var(--text-muted); display: block; margin-top: 0.25rem;">Example: <code>G-12345ABCDE</code> from analytics.google.com</span>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">Facebook / Meta Pixel ID</label>
+                        <input type="text" name="meta_pixel_id" placeholder="123456789012345" value="{{ old('meta_pixel_id', $settings['meta_pixel_id']->value ?? '') }}" class="glass-input" style="width: 100%;">
+                        <span style="font-size: 0.73rem; color: var(--text-muted); display: block; margin-top: 0.25rem;">Tracks Facebook ad conversions & pageviews automatically.</span>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">Google Search Console Verification Code</label>
+                        <input type="text" name="google_site_verification" placeholder="google-site-verification content code" value="{{ old('google_site_verification', $settings['google_site_verification']->value ?? '') }}" class="glass-input" style="width: 100%;">
+                        <span style="font-size: 0.73rem; color: var(--text-muted); display: block; margin-top: 0.25rem;">Renders <code>&lt;meta name="google-site-verification"&gt;</code> in head.</span>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">Microsoft Clarity Project ID (Heatmaps)</label>
+                        <input type="text" name="microsoft_clarity_id" placeholder="abcdefghij" value="{{ old('microsoft_clarity_id', $settings['microsoft_clarity_id']->value ?? '') }}" class="glass-input" style="width: 100%;">
+                        <span style="font-size: 0.73rem; color: var(--text-muted); display: block; margin-top: 0.25rem;">Free heatmaps & visitor session recordings from clarity.microsoft.com</span>
+                    </div>
+                </div>
+            </div>
+
             <!-- Privacy & Mediation Policy Notice -->
             <div style="background: rgba(10, 57, 74, 0.05); border: 1px solid rgba(10, 57, 74, 0.2); border-radius: var(--radius-xl); padding: 1.5rem; margin-bottom: 2rem;">
                 <div style="display: flex; gap: 0.75rem;">

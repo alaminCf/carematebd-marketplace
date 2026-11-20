@@ -11,6 +11,7 @@ use App\Models\HiringRequest;
 use App\Models\Location;
 use App\Models\Payout;
 use App\Models\Service;
+use App\Models\SiteVisit;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -21,6 +22,7 @@ class AdminReportController extends Controller
     {
         $startDate = $request->input('start_date', now()->subMonths(1)->toDateString());
         $endDate = $request->input('end_date', now()->toDateString());
+        $traffic = SiteVisit::analyticsSummary($startDate, $endDate);
 
         $metrics = [
             'total_caregivers' => Caregiver::count(),
@@ -43,6 +45,6 @@ class AdminReportController extends Controller
             ->withCount(['caregivers' => fn ($q) => $q->whereIn('status', [CaregiverStatus::Approved, CaregiverStatus::Published])])
             ->get();
 
-        return view('admin.reports.index', compact('metrics', 'serviceBreakdown', 'locationBreakdown', 'startDate', 'endDate'));
+        return view('admin.reports.index', compact('metrics', 'traffic', 'serviceBreakdown', 'locationBreakdown', 'startDate', 'endDate'));
     }
 }

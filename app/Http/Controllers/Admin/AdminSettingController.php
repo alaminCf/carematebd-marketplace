@@ -45,6 +45,10 @@ class AdminSettingController extends Controller
             'google_reviews_count' => ['nullable', 'integer', 'min:0'],
             'google_maps_api_key' => ['nullable', 'string', 'max:200'],
             'google_reviews_embed_code' => ['nullable', 'string'],
+            'google_analytics_id' => ['nullable', 'string', 'max:50'],
+            'google_site_verification' => ['nullable', 'string', 'max:150'],
+            'meta_pixel_id' => ['nullable', 'string', 'max:50'],
+            'microsoft_clarity_id' => ['nullable', 'string', 'max:50'],
         ]);
 
         foreach ($validated as $key => $val) {

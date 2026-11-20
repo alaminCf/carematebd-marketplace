@@ -14,6 +14,7 @@ use App\Models\Caregiver;
 use App\Models\Dispute;
 use App\Models\HiringRequest;
 use App\Models\Payout;
+use App\Models\SiteVisit;
 use App\Models\SupportTicket;
 use App\Models\User;
 use Illuminate\View\View;
@@ -22,6 +23,8 @@ class AdminDashboardController extends Controller
 {
     public function index(): View
     {
+        $traffic = SiteVisit::analyticsSummary();
+
         $stats = [
             'total_caregivers' => Caregiver::count(),
             'total_clients' => User::where('role', 'client')->count(),
@@ -59,6 +62,6 @@ class AdminDashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('admin.dashboard', compact('stats', 'pendingApplications', 'pendingRequests', 'recentBookings'));
+        return view('admin.dashboard', compact('stats', 'traffic', 'pendingApplications', 'pendingRequests', 'recentBookings'));
     }
 }

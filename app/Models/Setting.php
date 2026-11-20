@@ -101,6 +101,10 @@ class Setting extends Model
             $contactEmail = trim((string) (static::$cachedSettings['contact_email'] ?? '')) ?: $defaults['contact_email'];
             $contactPhone = trim((string) (static::$cachedSettings['contact_phone'] ?? '')) ?: $defaults['contact_phone'];
             $emergencyHotline = trim((string) (static::$cachedSettings['emergency_hotline'] ?? '')) ?: $defaults['emergency_hotline'];
+            $googleAnalyticsId = trim((string) (static::$cachedSettings['google_analytics_id'] ?? ''));
+            $googleSiteVerification = trim((string) (static::$cachedSettings['google_site_verification'] ?? ''));
+            $metaPixelId = trim((string) (static::$cachedSettings['meta_pixel_id'] ?? ''));
+            $microsoftClarityId = trim((string) (static::$cachedSettings['microsoft_clarity_id'] ?? ''));
         } catch (\Throwable) {
             return $defaults;
         }
@@ -114,6 +118,10 @@ class Setting extends Model
             'contact_phone_wa' => static::formatWhatsAppNumber($contactPhone),
             'emergency_hotline' => $emergencyHotline,
             'emergency_hotline_tel' => static::formatTelNumber($emergencyHotline),
+            'google_analytics_id' => $googleAnalyticsId,
+            'google_site_verification' => $googleSiteVerification,
+            'meta_pixel_id' => $metaPixelId,
+            'microsoft_clarity_id' => $microsoftClarityId,
         ];
     }
 
@@ -126,7 +134,11 @@ class Setting extends Model
      *     contact_phone_tel: string,
      *     contact_phone_wa: string,
      *     emergency_hotline: string,
-     *     emergency_hotline_tel: string
+     *     emergency_hotline_tel: string,
+     *     google_analytics_id: string,
+     *     google_site_verification: string,
+     *     meta_pixel_id: string,
+     *     microsoft_clarity_id: string
      * }
      */
     public static function defaultContactInfo(): array
@@ -140,6 +152,10 @@ class Setting extends Model
             'contact_phone_wa' => '8801610296460',
             'emergency_hotline' => '+880 1610-296460',
             'emergency_hotline_tel' => '+8801610296460',
+            'google_analytics_id' => '',
+            'google_site_verification' => '',
+            'meta_pixel_id' => '',
+            'microsoft_clarity_id' => '',
         ];
     }
 

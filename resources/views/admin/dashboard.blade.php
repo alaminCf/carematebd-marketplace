@@ -65,6 +65,55 @@
         </div>
     </div>
 
+    <!-- Live Website Traffic & Visitor Pulse -->
+    @if (isset($traffic))
+        <div class="glass-card" style="padding: 1.35rem 1.5rem; border-radius: var(--radius-xl); margin-bottom: 2rem; background: linear-gradient(135deg, #0a394a 0%, #0f5268 100%); color: #ffffff;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.85rem; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.65rem;">
+                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #34d399; box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.25); display: inline-block;"></span>
+                    <div>
+                        <h3 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0;">Live Website Traffic & Visitor Analytics</h3>
+                        <p style="font-size: 0.78rem; color: rgba(255,255,255,0.8); margin: 0.1rem 0 0 0;">Real-time public & portal visitor tracking across CareMate BD</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="{{ route('admin.reports.index') }}" class="btn btn-mint btn-sm" style="font-size: 0.78rem; font-weight: 800;">
+                        Full Traffic Report →
+                    </a>
+                    <a href="{{ route('admin.settings.index') }}" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; background: rgba(255,255,255,0.14); color: #ffffff; border-color: rgba(255,255,255,0.22);">
+                        GA4 / Pixel Settings
+                    </a>
+                </div>
+            </div>
+
+            <div class="stats-grid" style="margin-bottom: 0 !important; gap: 0.85rem !important;">
+                <div style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 14px; padding: 0.85rem 1rem;">
+                    <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: rgba(255,255,255,0.75);">Active Visitors (15m)</div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #6ee7b7; margin: 0.15rem 0;">{{ number_format($traffic['live_now']) }}</div>
+                    <div style="font-size: 0.72rem; color: rgba(255,255,255,0.8);">Currently browsing site</div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 14px; padding: 0.85rem 1rem;">
+                    <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: rgba(255,255,255,0.75);">Today's Traffic</div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #ffffff; margin: 0.15rem 0;">{{ number_format($traffic['today_unique']) }} <span style="font-size: 0.82rem; font-weight: 600; color: rgba(255,255,255,0.8);">visitors</span></div>
+                    <div style="font-size: 0.72rem; color: rgba(255,255,255,0.8);">{{ number_format($traffic['today_views']) }} total pageviews today</div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 14px; padding: 0.85rem 1rem;">
+                    <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: rgba(255,255,255,0.75);">Last 7 Days</div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #fde047; margin: 0.15rem 0;">{{ number_format($traffic['week_unique']) }} <span style="font-size: 0.82rem; font-weight: 600; color: rgba(255,255,255,0.8);">visitors</span></div>
+                    <div style="font-size: 0.72rem; color: rgba(255,255,255,0.8);">{{ number_format($traffic['week_views']) }} pageviews in 7 days</div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 14px; padding: 0.85rem 1rem;">
+                    <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: rgba(255,255,255,0.75);">All-Time Volume</div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #ffffff; margin: 0.15rem 0;">{{ number_format($traffic['total_views']) }} <span style="font-size: 0.82rem; font-weight: 600; color: rgba(255,255,255,0.8);">views</span></div>
+                    <div style="font-size: 0.72rem; color: rgba(255,255,255,0.8);">📱 {{ $traffic['devices']['mobile']['percentage'] ?? 0 }}% Mobile • 💻 {{ $traffic['devices']['desktop']['percentage'] ?? 0 }}% Desktop</div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Quick Action / Triage Grids -->
     <div class="dashboard-grid-2">
         <!-- Verification Queue (Pending Caregivers) -->

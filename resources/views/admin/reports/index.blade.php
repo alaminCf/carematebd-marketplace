@@ -28,6 +28,138 @@
         </form>
     </div>
 
+    <!-- Website Traffic & Visitor Analytics Section -->
+    @if (isset($traffic))
+        <div style="margin-bottom: 2.25rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                <h3 style="font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.82rem; color: var(--text-muted); margin: 0;">
+                    🌐 Website Traffic & Visitor Analytics ({{ $startDate }} to {{ $endDate }})
+                </h3>
+                <a href="{{ route('admin.settings.index') }}" style="font-size: 0.8rem; font-weight: 700; color: #0d9488; text-decoration: none;">
+                    Configure Google Analytics (GA4) & Meta Pixel →
+                </a>
+            </div>
+
+            <!-- 4 Traffic KPI Cards -->
+            <div class="stats-grid" style="margin-bottom: 1.25rem !important;">
+                <div class="glass-card stat-card" style="border-left: 4px solid #10b981;">
+                    <span class="stat-label">Active Now (Last 15m)</span>
+                    <div class="stat-value" style="color: #059669;">{{ number_format($traffic['live_now']) }}</div>
+                    <span class="stat-hint">Real-time active visitors</span>
+                </div>
+
+                <div class="glass-card stat-card" style="border-left: 4px solid #0284c7;">
+                    <span class="stat-label">Today's Traffic</span>
+                    <div class="stat-value" style="color: #0284c7;">{{ number_format($traffic['today_unique']) }}</div>
+                    <span class="stat-hint">{{ number_format($traffic['today_views']) }} pageviews today</span>
+                </div>
+
+                <div class="glass-card stat-card" style="border-left: 4px solid #0a394a;">
+                    <span class="stat-label">Period Unique Visitors</span>
+                    <div class="stat-value" style="color: #0a394a;">{{ number_format($traffic['period_unique']) }}</div>
+                    <span class="stat-hint">Distinct visitors in window</span>
+                </div>
+
+                <div class="glass-card stat-card" style="border-left: 4px solid #8b5cf6;">
+                    <span class="stat-label">Period Pageviews</span>
+                    <div class="stat-value" style="color: #6d28d9;">{{ number_format($traffic['period_views']) }}</div>
+                    <span class="stat-hint">All-time: {{ number_format($traffic['total_views']) }} views</span>
+                </div>
+            </div>
+
+            <!-- 7-Day Trend + Top Pages + Sources/Devices -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem;">
+                <!-- Top Visited Pages -->
+                <div class="glass-card" style="padding: 1.35rem; border-radius: var(--radius-xl);">
+                    <h4 style="font-size: 0.98rem; font-weight: 800; color: #0f172a; margin: 0 0 0.85rem 0;">
+                        🔥 Most Visited Pages
+                    </h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.55rem;">
+                        @forelse ($traffic['top_pages'] as $tp)
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.55rem 0.75rem; background: #f8fafc; border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 10px; gap: 0.5rem;">
+                                <span style="font-weight: 700; font-size: 0.82rem; color: #0a394a; word-break: break-all;">{{ $tp['path'] }}</span>
+                                <span style="font-size: 0.78rem; font-weight: 800; color: #0f172a; white-space: nowrap;">
+                                    {{ number_format($tp['views']) }} views <span style="color: #64748b; font-weight: 600;">({{ number_format($tp['unique_visitors']) }} uniq)</span>
+                                </span>
+                            </div>
+                        @empty
+                            <div style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.84rem;">
+                                Visitor pageviews will appear here as traffic arrives.
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
+                <!-- Traffic Sources & Device Breakdown -->
+                <div class="glass-card" style="padding: 1.35rem; border-radius: var(--radius-xl);">
+                    <h4 style="font-size: 0.98rem; font-weight: 800; color: #0f172a; margin: 0 0 0.85rem 0;">
+                        📡 Traffic Sources & Devices
+                    </h4>
+                    <div style="margin-bottom: 1rem;">
+                        <div style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem;">Acquisition Channels</div>
+                        <div style="display: flex; flex-direction: column; gap: 0.45rem;">
+                            @foreach ($traffic['sources'] as $srcName => $srcData)
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; margin-bottom: 0.18rem;">
+                                        <span>{{ $srcName }}</span>
+                                        <span>{{ number_format($srcData['count']) }} ({{ $srcData['percentage'] }}%)</span>
+                                    </div>
+                                    <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
+                                        <div style="width: {{ $srcData['percentage'] }}%; height: 100%; background: #0d9488; border-radius: 999px;"></div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div style="padding-top: 0.75rem; border-top: 1px solid rgba(226, 232, 240, 0.8);">
+                        <div style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem;">Visitor Devices</div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+                            <div style="background: #f8fafc; border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 10px; padding: 0.55rem; text-align: center;">
+                                <div style="font-size: 0.72rem; color: #64748b; font-weight: 700;">📱 Mobile</div>
+                                <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">{{ $traffic['devices']['mobile']['percentage'] ?? 0 }}%</div>
+                                <div style="font-size: 0.68rem; color: #94a3b8;">{{ $traffic['devices']['mobile']['count'] ?? 0 }} visits</div>
+                            </div>
+                            <div style="background: #f8fafc; border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 10px; padding: 0.55rem; text-align: center;">
+                                <div style="font-size: 0.72rem; color: #64748b; font-weight: 700;">💻 Desktop</div>
+                                <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">{{ $traffic['devices']['desktop']['percentage'] ?? 0 }}%</div>
+                                <div style="font-size: 0.68rem; color: #94a3b8;">{{ $traffic['devices']['desktop']['count'] ?? 0 }} visits</div>
+                            </div>
+                            <div style="background: #f8fafc; border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 10px; padding: 0.55rem; text-align: center;">
+                                <div style="font-size: 0.72rem; color: #64748b; font-weight: 700;">📟 Tablet</div>
+                                <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">{{ $traffic['devices']['tablet']['percentage'] ?? 0 }}%</div>
+                                <div style="font-size: 0.68rem; color: #94a3b8;">{{ $traffic['devices']['tablet']['count'] ?? 0 }} visits</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Last 7 Days Daily Traffic Trend -->
+                <div class="glass-card" style="padding: 1.35rem; border-radius: var(--radius-xl);">
+                    <h4 style="font-size: 0.98rem; font-weight: 800; color: #0f172a; margin: 0 0 0.85rem 0;">
+                        📅 Last 7 Days Daily Traffic
+                    </h4>
+                    @php
+                        $maxDayViews = max(1, collect($traffic['daily_trend'])->max('views') ?? 1);
+                    @endphp
+                    <div style="display: flex; flex-direction: column; gap: 0.55rem;">
+                        @foreach ($traffic['daily_trend'] as $day)
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.77rem; font-weight: 700; margin-bottom: 0.15rem;">
+                                    <span style="color: #334155;">{{ $day['label'] }}</span>
+                                    <span style="color: #0a394a;">{{ number_format($day['views']) }} views ({{ number_format($day['unique']) }} uniq)</span>
+                                </div>
+                                <div style="width: 100%; height: 7px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
+                                    <div style="width: {{ min(100, (int) round(($day['views'] / $maxDayViews) * 100)) }}%; height: 100%; background: linear-gradient(90deg, #0a394a, #0d9488); border-radius: 999px;"></div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Financial Performance Cards -->
     <div style="margin-bottom: 2rem;">
         <h3 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.82rem; color: var(--text-muted);">
