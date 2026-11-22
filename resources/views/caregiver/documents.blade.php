@@ -3,6 +3,26 @@
     <x-slot:header>Identity & Compliance Documents</x-slot:header>
     <x-slot:subheading>Private encrypted document safe. Documents are inspected only by CareMate Admin and never exposed publicly.</x-slot:subheading>
 
+    @if (in_array($caregiver->status->value, ['draft', 'changes_required']))
+        <div style="background: linear-gradient(135deg, #0a394a 0%, #0f5268 100%); color: #ffffff; border-radius: 18px; padding: 1.15rem 1.35rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <div style="font-weight: 800; font-size: 1rem;">
+                    @if ($caregiver->status->value === 'draft')
+                        ⚡ Your 9-Step Verification Application is in Draft (Step {{ $caregiver->application_step }} of 9)
+                    @else
+                        ⚠️ Verification Changes Requested: {{ $caregiver->status_reason ?? 'Please update your NID or documents.' }}
+                    @endif
+                </div>
+                <div style="font-size: 0.82rem; color: rgba(255,255,255,0.85); margin-top: 0.2rem;">
+                    You can upload your NID Front, NID Back, and certificates directly below, or resume the step-by-step registration wizard.
+                </div>
+            </div>
+            <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 800; white-space: nowrap;">
+                Resume 9-Step Application →
+            </a>
+        </div>
+    @endif
+
     <div class="documents-layout">
         <!-- Document Table -->
         <div style="min-width: 0;">
@@ -102,30 +122,61 @@
                 @csrf
 
                 <div style="margin-bottom: 1rem;">
-                    <label class="form-label">Document Title <span style="color: #ef4444;">*</span></label>
-                    <input type="text" name="title" required placeholder="e.g. Police Clearance 2026" class="glass-input">
-                </div>
-
-                <div style="margin-bottom: 1rem;">
                     <label class="form-label">Document Category <span style="color: #ef4444;">*</span></label>
-                    <select name="type" required class="glass-input">
-                        <option value="police_clearance">Police Clearance Certificate</option>
-                        <option value="medical_certificate">Medical Fitness / Health Screening</option>
-                        <option value="nursing_license">Nursing Council License</option>
-                        <option value="training_certificate">Caregiving Training Diploma</option>
-                        <option value="other">Other Supporting Document</option>
+                    <select name="type" id="docTypeSelect" required class="glass-input">
+                        <option value="nid_front">🪪 National ID Card (NID Front Side)</option>
+                        <option value="nid_back">🪪 National ID Card (NID Back Side)</option>
+                        <option value="nursing_registration">🩺 BNMC Nursing Council License</option>
+                        <option value="training_certificate">📜 Caregiving Training Diploma / Certificate</option>
+                        <option value="police_verification">🛡️ Police Clearance Certificate</option>
+                        <option value="academic_certificate">🎓 Academic Certificate (SSC / HSC / Degree)</option>
+                        <option value="experience_letter">💼 Hospital / Agency Experience Letter</option>
+                        <option value="other">📄 Other Supporting Document</option>
                     </select>
                 </div>
 
-                <div style="margin-bottom: 1.5rem;">
-                    <label class="form-label">File (PDF or Image, max 5MB) <span style="color: #ef4444;">*</span></label>
-                    <input type="file" name="document_file" required accept="image/*,.pdf" class="glass-input">
+                <div style="margin-bottom: 1rem;">
+                    <label class="form-label">Document Title <span style="color: #ef4444;">*</span></label>
+                    <input type="text" name="title" id="docTitleInput" required value="{{ old('title', 'National ID (Front)') }}" placeholder="e.g. National ID (Front) or Police Clearance" class="glass-input">
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <div style="margin-bottom: 1rem;">
+                    <label class="form-label">Government NID Number (Optional — updates your profile NID)</label>
+                    <input type="text" name="nid_number" value="{{ old('nid_number', $caregiver->nid_number) }}" placeholder="e.g. 199226955000000" class="glass-input">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label class="form-label">File (JPG, PNG, WebP or PDF, max 10MB) <span style="color: #ef4444;">*</span></label>
+                    <input type="file" name="file" required accept="image/*,.pdf" class="glass-input">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
                     Upload to Secure Safe
                 </button>
             </form>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var sel = document.getElementById('docTypeSelect');
+                    var titleIn = document.getElementById('docTitleInput');
+                    if (sel && titleIn) {
+                        var labels = {
+                            'nid_front': 'National ID (Front)',
+                            'nid_back': 'National ID (Back)',
+                            'nursing_registration': 'BNMC Nursing Registration License',
+                            'training_certificate': 'Caregiving Training Certificate',
+                            'police_verification': 'Police Clearance Certificate',
+                            'academic_certificate': 'Academic Certificate',
+                            'experience_letter': 'Clinical Experience Letter',
+                            'other': 'Supporting Verification Document'
+                        };
+                        sel.addEventListener('change', function() {
+                            if (labels[sel.value]) {
+                                titleIn.value = labels[sel.value];
+                            }
+                        });
+                    }
+                });
+            </script>
         </div>
     </div>
 </x-layouts.dashboard>

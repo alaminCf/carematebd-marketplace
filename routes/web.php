@@ -85,6 +85,7 @@ Route::middleware('auth')->group(function (): void {
 
 // Caregiver Registration Wizard (Can be guest or draft caregiver)
 Route::get('/become-caregiver', [CaregiverRegistrationController::class, 'show'])->name('caregiver.register');
+Route::get('/caregiver/onboarding', [CaregiverRegistrationController::class, 'show'])->name('caregiver.onboarding');
 Route::post('/become-caregiver', [CaregiverRegistrationController::class, 'saveStep'])->name('caregiver.register.step');
 Route::post('/become-caregiver/extract-document', [CaregiverRegistrationController::class, 'extractDocument'])
     ->middleware('throttle:30,1')

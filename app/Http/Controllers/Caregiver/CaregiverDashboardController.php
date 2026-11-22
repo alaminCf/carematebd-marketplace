@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Caregiver;
 
 use App\Enums\BookingStatus;
+use App\Enums\CaregiverStatus;
 use App\Enums\DocumentType;
 use App\Enums\EarningStatus;
 use App\Enums\HiringRequestStatus;
@@ -12,6 +13,7 @@ use App\Enums\TicketPriority;
 use App\Enums\TicketStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Caregiver;
 use App\Models\CaregiverAvailability;
 use App\Models\CaregiverBlockedDate;
 use App\Models\CaregiverEarning;
@@ -41,9 +43,25 @@ class CaregiverDashboardController extends Controller
         public SecureDocumentService $documentService
     ) {}
 
+    protected function getOrCreateCaregiver(): Caregiver
+    {
+        $user = Auth::user();
+        if ($user->caregiver) {
+            return $user->caregiver;
+        }
+
+        return Caregiver::firstOrCreate(
+            ['user_id' => $user->id],
+            [
+                'status' => CaregiverStatus::Draft,
+                'application_step' => 1,
+            ]
+        );
+    }
+
     public function index(): View
     {
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
 
         // Calculate profile completion percentage
         $completionFields = [
@@ -140,7 +158,7 @@ class CaregiverDashboardController extends Controller
 
     public function requests(): View
     {
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
 
         $requests = HiringRequest::where('caregiver_id', $caregiver->id)
             ->whereIn('status', HiringRequestStatus::visibleToCaregiver())
@@ -165,7 +183,7 @@ class CaregiverDashboardController extends Controller
     {
         Gate::authorize('respond', $hiringRequest);
 
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
         $note = $request->input('note');
 
         $this->workflowService->caregiverAccept($hiringRequest, $caregiver, $note);
@@ -178,7 +196,7 @@ class CaregiverDashboardController extends Controller
     {
         Gate::authorize('respond', $hiringRequest);
 
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
         $validated = $request->validate([
             'reason' => ['required', 'string', 'max:500'],
         ]);
@@ -191,7 +209,7 @@ class CaregiverDashboardController extends Controller
 
     public function jobs(): View
     {
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
 
         $jobs = Booking::where('caregiver_id', $caregiver->id)
             ->with(['service', 'area', 'district', 'earning'])
@@ -212,7 +230,7 @@ class CaregiverDashboardController extends Controller
 
     public function availability(): View
     {
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
         $availabilities = $caregiver->availabilities->keyBy('day_of_week');
         $blockedDates = $caregiver->blockedDates()->where('date', '>=', now()->toDateString())->orderBy('date')->get();
 
@@ -221,7 +239,7 @@ class CaregiverDashboardController extends Controller
 
     public function updateAvailability(Request $request): RedirectResponse
     {
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
 
         $validated = $request->validate([
             'days' => ['array'],
@@ -255,7 +273,7 @@ class CaregiverDashboardController extends Controller
 
     public function blockDate(Request $request): RedirectResponse
     {
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
 
         $validated = $request->validate([
             'date' => ['required', 'date', 'after_or_equal:today'],
@@ -272,7 +290,7 @@ class CaregiverDashboardController extends Controller
 
     public function unblockDate(CaregiverBlockedDate $blockedDate): RedirectResponse
     {
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
         abort_unless($blockedDate->caregiver_id === $caregiver->id, 403);
 
         $blockedDate->delete();
@@ -282,7 +300,7 @@ class CaregiverDashboardController extends Controller
 
     public function earnings(): View
     {
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
 
         $totalEarnings = CaregiverEarning::where('caregiver_id', $caregiver->id)->sum('net_amount');
         $availableEarnings = CaregiverEarning::where('caregiver_id', $caregiver->id)->where('status', EarningStatus::Available)->sum('net_amount');
@@ -318,7 +336,7 @@ class CaregiverDashboardController extends Controller
 
     public function storePayout(Request $request): RedirectResponse
     {
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
         $minPayout = (float) Setting::get('min_payout_amount', 1000);
 
         $availableEarnings = CaregiverEarning::where('caregiver_id', $caregiver->id)->where('status', EarningStatus::Available)->sum('net_amount');
@@ -344,7 +362,7 @@ class CaregiverDashboardController extends Controller
 
     public function documents(): View
     {
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
         $documents = $caregiver->documents()->latest()->get();
         $certificates = $caregiver->certificates()->latest()->get();
 
@@ -353,21 +371,53 @@ class CaregiverDashboardController extends Controller
 
     public function storeDocument(Request $request): RedirectResponse
     {
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
+
+        // Support both 'file' and 'document_file' input names from form
+        if (! $request->hasFile('file') && $request->hasFile('document_file')) {
+            $request->files->set('file', $request->file('document_file'));
+        }
 
         $validated = $request->validate([
             'type' => ['required', 'string'],
-            'title' => ['required', 'string', 'max:120'],
-            'file' => ['required', 'file', 'mimes:jpeg,png,jpg,pdf', 'max:5120'],
+            'title' => ['nullable', 'string', 'max:120'],
+            'nid_number' => ['nullable', 'string', 'min:8', 'max:25'],
+            'file' => ['required', 'file', 'mimes:jpeg,png,jpg,webp,pdf', 'max:10240'],
         ]);
 
-        $docType = DocumentType::tryFrom($validated['type']) ?? DocumentType::Other;
+        if (! empty($validated['nid_number'])) {
+            $cleanNid = preg_replace('/\s+/', '', trim($validated['nid_number']));
+            $nidHash = hash('sha256', $cleanNid);
+            $dup = Caregiver::withTrashed()
+                ->where('nid_hash', $nidHash)
+                ->where('id', '!=', $caregiver->id)
+                ->first();
+            if (! $dup || $dup->trashed() || $dup->status === CaregiverStatus::Draft) {
+                $dup?->update(['nid_hash' => null]);
+                $caregiver->update([
+                    'nid_number' => $cleanNid,
+                    'nid_hash' => $nidHash,
+                ]);
+            }
+        }
+
+        $typeMap = [
+            'police_clearance' => DocumentType::PoliceVerification,
+            'medical_certificate' => DocumentType::Other,
+            'nursing_license' => DocumentType::NursingRegistration,
+            'training_certificate' => DocumentType::TrainingCertificate,
+        ];
+
+        $docType = DocumentType::tryFrom($validated['type'])
+            ?? ($typeMap[$validated['type']] ?? DocumentType::Other);
+
+        $title = ! empty($validated['title']) ? $validated['title'] : $docType->label();
 
         $this->documentService->storePrivateDocument(
             $caregiver,
             $request->file('file'),
             $docType,
-            $validated['title']
+            $title
         );
 
         return back()->with('success', 'Document uploaded securely. CareMate will verify it.');
@@ -375,12 +425,13 @@ class CaregiverDashboardController extends Controller
 
     public function support(): View
     {
+        $caregiver = $this->getOrCreateCaregiver();
         $tickets = SupportTicket::where('user_id', Auth::id())
             ->with(['messages', 'booking'])
             ->latest()
             ->paginate(10);
 
-        $caregiverJobs = Booking::where('caregiver_id', Auth::user()->caregiver->id)->latest()->get();
+        $caregiverJobs = Booking::where('caregiver_id', $caregiver->id)->latest()->get();
 
         return view('caregiver.support.index', compact('tickets', 'caregiverJobs'));
     }
@@ -452,7 +503,7 @@ class CaregiverDashboardController extends Controller
 
     public function profile(): View
     {
-        $caregiver = Auth::user()->caregiver;
+        $caregiver = $this->getOrCreateCaregiver();
         $divisions = Location::where('type', 'division')->where('is_active', true)->orderBy('name')->get();
         $districts = Location::where('type', 'district')->where('is_active', true)->orderBy('name')->get();
         $areas = Location::where('type', 'area')->where('is_active', true)->orderBy('name')->get();

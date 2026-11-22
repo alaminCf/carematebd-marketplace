@@ -224,7 +224,7 @@
                 </div>
 
                 @if (in_array($caregiver->status->value, ['draft', 'changes_required']))
-                    <a href="{{ route('caregiver.onboarding') }}" class="btn btn-mint btn-sm" style="font-weight: 800; white-space: nowrap;">
+                    <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="font-weight: 800; white-space: nowrap;">
                         Complete 9-Step Verification →
                     </a>
                 @endif

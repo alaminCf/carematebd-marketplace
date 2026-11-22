@@ -170,16 +170,30 @@
                             @error('nid_number') <span class="form-error">{{ $message }}</span> @enderror
                         </div>
 
+                        @php
+                            $existingNidFront = $caregiver?->documents()->where('type', \App\Enums\DocumentType::NidFront)->latest()->first();
+                            $existingNidBack = $caregiver?->documents()->where('type', \App\Enums\DocumentType::NidBack)->latest()->first();
+                        @endphp
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                            <div style="background: rgba(255, 255, 255, 0.6); border: 2px dashed rgba(203, 213, 225, 0.9); padding: 1.5rem; border-radius: var(--radius-md); text-align: center;">
+                            <div style="background: rgba(255, 255, 255, 0.6); border: 2px dashed {{ $existingNidFront ? '#10b981' : 'rgba(203, 213, 225, 0.9)' }}; padding: 1.5rem; border-radius: var(--radius-md); text-align: center;">
                                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🪪</div>
-                                <label class="form-label">NID Front Scan / Photo <span style="color: #ef4444;">*</span></label>
+                                <label class="form-label">NID Front Scan / Photo {!! $existingNidFront ? '<span style="color: #059669;">(✓ Uploaded)</span>' : '<span style="color: #ef4444;">*</span>' !!}</label>
+                                @if ($existingNidFront)
+                                    <div style="font-size: 0.76rem; color: #059669; font-weight: 700; margin-bottom: 0.45rem;">
+                                        ✓ Saved: {{ $existingNidFront->original_name }} (Optional to replace)
+                                    </div>
+                                @endif
                                 <input type="file" id="input_nid_front" name="nid_front" accept="image/*,.pdf" class="glass-input" style="font-size: 0.8rem;">
                                 @error('nid_front') <span class="form-error">{{ $message }}</span> @enderror
                             </div>
-                            <div style="background: rgba(255, 255, 255, 0.6); border: 2px dashed rgba(203, 213, 225, 0.9); padding: 1.5rem; border-radius: var(--radius-md); text-align: center;">
+                            <div style="background: rgba(255, 255, 255, 0.6); border: 2px dashed {{ $existingNidBack ? '#10b981' : 'rgba(203, 213, 225, 0.9)' }}; padding: 1.5rem; border-radius: var(--radius-md); text-align: center;">
                                 <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🪪</div>
-                                <label class="form-label">NID Back Scan / Photo <span style="color: #ef4444;">*</span></label>
+                                <label class="form-label">NID Back Scan / Photo {!! $existingNidBack ? '<span style="color: #059669;">(✓ Uploaded)</span>' : '<span style="color: #ef4444;">*</span>' !!}</label>
+                                @if ($existingNidBack)
+                                    <div style="font-size: 0.76rem; color: #059669; font-weight: 700; margin-bottom: 0.45rem;">
+                                        ✓ Saved: {{ $existingNidBack->original_name }} (Optional to replace)
+                                    </div>
+                                @endif
                                 <input type="file" id="input_nid_back" name="nid_back" accept="image/*,.pdf" class="glass-input" style="font-size: 0.8rem;">
                                 @error('nid_back') <span class="form-error">{{ $message }}</span> @enderror
                             </div>

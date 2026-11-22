@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class CaregiverRegistrationController extends Controller
@@ -64,58 +65,62 @@ class CaregiverRegistrationController extends Controller
 
         // If authenticated caregiver, securely store document and link extraction data
         if (Auth::check() && Auth::user()->isCaregiver() && Auth::user()->caregiver) {
-            $caregiver = Auth::user()->caregiver;
+            try {
+                $caregiver = Auth::user()->caregiver;
 
-            if ($docType === 'nid_front') {
-                $doc = $this->documentService->storePrivateDocument(
-                    $caregiver,
-                    $file,
-                    DocumentType::NidFront,
-                    'National ID (Front)'
-                );
-                $doc->update([
-                    'extraction_status' => $result['status'] ?? 'none',
-                    'extracted_data' => $result['extracted'] ?? [],
-                    'extraction_notes' => $result['notes'] ?? null,
-                    'extracted_at' => now(),
-                ]);
-            } elseif ($docType === 'nid_back') {
-                $doc = $this->documentService->storePrivateDocument(
-                    $caregiver,
-                    $file,
-                    DocumentType::NidBack,
-                    'National ID (Back)'
-                );
-                $doc->update([
-                    'extraction_status' => $result['status'] ?? 'none',
-                    'extracted_data' => $result['extracted'] ?? [],
-                    'extraction_notes' => $result['notes'] ?? null,
-                    'extracted_at' => now(),
-                ]);
+                if ($docType === 'nid_front') {
+                    $doc = $this->documentService->storePrivateDocument(
+                        $caregiver,
+                        $file,
+                        DocumentType::NidFront,
+                        'National ID (Front)'
+                    );
+                    $doc->update([
+                        'extraction_status' => $result['status'] ?? 'none',
+                        'extracted_data' => $result['extracted'] ?? [],
+                        'extraction_notes' => $result['notes'] ?? null,
+                        'extracted_at' => now(),
+                    ]);
+                } elseif ($docType === 'nid_back') {
+                    $doc = $this->documentService->storePrivateDocument(
+                        $caregiver,
+                        $file,
+                        DocumentType::NidBack,
+                        'National ID (Back)'
+                    );
+                    $doc->update([
+                        'extraction_status' => $result['status'] ?? 'none',
+                        'extracted_data' => $result['extracted'] ?? [],
+                        'extraction_notes' => $result['notes'] ?? null,
+                        'extracted_at' => now(),
+                    ]);
 
-                if (! empty($result['extracted']['permanent_address'])) {
-                    $caregiver->update([
-                        'permanent_address' => $result['extracted']['permanent_address'],
+                    if (! empty($result['extracted']['permanent_address'])) {
+                        $caregiver->update([
+                            'permanent_address' => $result['extracted']['permanent_address'],
+                        ]);
+                    }
+                } elseif ($docType === 'certificate' && ! empty($result['extracted']['cert_name'])) {
+                    $this->documentService->storeCertificate($caregiver, $file, [
+                        'name' => $result['extracted']['cert_name'],
+                        'institution' => $result['extracted']['cert_institution'] ?? 'Accredited Institute',
+                        'certificate_number' => $result['extracted']['cert_number'] ?? null,
+                        'issue_year' => $result['extracted']['cert_year'] ?? null,
+                        'is_public' => true,
                     ]);
                 }
-            } elseif ($docType === 'certificate' && ! empty($result['extracted']['cert_name'])) {
-                $this->documentService->storeCertificate($caregiver, $file, [
-                    'name' => $result['extracted']['cert_name'],
-                    'institution' => $result['extracted']['cert_institution'] ?? 'Accredited Institute',
-                    'certificate_number' => $result['extracted']['cert_number'] ?? null,
-                    'issue_year' => $result['extracted']['cert_year'] ?? null,
-                    'is_public' => true,
-                ]);
-            }
 
-            // Update caregiver tracking
-            $existingExtracted = $caregiver->extracted_profile_data ?? [];
-            $merged = array_merge($existingExtracted, $result['extracted'] ?? []);
-            $caregiver->update([
-                'auto_fill_status' => $result['status'] ?? 'extracted',
-                'extracted_profile_data' => $merged,
-                'extracted_at' => now(),
-            ]);
+                // Update caregiver tracking
+                $existingExtracted = is_array($caregiver->extracted_profile_data) ? $caregiver->extracted_profile_data : [];
+                $merged = array_merge($existingExtracted, $result['extracted'] ?? []);
+                $caregiver->update([
+                    'auto_fill_status' => $result['status'] ?? 'extracted',
+                    'extracted_profile_data' => $merged,
+                    'extracted_at' => now(),
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning('Caregiver extractDocument save warning: '.$e->getMessage());
+            }
         }
 
         return response()->json([
@@ -186,7 +191,7 @@ class CaregiverRegistrationController extends Controller
             'gender' => ['required', 'in:female,male,other'],
             'date_of_birth' => ['required', 'date', 'before:-18 years'],
             'password' => $userId ? ['nullable', 'confirmed', 'min:6'] : ['required', 'confirmed', 'min:6'],
-            'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
+            'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:10240'],
         ]);
 
         return DB::transaction(function () use ($validated, $request, $userId): RedirectResponse {
@@ -240,15 +245,37 @@ class CaregiverRegistrationController extends Controller
         $this->ensureCaregiverAuth();
         $caregiver = Auth::user()->caregiver;
 
+        $hasFront = $caregiver->documents()->where('type', DocumentType::NidFront)->exists();
+        $hasBack = $caregiver->documents()->where('type', DocumentType::NidBack)->exists();
+
         $validated = $request->validate([
-            'nid_number' => ['required', 'string', 'min:10', 'max:20'],
-            'nid_front' => [$caregiver->documents()->where('type', DocumentType::NidFront)->exists() ? 'nullable' : 'required', 'file', 'mimes:jpeg,png,jpg,pdf', 'max:5120'],
-            'nid_back' => [$caregiver->documents()->where('type', DocumentType::NidBack)->exists() ? 'nullable' : 'required', 'file', 'mimes:jpeg,png,jpg,pdf', 'max:5120'],
+            'nid_number' => ['required', 'string', 'min:8', 'max:25'],
+            'nid_front' => [$hasFront ? 'nullable' : 'required', 'file', 'mimes:jpeg,png,jpg,webp,pdf', 'max:10240'],
+            'nid_back' => [$hasBack ? 'nullable' : 'required', 'file', 'mimes:jpeg,png,jpg,webp,pdf', 'max:10240'],
         ]);
 
+        $cleanNid = preg_replace('/\s+/', '', trim($validated['nid_number']));
+        $nidHash = hash('sha256', $cleanNid);
+
+        // Prevent SQL 1062 UniqueConstraintViolationException if nid_hash exists on another caregiver row
+        $duplicateCaregiver = Caregiver::withTrashed()
+            ->where('nid_hash', $nidHash)
+            ->where('id', '!=', $caregiver->id)
+            ->first();
+
+        if ($duplicateCaregiver) {
+            if ($duplicateCaregiver->trashed() || $duplicateCaregiver->status === CaregiverStatus::Draft) {
+                $duplicateCaregiver->update(['nid_hash' => null]);
+            } else {
+                return back()->withErrors([
+                    'nid_number' => 'This National ID (NID) number is already registered with an active CareMate account. Please log in to your existing account or contact CareMate Support.',
+                ])->withInput();
+            }
+        }
+
         $caregiver->update([
-            'nid_number' => $validated['nid_number'],
-            'nid_hash' => hash('sha256', $validated['nid_number']),
+            'nid_number' => $cleanNid,
+            'nid_hash' => $nidHash,
             'application_step' => max(3, $caregiver->application_step),
         ]);
 

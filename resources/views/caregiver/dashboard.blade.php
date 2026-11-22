@@ -281,7 +281,7 @@
                 </div>
 
                 @if (in_array($caregiver->status->value, ['draft', 'changes_required']))
-                    <a href="{{ route('caregiver.onboarding') }}" class="btn btn-mint btn-sm" style="padding: 0.38rem 0.85rem; font-size: 0.76rem; font-weight: 800; min-height: 34px;">
+                    <a href="{{ route('caregiver.register') }}" class="btn btn-mint btn-sm" style="padding: 0.38rem 0.85rem; font-size: 0.76rem; font-weight: 800; min-height: 34px;">
                         Complete Verification →
                     </a>
                 @elseif ($pct < 100)

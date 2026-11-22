@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\CaregiverStatus;
 use App\Enums\LocationType;
 use App\Enums\UserRole;
 use App\Models\Caregiver;
@@ -117,6 +118,14 @@ class PlatformSmokeTest extends TestCase
             $response = $this->actingAs($caregiverUser)->get($route);
             $response->assertStatus(200);
         }
+
+        // Also test when caregiver is in 'draft' or 'changes_required' state (e.g. stopped mid-registration and logged in)
+        $originalStatus = $caregiverUser->caregiver->status;
+        $caregiverUser->caregiver->update(['status' => CaregiverStatus::Draft, 'application_step' => 2]);
+        foreach (['/caregiver/dashboard', '/caregiver/profile', '/caregiver/documents', '/become-caregiver'] as $draftRoute) {
+            $this->actingAs($caregiverUser)->get($draftRoute)->assertStatus(200);
+        }
+        $caregiverUser->caregiver->update(['status' => $originalStatus]);
     }
 
     public function test_caregiver_can_update_profile_rates_and_information(): void
