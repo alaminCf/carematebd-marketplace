@@ -18,7 +18,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 20
+          fetch-depth: 0
 
       - name: Upload changed files and clear compiled Blade views
         env:
@@ -48,7 +48,10 @@ jobs:
           try:
               changed = subprocess.check_output(['git', 'diff', '--name-only', 'ce33c7a', 'HEAD'], text=True).splitlines()
           except Exception:
-              changed = []
+              try:
+                  changed = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD~25', 'HEAD'], text=True).splitlines()
+              except Exception:
+                  changed = []
 
           core_sync = [
               'app/Http/Controllers/Admin/AdminSettingController.php',

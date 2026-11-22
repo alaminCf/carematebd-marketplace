@@ -274,10 +274,10 @@
                                     <span style="font-weight: 800; font-size: 0.86rem; color: #0f172a;">{{ $missing['label'] }}</span>
                                     <span style="font-size: 0.68rem; font-weight: 800; padding: 0.12rem 0.45rem; border-radius: 999px; background: #fef3c7; color: #b45309;">+{{ $missing['weight'] }}%</span>
                                 </div>
-                                <div style="font-size: 0.76rem; color: #64748b; margin-top: 0.1rem;">{{ $missing['description'] }}</div>
+                                <div style="font-size: 0.76rem; color: #64748b; margin-top: 0.1rem;">{{ $missing['description'] ?? $missing['hint'] ?? '' }}</div>
                             </div>
-                            <a href="{{ $missing['action_url'] }}" class="btn btn-primary btn-sm" style="padding: 0.4rem 0.85rem; font-size: 0.78rem; font-weight: 700; white-space: nowrap; flex-shrink: 0;">
-                                {{ $missing['action_label'] }} →
+                            <a href="{{ $missing['action_url'] ?? $missing['url'] ?? route('caregiver.profile') }}" class="btn btn-primary btn-sm" style="padding: 0.4rem 0.85rem; font-size: 0.78rem; font-weight: 700; white-space: nowrap; flex-shrink: 0;">
+                                {{ $missing['action_label'] ?? 'Complete Now' }} →
                             </a>
                         </div>
                     @endforeach

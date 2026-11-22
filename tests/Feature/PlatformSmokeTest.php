@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enums\CaregiverStatus;
 use App\Enums\LocationType;
 use App\Enums\UserRole;
+use App\Enums\UserStatus;
 use App\Models\Caregiver;
 use App\Models\Location;
 use App\Models\Service;
@@ -119,13 +120,24 @@ class PlatformSmokeTest extends TestCase
             $response->assertStatus(200);
         }
 
-        // Also test when caregiver is in 'draft' or 'changes_required' state (e.g. stopped mid-registration and logged in)
-        $originalStatus = $caregiverUser->caregiver->status;
-        $caregiverUser->caregiver->update(['status' => CaregiverStatus::Draft, 'application_step' => 2]);
-        foreach (['/caregiver/dashboard', '/caregiver/profile', '/caregiver/documents', '/become-caregiver'] as $draftRoute) {
-            $this->actingAs($caregiverUser)->get($draftRoute)->assertStatus(200);
+        // Also test a newly registered incomplete 'draft' caregiver (with missing profile fields & missing documents)
+        $draftUser = User::create([
+            'name' => 'Incomplete Draft Caregiver',
+            'email' => 'draft-caregiver@example.com',
+            'phone' => '+8801799887766',
+            'role' => UserRole::Caregiver,
+            'status' => UserStatus::Active,
+            'password' => bcrypt('password123'),
+        ]);
+        Caregiver::create([
+            'user_id' => $draftUser->id,
+            'status' => CaregiverStatus::Draft,
+            'application_step' => 2,
+        ]);
+
+        foreach (['/caregiver/dashboard', '/caregiver/profile', '/caregiver/documents', '/caregiver/availability', '/caregiver/earnings', '/caregiver/requests', '/caregiver/jobs', '/caregiver/support', '/become-caregiver'] as $draftRoute) {
+            $this->actingAs($draftUser)->get($draftRoute)->assertStatus(200);
         }
-        $caregiverUser->caregiver->update(['status' => $originalStatus]);
     }
 
     public function test_caregiver_can_update_profile_rates_and_information(): void
