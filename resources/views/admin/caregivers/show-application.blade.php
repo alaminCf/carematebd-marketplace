@@ -21,6 +21,15 @@
                         <div style="font-size: 0.85rem; color: var(--text-muted);">
                             📧 {{ $caregiver->user->email }} • 📞 {{ $caregiver->user->phone }}
                         </div>
+                        <div style="font-size: 0.78rem; color: #0f766e; font-weight: 700; margin-top: 0.35rem;">
+                            📅 Registered: {{ $caregiver->created_at?->format('d M Y, h:i A') }}
+                            @if ($caregiver->submitted_at)
+                                • Submitted: {{ $caregiver->submitted_at->format('d M Y, h:i A') }}
+                            @endif
+                            @if ($caregiver->adminActions->first()?->admin)
+                                • ✏️ Last Edited by {{ $caregiver->adminActions->first()->admin->name }} ({{ $caregiver->adminActions->first()->created_at->format('d M Y, h:i A') }})
+                            @endif
+                        </div>
                     </div>
                 </div>
 

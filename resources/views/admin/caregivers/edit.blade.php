@@ -3,16 +3,34 @@
     <x-slot:header>Edit Caregiver: {{ $caregiver->user->name }}</x-slot:header>
     <x-slot:subheading>Update provider rates, marketplace sequencing, verification status, and clinical specialties.</x-slot:subheading>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
         <a href="{{ route('admin.caregivers.show', $caregiver->id) }}" class="btn btn-secondary btn-sm">
             ← Back to Caregiver Profile
         </a>
-        <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
             <x-badge :tone="$caregiver->status->badgeTone()">{{ $caregiver->status->label() }}</x-badge>
             @if ($caregiver->sort_order > 0)
                 <span class="badge" style="background: rgba(21, 121, 142, 0.12); color: var(--brand-primary); font-weight: 700;">
                     Sequence #{{ $caregiver->sort_order }}
                 </span>
+            @endif
+        </div>
+    </div>
+
+    <!-- Timestamp & Last Admin Edit Banner -->
+    <div style="background: #f8fafc; border: 1px solid rgba(226, 232, 240, 0.95); border-radius: 14px; padding: 0.85rem 1.15rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; font-size: 0.82rem;">
+        <div>
+            <span style="color: #64748b;">📅 Added / Registered:</span>
+            <strong style="color: #0f172a;">{{ $caregiver->created_at?->format('d M Y, h:i A') }}</strong>
+            <span style="color: #94a3b8;">({{ $caregiver->created_at?->diffForHumans() }})</span>
+        </div>
+        <div>
+            @if ($caregiver->adminActions->first()?->admin)
+                <span style="color: #64748b;">✏️ Last Edited By:</span>
+                <strong style="color: #0d9488;">{{ $caregiver->adminActions->first()->admin->name }}</strong>
+                <span style="color: #64748b;">on {{ $caregiver->adminActions->first()->created_at->format('d M Y, h:i A') }}</span>
+            @else
+                <span style="color: #64748b;">Last Updated: <strong>{{ $caregiver->updated_at?->format('d M Y, h:i A') }}</strong></span>
             @endif
         </div>
     </div>

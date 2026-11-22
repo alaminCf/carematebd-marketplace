@@ -29,7 +29,7 @@ class AdminCaregiverController extends Controller
     {
         $status = $request->input('status', 'all');
 
-        $query = Caregiver::with(['user', 'services', 'district', 'area']);
+        $query = Caregiver::with(['user', 'services', 'district', 'area', 'reviewer', 'adminActions.admin']);
 
         if ($status === 'all') {
             $query->whereIn('status', [CaregiverStatus::PendingVerification, CaregiverStatus::UnderReview, CaregiverStatus::ChangesRequired]);
@@ -54,7 +54,9 @@ class AdminCaregiverController extends Controller
             'certificates',
             'experiences',
             'availabilities',
+            'reviewer',
             'verificationLogs.admin',
+            'adminActions.admin',
         ]);
 
         return view('admin.caregivers.show-application', compact('caregiver'));
@@ -288,7 +290,7 @@ class AdminCaregiverController extends Controller
         $search = $request->input('search');
         $status = $request->input('status');
 
-        $query = Caregiver::with(['user', 'services', 'district', 'area']);
+        $query = Caregiver::with(['user', 'services', 'district', 'area', 'reviewer', 'adminActions.admin']);
 
         if ($search) {
             $query->whereHas('user', fn ($u) => $u->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%"))
@@ -322,7 +324,9 @@ class AdminCaregiverController extends Controller
             'availabilities',
             'bookings.client.user',
             'reviews.client.user',
+            'reviewer',
             'verificationLogs.admin',
+            'adminActions.admin',
         ]);
 
         return view('admin.caregivers.show', compact('caregiver'));
@@ -336,6 +340,8 @@ class AdminCaregiverController extends Controller
             'division',
             'district',
             'area',
+            'reviewer',
+            'adminActions.admin',
         ]);
 
         $services = Service::where('is_active', true)->orderBy('name')->get();
@@ -415,7 +421,29 @@ class AdminCaregiverController extends Controller
 
         $prevStatus = $caregiver->status->value;
 
-        DB::transaction(function () use ($caregiver, $request, $validated, $admin, $prevStatus): void {
+        $oldSnapshot = [
+            'name' => $caregiver->user->name,
+            'email' => $caregiver->user->email,
+            'phone' => $caregiver->user->phone,
+            'gender' => $caregiver->gender,
+            'date_of_birth' => $caregiver->date_of_birth?->format('Y-m-d'),
+            'caregiver_type' => $caregiver->caregiver_type,
+            'years_experience' => (int) $caregiver->years_experience,
+            'education_qualification' => $caregiver->education_qualification,
+            'daily_rate' => (float) $caregiver->daily_rate,
+            'hourly_rate' => $caregiver->hourly_rate !== null ? (float) $caregiver->hourly_rate : null,
+            'weekly_rate' => $caregiver->weekly_rate !== null ? (float) $caregiver->weekly_rate : null,
+            'monthly_rate' => $caregiver->monthly_rate !== null ? (float) $caregiver->monthly_rate : null,
+            'employment_type' => $caregiver->employment_type,
+            'live_type' => $caregiver->live_type,
+            'is_available' => (bool) $caregiver->is_available,
+            'city' => $caregiver->city,
+            'status' => $prevStatus,
+            'is_featured' => (bool) $caregiver->is_featured,
+            'sort_order' => (int) $caregiver->sort_order,
+        ];
+
+        DB::transaction(function () use ($caregiver, $request, $validated, $admin, $prevStatus, $oldSnapshot): void {
             // Update User details
             $userData = [
                 'name' => $validated['name'],
@@ -475,6 +503,7 @@ class AdminCaregiverController extends Controller
                 'about' => $validated['about'] ?? $caregiver->about,
                 'bio' => $validated['bio'] ?? $caregiver->bio,
                 'special_skills' => $validated['special_skills'] ?? null,
+                'reviewed_by' => $admin->id,
                 'search_text' => implode(' ', array_filter([
                     $validated['name'],
                     $validated['caregiver_type'],
@@ -516,13 +545,58 @@ class AdminCaregiverController extends Controller
                 ]);
             }
 
+            $newSnapshot = [
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'gender' => $validated['gender'],
+                'date_of_birth' => $validated['date_of_birth'] ?? null,
+                'caregiver_type' => $validated['caregiver_type'],
+                'years_experience' => (int) $validated['years_experience'],
+                'education_qualification' => $validated['education_qualification'] ?? null,
+                'daily_rate' => (float) $validated['daily_rate'],
+                'hourly_rate' => isset($validated['hourly_rate']) && $validated['hourly_rate'] !== '' ? (float) $validated['hourly_rate'] : null,
+                'weekly_rate' => isset($validated['weekly_rate']) && $validated['weekly_rate'] !== '' ? (float) $validated['weekly_rate'] : null,
+                'monthly_rate' => isset($validated['monthly_rate']) && $validated['monthly_rate'] !== '' ? (float) $validated['monthly_rate'] : null,
+                'employment_type' => $validated['employment_type'],
+                'live_type' => $validated['live_type'],
+                'is_available' => $request->boolean('is_available', true),
+                'city' => $validated['city'] ?? null,
+                'status' => $newStatus->value,
+                'is_featured' => $request->boolean('is_featured'),
+                'sort_order' => (int) ($validated['sort_order'] ?? 0),
+            ];
+
+            $prevDiff = [];
+            $newDiff = [];
+            foreach ($newSnapshot as $k => $v) {
+                if (($oldSnapshot[$k] ?? null) !== $v) {
+                    $prevDiff[$k] = $oldSnapshot[$k] ?? null;
+                    $newDiff[$k] = $v;
+                }
+            }
+            if (! empty($validated['password'])) {
+                $prevDiff['password'] = '********';
+                $newDiff['password'] = 'Password Updated';
+            }
+            if ($request->hasFile('profile_photo')) {
+                $prevDiff['profile_photo'] = 'Previous Photo';
+                $newDiff['profile_photo'] = 'New Photo Uploaded';
+            }
+            if (empty($newDiff)) {
+                $prevDiff['status'] = $prevStatus;
+                $newDiff['status'] = $newStatus->value;
+            }
+
+            $changedFieldNames = implode(', ', array_map(fn ($k) => ucwords(str_replace('_', ' ', $k)), array_keys($newDiff)));
+
             $this->auditLogService->log(
                 $admin,
                 'caregiver.profile_updated_by_admin',
                 $caregiver,
-                ['status' => $prevStatus],
-                ['status' => $newStatus->value, 'sort_order' => $updateData['sort_order']],
-                "Admin updated caregiver profile and marketplace settings for {$caregiver->user->name}"
+                $prevDiff,
+                $newDiff,
+                "Edited caregiver {$caregiver->user->name} ({$changedFieldNames})"
             );
         });
 
@@ -536,6 +610,7 @@ class AdminCaregiverController extends Controller
             'sort_order' => ['required', 'integer', 'min:0', 'max:99999'],
         ]);
 
+        $prevSort = (int) $caregiver->sort_order;
         $caregiver->update([
             'sort_order' => (int) $validated['sort_order'],
         ]);
@@ -544,9 +619,9 @@ class AdminCaregiverController extends Controller
             Auth::user(),
             'caregiver.sort_order_updated',
             $caregiver,
-            [],
+            ['sort_order' => $prevSort],
             ['sort_order' => $caregiver->sort_order],
-            "Admin updated display position of {$caregiver->user->name} to {$caregiver->sort_order}"
+            "Updated display position of {$caregiver->user->name} from #{$prevSort} to #{$caregiver->sort_order}"
         );
 
         return back()->with('success', "Display order for {$caregiver->user->name} updated to #{$caregiver->sort_order}.");
@@ -554,7 +629,17 @@ class AdminCaregiverController extends Controller
 
     public function toggleFeatured(Caregiver $caregiver): RedirectResponse
     {
-        $caregiver->update(['is_featured' => ! $caregiver->is_featured]);
+        $prevFeatured = (bool) $caregiver->is_featured;
+        $caregiver->update(['is_featured' => ! $prevFeatured]);
+
+        $this->auditLogService->log(
+            Auth::user(),
+            'caregiver.featured_toggled',
+            $caregiver,
+            ['is_featured' => $prevFeatured],
+            ['is_featured' => (bool) $caregiver->is_featured],
+            ($caregiver->is_featured ? 'Marked' : 'Unmarked')." {$caregiver->user->name} as Featured Caregiver"
+        );
 
         return back()->with('success', 'Caregiver featured status updated.');
     }

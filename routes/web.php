@@ -230,6 +230,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->as('admin.')->group(
     // Admin & Role-based Users Management
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
     Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
     Route::post('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('users.toggle-status');
     Route::post('/users/{user}/password', [AdminUserController::class, 'updatePassword'])->name('users.password');
     Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');

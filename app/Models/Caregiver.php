@@ -292,6 +292,18 @@ class Caregiver extends Model
     }
 
     /**
+     * Administrative edit & status history for this caregiver.
+     *
+     * @return HasMany<AdminAction, $this>
+     */
+    public function adminActions(): HasMany
+    {
+        return $this->hasMany(AdminAction::class, 'entity_id')
+            ->where('entity_type', self::class)
+            ->latest();
+    }
+
+    /**
      * @return HasMany<HiringRequest, $this>
      */
     public function hiringRequests(): HasMany

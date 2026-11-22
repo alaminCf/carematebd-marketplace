@@ -136,14 +136,36 @@
                                 @endif
                             </td>
 
-                            <!-- Created -->
-                            <td style="font-size: 0.8rem; color: var(--text-muted);">
-                                {{ $u->created_at->format('M d, Y') }}
+                            <!-- Created & Edit Log -->
+                            <td style="font-size: 0.78rem; color: var(--text-muted); white-space: nowrap;">
+                                <div style="font-weight: 700; color: #0f172a;">
+                                    📅 {{ $u->created_at?->format('d M Y, h:i A') }}
+                                </div>
+                                <div style="font-size: 0.72rem; color: #64748b;">
+                                    Added {{ $u->created_at?->diffForHumans() }}
+                                </div>
+                                @php
+                                    $lastUserAction = $u->entityAdminActions->first();
+                                @endphp
+                                @if ($lastUserAction && $lastUserAction->admin)
+                                    <div style="font-size: 0.71rem; color: #0d9488; font-weight: 700; margin-top: 0.15rem;">
+                                        ✏️ {{ $lastUserAction->actionLabel() }} by {{ $lastUserAction->admin->name }}
+                                    </div>
+                                @endif
                             </td>
 
                             <!-- Actions -->
                             <td style="text-align: right;">
                                 <div style="display: inline-flex; align-items: center; gap: 0.4rem; justify-content: flex-end;">
+                                    <!-- Edit User Action -->
+                                    <button type="button"
+                                            onclick="openEditUserModal('{{ $u->id }}', '{{ addslashes($u->name) }}', '{{ addslashes($u->email) }}', '{{ addslashes($u->phone ?? '') }}', '{{ $u->role->value }}')"
+                                            class="btn btn-secondary btn-sm"
+                                            title="Edit User Details"
+                                            style="padding: 0.3rem 0.55rem; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                        ✏️ <span class="d-none d-sm-inline">Edit</span>
+                                    </button>
+
                                     <!-- Change Password Action -->
                                     <button type="button" 
                                             onclick="openChangePasswordModal('{{ $u->id }}', '{{ addslashes($u->name) }}', '{{ addslashes($u->email) }}')"
@@ -191,6 +213,99 @@
                 {{ $users->links() }}
             </div>
         @endif
+    </div>
+
+    <!-- Recent Admin & User Account Edit History -->
+    @if (isset($recentUserEdits) && $recentUserEdits->isNotEmpty())
+        <div class="glass-card" style="padding: 1.75rem; border-radius: var(--radius-xl); margin-top: 1.75rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.5rem;">
+                <div>
+                    <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">🕒 Recent Admin & User Edit History</h3>
+                    <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0.15rem 0 0 0;">Log of user creation, role/profile edits, password resets, and status changes by administrators.</p>
+                </div>
+                <a href="{{ route('admin.audit-logs', ['entity' => 'User']) }}" style="font-size: 0.8rem; font-weight: 700; color: #0d9488; text-decoration: none;">
+                    View All User Audit Logs →
+                </a>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                @foreach ($recentUserEdits as $editLog)
+                    @php
+                        $targetInfo = $editLog->targetInfo();
+                        $diffs = $editLog->changedFields();
+                    @endphp
+                    <div style="padding: 0.9rem 1.1rem; background: #f8fafc; border: 1px solid rgba(226, 232, 240, 0.95); border-radius: 14px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                <span style="font-weight: 800; font-size: 0.86rem; color: #0f172a;">
+                                    👑 {{ $editLog->admin?->name ?? 'Admin' }}
+                                </span>
+                                <span style="font-size: 0.72rem; font-weight: 800; background: rgba(13, 148, 136, 0.12); color: #0f766e; padding: 0.14rem 0.55rem; border-radius: 999px;">
+                                    {{ $editLog->actionLabel() }}
+                                </span>
+                                <span style="font-size: 0.82rem; color: #334155; font-weight: 700;">
+                                    → {{ $targetInfo['label'] }}
+                                </span>
+                            </div>
+                            <span style="font-size: 0.76rem; color: #475569; font-weight: 700;">
+                                📅 {{ $editLog->created_at->format('d M Y, h:i:s A') }} ({{ $editLog->created_at->diffForHumans() }})
+                            </span>
+                        </div>
+                        @if (count($diffs) > 0)
+                            <div style="margin-top: 0.45rem; display: flex; flex-wrap: wrap; gap: 0.45rem;">
+                                @foreach ($diffs as $d)
+                                    <span style="font-size: 0.74rem; background: #ffffff; border: 1px solid #e2e8f0; padding: 0.18rem 0.55rem; border-radius: 8px; color: #334155;">
+                                        <strong>{{ $d['field'] }}:</strong>
+                                        @if ($d['from'] !== '—')
+                                            <span style="color: #dc2626; text-decoration: line-through;">{{ $d['from'] }}</span> →
+                                        @endif
+                                        <strong style="color: #059669;">{{ $d['to'] }}</strong>
+                                    </span>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+    <!-- Modal: Edit User Details -->
+    <div id="edit-user-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(5px); z-index: 9999; align-items: center; justify-content: center; padding: 1.25rem;">
+        <div class="glass-card" style="background: rgba(255, 255, 255, 0.98); max-width: 500px; width: 100%; border-radius: var(--radius-xl); padding: 2rem; box-shadow: 0 25px 50px rgba(0,0,0,0.25);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;">✏️ Edit User Account</h3>
+                <button type="button" onclick="closeEditUserModal()" style="background: none; border: none; font-size: 1.6rem; cursor: pointer; color: var(--text-muted); line-height: 1;">&times;</button>
+            </div>
+            <form id="edit-user-form" method="POST" action="">
+                @csrf
+                @method('PUT')
+                <div style="margin-bottom: 0.9rem;">
+                    <label class="form-label" style="font-size: 0.82rem; font-weight: 700;">Full Name *</label>
+                    <input type="text" name="name" id="edit-user-name" required class="glass-input" style="font-size: 0.88rem;">
+                </div>
+                <div style="margin-bottom: 0.9rem;">
+                    <label class="form-label" style="font-size: 0.82rem; font-weight: 700;">Email Address *</label>
+                    <input type="email" name="email" id="edit-user-email" required class="glass-input" style="font-size: 0.88rem;">
+                </div>
+                <div style="margin-bottom: 0.9rem;">
+                    <label class="form-label" style="font-size: 0.82rem; font-weight: 700;">Phone Number *</label>
+                    <input type="text" name="phone" id="edit-user-phone" required class="glass-input" style="font-size: 0.88rem;">
+                </div>
+                <div style="margin-bottom: 1.35rem;">
+                    <label class="form-label" style="font-size: 0.82rem; font-weight: 700;">Role *</label>
+                    <select name="role" id="edit-user-role" required class="glass-input" style="font-size: 0.88rem;">
+                        <option value="admin">👑 Administrator</option>
+                        <option value="caregiver">🩺 Caregiver / Nurse</option>
+                        <option value="client">👨‍👩‍👧 Client / Family</option>
+                    </select>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+                    <button type="button" onclick="closeEditUserModal()" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="font-weight: 700;">Save Changes</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Modal: Create New User (Accessible, Responsive, Never clipped) -->
@@ -331,15 +446,33 @@
             document.getElementById('change-password-modal').style.display = 'none';
         }
 
+        function openEditUserModal(userId, name, email, phone, role) {
+            const form = document.getElementById('edit-user-form');
+            form.action = `/admin/users/${userId}`;
+            document.getElementById('edit-user-name').value = name;
+            document.getElementById('edit-user-email').value = email;
+            document.getElementById('edit-user-phone').value = phone;
+            document.getElementById('edit-user-role').value = role;
+            document.getElementById('edit-user-modal').style.display = 'flex';
+        }
+
+        function closeEditUserModal() {
+            document.getElementById('edit-user-modal').style.display = 'none';
+        }
+
         // Close on backdrop click
         window.addEventListener('click', function(e) {
             const createModal = document.getElementById('create-user-modal');
             const passModal = document.getElementById('change-password-modal');
+            const editModal = document.getElementById('edit-user-modal');
             if (e.target === createModal) {
                 closeCreateModal();
             }
             if (e.target === passModal) {
                 closeChangePasswordModal();
+            }
+            if (e.target === editModal) {
+                closeEditUserModal();
             }
         });
 

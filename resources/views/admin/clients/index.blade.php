@@ -50,7 +50,10 @@
                                     {{ $c->user->isSuspended() ? 'Suspended' : 'Active' }}
                                 </x-badge>
                             </td>
-                            <td style="font-size: 0.82rem; color: var(--text-muted);">{{ $c->created_at->format('M d, Y') }}</td>
+                            <td style="font-size: 0.8rem; color: var(--text-muted); white-space: nowrap;">
+                                <div style="font-weight: 700; color: #0f172a;">{{ $c->created_at->format('d M Y, h:i A') }}</div>
+                                <div style="font-size: 0.72rem; color: #64748b;">{{ $c->created_at->diffForHumans() }}</div>
+                            </td>
                             <td style="text-align: right;">
                                 <a href="{{ route('admin.clients.show', $c->id) }}" class="btn btn-secondary btn-sm" style="font-size: 0.8rem;">
                                     Profile →

@@ -46,8 +46,13 @@
                                 <td>{{ $app->caregiver_type ?? 'Caregiver' }}</td>
                                 <td>{{ $app->years_experience }} Years</td>
                                 <td>{{ $app->city ?? 'Dhaka' }}</td>
-                                <td style="font-size: 0.82rem; color: var(--text-muted);">
-                                    {{ $app->submitted_at ? $app->submitted_at->format('M d, Y') : $app->created_at->format('M d, Y') }}
+                                <td style="font-size: 0.8rem; color: var(--text-muted); white-space: nowrap;">
+                                    <div style="font-weight: 700; color: #0f172a;">
+                                        📅 {{ ($app->submitted_at ?? $app->created_at)->format('d M Y, h:i A') }}
+                                    </div>
+                                    <div style="font-size: 0.72rem; color: #64748b;">
+                                        Added: {{ $app->created_at->format('d M Y, h:i A') }} ({{ $app->created_at->diffForHumans() }})
+                                    </div>
                                 </td>
                                 <td>
                                     <x-badge :tone="$app->status->badgeTone()">{{ $app->status->label() }}</x-badge>

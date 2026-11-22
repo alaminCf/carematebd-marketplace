@@ -32,18 +32,22 @@
                 <thead>
                     <tr>
                         <th style="width: 110px; text-align: center;">Order / Seq</th>
-                        <th>Caregiver</th>
+                        <th>Caregiver / Nurse</th>
                         <th>Care Specialty</th>
                         <th>City / Area</th>
                         <th>Rating</th>
                         <th>Daily Rate</th>
                         <th style="text-align: center;">Featured</th>
                         <th>Status</th>
+                        <th>Added & Edit Log</th>
                         <th style="text-align: right; min-width: 220px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($caregivers as $cg)
+                        @php
+                            $latestEdit = $cg->adminActions->first();
+                        @endphp
                         <tr>
                             <!-- Marketplace Sequence Order Input -->
                             <td style="text-align: center;">
@@ -112,6 +116,25 @@
                                 <x-badge :tone="$cg->status->badgeTone()">{{ $cg->status->label() }}</x-badge>
                             </td>
 
+                            <!-- Added Date/Time & Last Admin Edit -->
+                            <td style="font-size: 0.78rem; white-space: nowrap;">
+                                <div style="font-weight: 700; color: #0f172a;">
+                                    📅 {{ $cg->created_at?->format('d M Y, h:i A') }}
+                                </div>
+                                <div style="font-size: 0.72rem; color: #64748b;">
+                                    Added {{ $cg->created_at?->diffForHumans() }}
+                                </div>
+                                @if ($latestEdit && $latestEdit->admin)
+                                    <div style="margin-top: 0.2rem; font-size: 0.71rem; color: #0d9488; font-weight: 700;">
+                                        ✏️ Edited by {{ $latestEdit->admin->name }} ({{ $latestEdit->created_at->diffForHumans() }})
+                                    </div>
+                                @elseif ($cg->reviewer)
+                                    <div style="margin-top: 0.2rem; font-size: 0.71rem; color: #0284c7; font-weight: 700;">
+                                        ✓ Verified by {{ $cg->reviewer->name }}
+                                    </div>
+                                @endif
+                            </td>
+
                             <!-- Actions Group (View, Edit, Dossier, Suspend) -->
                             <td style="text-align: right; white-space: nowrap;">
                                 <div style="display: inline-flex; align-items: center; gap: 0.35rem;">
@@ -152,7 +175,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 3rem;">
+                            <td colspan="10" style="text-align: center; color: var(--text-muted); padding: 3rem;">
                                 No caregivers matched this search query.
                             </td>
                         </tr>

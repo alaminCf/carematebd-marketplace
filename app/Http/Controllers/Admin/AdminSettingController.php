@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdminAction;
 use App\Models\GoogleReview;
 use App\Models\Setting;
+use App\Models\User;
 use App\Services\AuditLogService;
 use App\Services\GoogleReviewService;
 use Illuminate\Http\RedirectResponse;
@@ -51,7 +52,16 @@ class AdminSettingController extends Controller
             'microsoft_clarity_id' => ['nullable', 'string', 'max:50'],
         ]);
 
+        $existingSettings = Setting::all()->keyBy('key');
+        $prevDiff = [];
+        $newDiff = [];
+
         foreach ($validated as $key => $val) {
+            $oldVal = $existingSettings[$key]->value ?? null;
+            if ((string) $oldVal !== (string) $val) {
+                $prevDiff[$key] = $oldVal;
+                $newDiff[$key] = $val;
+            }
             Setting::set($key, $val);
         }
 
@@ -62,7 +72,14 @@ class AdminSettingController extends Controller
             //
         }
 
-        $this->auditLogService->log(Auth::user(), 'settings.updated', null, null, $validated);
+        $this->auditLogService->log(
+            Auth::user(),
+            'settings.updated',
+            null,
+            $prevDiff ?: null,
+            $newDiff ?: $validated,
+            ! empty($newDiff) ? 'Updated platform settings: '.implode(', ', array_keys($newDiff)) : 'Saved platform settings'
+        );
 
         return back()->with('success', 'Platform settings updated successfully.');
     }
@@ -134,8 +151,30 @@ class AdminSettingController extends Controller
 
     public function auditLogs(Request $request): View
     {
-        $logs = AdminAction::with('admin')->latest()->paginate(20);
+        $adminFilter = $request->query('admin_id');
+        $entityFilter = $request->query('entity');
+        $search = $request->query('search');
 
-        return view('admin.audit-logs', compact('logs'));
+        $query = AdminAction::with('admin')->latest();
+
+        if ($adminFilter) {
+            $query->where('admin_id', $adminFilter);
+        }
+
+        if ($entityFilter) {
+            $query->where('entity_type', 'like', "%{$entityFilter}%");
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search): void {
+                $q->where('action', 'like', "%{$search}%")
+                    ->orWhere('reason', 'like', "%{$search}%");
+            });
+        }
+
+        $logs = $query->paginate(25)->withQueryString();
+        $admins = User::where('role', 'admin')->orderBy('name')->get();
+
+        return view('admin.audit-logs', compact('logs', 'admins', 'adminFilter', 'entityFilter', 'search'));
     }
 }

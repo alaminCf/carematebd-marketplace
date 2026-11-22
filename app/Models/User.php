@@ -164,4 +164,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(AdminAction::class, 'admin_id');
     }
+
+    /**
+     * Administrative actions performed on this user account.
+     *
+     * @return HasMany<AdminAction, $this>
+     */
+    public function entityAdminActions(): HasMany
+    {
+        return $this->hasMany(AdminAction::class, 'entity_id')
+            ->where('entity_type', self::class)
+            ->latest();
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\UserRole;
 use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
+use App\Models\AdminAction;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\AuditLogService;
@@ -26,7 +27,7 @@ class AdminUserController extends Controller
         $search = $request->query('search');
         $roleFilter = $request->query('role');
 
-        $query = User::query()->latest();
+        $query = User::with(['entityAdminActions.admin', 'caregiver'])->latest();
 
         if ($search) {
             $query->where(function ($q) use ($search): void {
@@ -43,8 +44,13 @@ class AdminUserController extends Controller
         $users = $query->paginate(15)->withQueryString();
         $roles = Role::all();
         $userRoleCases = UserRole::cases();
+        $recentUserEdits = AdminAction::with('admin')
+            ->where('entity_type', User::class)
+            ->latest()
+            ->take(10)
+            ->get();
 
-        return view('admin.users.index', compact('users', 'search', 'roleFilter', 'roles', 'userRoleCases'));
+        return view('admin.users.index', compact('users', 'search', 'roleFilter', 'roles', 'userRoleCases', 'recentUserEdits'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -82,11 +88,67 @@ class AdminUserController extends Controller
             [
                 'name' => $user->name,
                 'email' => $user->email,
+                'phone' => $user->phone,
                 'role' => $user->role->value,
-            ]
+            ],
+            "Created new {$user->role->value} account for {$user->name}"
         );
 
         return redirect()->route('admin.users.index')->with('success', "User '{$user->name}' ({$user->role->label()}) was created successfully.");
+    }
+
+    public function update(Request $request, User $user): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
+            'phone' => ['required', 'string', 'max:30', 'unique:users,phone,'.$user->id],
+            'role' => ['required', 'string', Rule::enum(UserRole::class)],
+        ]);
+
+        $oldState = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'role' => $user->role->value,
+        ];
+
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'role' => UserRole::from($validated['role']),
+        ]);
+
+        $newState = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'role' => $user->role->value,
+        ];
+
+        $prevDiff = [];
+        $newDiff = [];
+        foreach ($newState as $k => $v) {
+            if (($oldState[$k] ?? null) !== $v) {
+                $prevDiff[$k] = $oldState[$k] ?? null;
+                $newDiff[$k] = $v;
+            }
+        }
+
+        if (! empty($newDiff)) {
+            $changedFields = implode(', ', array_keys($newDiff));
+            $this->auditLogService->log(
+                Auth::user(),
+                'admin.user.updated',
+                $user,
+                $prevDiff,
+                $newDiff,
+                "Updated user {$user->name} ({$changedFields})"
+            );
+        }
+
+        return redirect()->route('admin.users.index')->with('success', "User '{$user->name}' details updated successfully.");
     }
 
     public function toggleStatus(User $user): RedirectResponse

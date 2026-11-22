@@ -270,10 +270,119 @@
                     @endforelse
                 </div>
             </div>
+
+            <!-- Admin Edit History & Verification Audit Log -->
+            <div class="glass-card" style="padding: 1.75rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <div>
+                        <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin: 0;">🕒 Admin Edit History & Audit Log</h3>
+                        <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0.15rem 0 0 0;">Complete record of which admin edited or verified this caregiver/nurse and what changed.</p>
+                    </div>
+                    <a href="{{ route('admin.audit-logs', ['entity' => 'Caregiver']) }}" style="font-size: 0.8rem; font-weight: 700; color: #0d9488; text-decoration: none;">
+                        Full Platform Audit Trail →
+                    </a>
+                </div>
+
+                @if ($caregiver->adminActions->isNotEmpty())
+                    <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+                        @foreach ($caregiver->adminActions as $act)
+                            @php
+                                $diffs = $act->changedFields();
+                            @endphp
+                            <div style="padding: 1rem 1.15rem; background: #f8fafc; border: 1px solid rgba(226, 232, 240, 0.95); border-radius: 14px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.45rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.55rem;">
+                                        @if ($act->admin)
+                                            <img src="{{ $act->admin->avatarUrl() }}" alt="" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">
+                                            <span style="font-weight: 800; font-size: 0.88rem; color: #0f172a;">{{ $act->admin->name }}</span>
+                                        @else
+                                            <span style="font-weight: 800; font-size: 0.88rem; color: #0f172a;">System Admin</span>
+                                        @endif
+                                        <span style="font-size: 0.72rem; font-weight: 800; background: rgba(13, 148, 136, 0.12); color: #0f766e; padding: 0.16rem 0.55rem; border-radius: 999px;">
+                                            {{ $act->actionLabel() }}
+                                        </span>
+                                    </div>
+                                    <div style="font-size: 0.78rem; color: #475569; font-weight: 700;">
+                                        📅 {{ $act->created_at->format('d M Y, h:i:s A') }} <span style="color: #94a3b8; font-weight: 500;">({{ $act->created_at->diffForHumans() }})</span>
+                                    </div>
+                                </div>
+
+                                @if ($act->reason)
+                                    <div style="font-size: 0.82rem; color: #334155; margin-bottom: 0.5rem;">
+                                        {{ $act->reason }}
+                                    </div>
+                                @endif
+
+                                @if (count($diffs) > 0)
+                                    <div style="background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 10px; overflow: hidden; margin-top: 0.4rem;">
+                                        <table style="width: 100%; border-collapse: collapse; font-size: 0.78rem;">
+                                            <thead>
+                                                <tr style="background: #f1f5f9; text-align: left; color: #475569;">
+                                                    <th style="padding: 0.4rem 0.65rem; font-weight: 800;">Edited Field</th>
+                                                    <th style="padding: 0.4rem 0.65rem; font-weight: 800;">Before</th>
+                                                    <th style="padding: 0.4rem 0.65rem; font-weight: 800;">After</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($diffs as $d)
+                                                    <tr style="border-top: 1px solid #f1f5f9;">
+                                                        <td style="padding: 0.4rem 0.65rem; font-weight: 700; color: #0f172a;">{{ $d['field'] }}</td>
+                                                        <td style="padding: 0.4rem 0.65rem; color: #dc2626; text-decoration: line-through;">{{ Str::limit($d['from'], 60) }}</td>
+                                                        <td style="padding: 0.4rem 0.65rem; color: #059669; font-weight: 700;">{{ Str::limit($d['to'], 60) }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div style="text-align: center; padding: 1.5rem; color: var(--text-muted); background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+                        No administrative edits logged for this caregiver yet.
+                    </div>
+                @endif
+            </div>
         </div>
 
-        <!-- Right Column: Personal Info, Safety, Rates & Location -->
+        <!-- Right Column: Timestamps, Personal Info, Safety, Rates & Location -->
         <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <!-- Registration & Audit Timestamps Card -->
+            <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid #0d9488;">
+                <h3 style="font-size: 1.08rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; border-bottom: 1px solid rgba(226, 232, 240, 0.8); padding-bottom: 0.5rem;">
+                    📅 Registration & Edit Record
+                </h3>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.84rem;">
+                    <div>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">Account Added / Registered:</span>
+                        <strong style="color: #0f172a;">{{ $caregiver->created_at?->format('d M Y, h:i:s A') }}</strong>
+                        <span style="font-size: 0.73rem; color: #64748b; display: block;">({{ $caregiver->created_at?->diffForHumans() }})</span>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">Application Submitted:</span>
+                        <strong style="color: #0f172a;">{{ $caregiver->submitted_at ? $caregiver->submitted_at->format('d M Y, h:i:s A') : 'Not submitted yet' }}</strong>
+                    </div>
+                    @if ($caregiver->approved_at || $caregiver->published_at)
+                        <div>
+                            <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">Approved / Published On:</span>
+                            <strong style="color: #059669;">{{ ($caregiver->published_at ?? $caregiver->approved_at)->format('d M Y, h:i:s A') }}</strong>
+                            @if ($caregiver->reviewer)
+                                <span style="font-size: 0.74rem; color: #0f766e; font-weight: 700; display: block;">✓ Verified by {{ $caregiver->reviewer->name }}</span>
+                            @endif
+                        </div>
+                    @endif
+                    <div>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">Last Modified:</span>
+                        <strong style="color: #0f172a;">{{ $caregiver->updated_at?->format('d M Y, h:i:s A') }}</strong>
+                        @if ($caregiver->adminActions->first()?->admin)
+                            <span style="font-size: 0.74rem; color: #0284c7; font-weight: 700; display: block;">
+                                ✏️ Last edited by {{ $caregiver->adminActions->first()->admin->name }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
+            </div>
             
             <!-- Contact & Personal Details Card -->
             <div class="glass-card" style="padding: 1.75rem;">
