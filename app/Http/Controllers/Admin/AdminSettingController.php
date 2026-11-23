@@ -47,10 +47,14 @@ class AdminSettingController extends Controller
             'google_maps_api_key' => ['nullable', 'string', 'max:200'],
             'google_reviews_embed_code' => ['nullable', 'string'],
             'google_analytics_id' => ['nullable', 'string', 'max:50'],
-            'google_site_verification' => ['nullable', 'string', 'max:150'],
+            'google_site_verification' => ['nullable', 'string', 'max:255'],
             'meta_pixel_id' => ['nullable', 'string', 'max:50'],
             'microsoft_clarity_id' => ['nullable', 'string', 'max:50'],
         ]);
+
+        if (! empty($validated['google_site_verification'])) {
+            $validated['google_site_verification'] = Setting::extractGoogleVerificationCode($validated['google_site_verification']);
+        }
 
         $existingSettings = Setting::all()->keyBy('key');
         $prevDiff = [];

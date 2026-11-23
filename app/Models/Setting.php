@@ -102,7 +102,7 @@ class Setting extends Model
             $contactPhone = trim((string) (static::$cachedSettings['contact_phone'] ?? '')) ?: $defaults['contact_phone'];
             $emergencyHotline = trim((string) (static::$cachedSettings['emergency_hotline'] ?? '')) ?: $defaults['emergency_hotline'];
             $googleAnalyticsId = trim((string) (static::$cachedSettings['google_analytics_id'] ?? ''));
-            $googleSiteVerification = trim((string) (static::$cachedSettings['google_site_verification'] ?? ''));
+            $googleSiteVerification = static::extractGoogleVerificationCode((string) (static::$cachedSettings['google_site_verification'] ?? ''));
             $metaPixelId = trim((string) (static::$cachedSettings['meta_pixel_id'] ?? ''));
             $microsoftClarityId = trim((string) (static::$cachedSettings['microsoft_clarity_id'] ?? ''));
         } catch (\Throwable) {
@@ -123,6 +123,21 @@ class Setting extends Model
             'meta_pixel_id' => $metaPixelId,
             'microsoft_clarity_id' => $microsoftClarityId,
         ];
+    }
+
+    public static function extractGoogleVerificationCode(string $value): string
+    {
+        $value = trim($value);
+
+        if ($value === '') {
+            return '';
+        }
+
+        if (preg_match('/content=["\']([^"\']+)["\']/i', $value, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return $value;
     }
 
     /**
