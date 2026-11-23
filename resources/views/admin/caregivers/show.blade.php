@@ -458,21 +458,35 @@
 
             <!-- Geographic Location Card -->
             <div class="glass-card" style="padding: 1.75rem;">
-                <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(226, 232, 240, 0.8); padding-bottom: 0.5rem;">
-                    Location & Territory
-                </h3>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(226, 232, 240, 0.8); padding-bottom: 0.5rem;">
+                    <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">
+                        Service Areas & Residence
+                    </h3>
+                    <a href="{{ route('admin.caregivers.edit', $caregiver->id) }}" style="font-size: 0.76rem; font-weight: 700; color: #0d9488; text-decoration: none;">Edit →</a>
+                </div>
 
                 <div style="display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.88rem;">
+                    <div style="background: rgba(13, 148, 136, 0.07); border: 1px solid rgba(13, 148, 136, 0.22); border-radius: 12px; padding: 0.75rem;">
+                        <span style="color: #0f766e; display: block; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.4rem;">📍 Assigned Service Areas (Where Care is Provided):</span>
+                        @if ($caregiver->serviceAreas->isNotEmpty())
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.35rem;">
+                                @foreach ($caregiver->serviceAreas as $sa)
+                                    <span style="font-size: 0.76rem; font-weight: 700; background: #ffffff; color: #0a394a; border: 1px solid rgba(13, 148, 136, 0.3); padding: 0.18rem 0.55rem; border-radius: 999px;">
+                                        {{ $sa->name }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        @else
+                            <span style="font-size: 0.8rem; color: #64748b;">Not separately specified (defaulting to {{ $caregiver->district?->name ?? $caregiver->city ?? 'Bangladesh' }})</span>
+                        @endif
+                    </div>
+
                     <div>
-                        <span style="color: var(--text-muted); display: block; font-size: 0.78rem;">Administrative Division:</span>
-                        <strong style="color: #0f172a;">{{ $caregiver->division?->name ?? 'Not assigned' }}</strong>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.78rem;">Home Division / District:</span>
+                        <strong style="color: #0f172a;">{{ $caregiver->division?->name ?? 'Not assigned' }} / {{ $caregiver->district?->name ?? 'Not assigned' }}</strong>
                     </div>
                     <div>
-                        <span style="color: var(--text-muted); display: block; font-size: 0.78rem;">District:</span>
-                        <strong style="color: #0f172a;">{{ $caregiver->district?->name ?? 'Not assigned' }}</strong>
-                    </div>
-                    <div>
-                        <span style="color: var(--text-muted); display: block; font-size: 0.78rem;">Area / Upazila:</span>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.78rem;">Home Area / Upazila:</span>
                         <strong style="color: #0f172a;">{{ $caregiver->area?->name ?? $caregiver->city ?? 'Not assigned' }}</strong>
                     </div>
                     <div>

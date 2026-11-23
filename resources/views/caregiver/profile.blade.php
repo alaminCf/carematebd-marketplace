@@ -458,9 +458,9 @@
                     <input type="text" name="present_address" value="{{ old('present_address', $caregiver->present_address) }}" class="glass-input" placeholder="House #, Road #, Area/Sector">
                 </div>
 
-                <div class="form-row-3col" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.9rem;">
+                <div class="form-row-3col" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.9rem; margin-bottom: 1.15rem;">
                     <div>
-                        <label class="form-label">Division</label>
+                        <label class="form-label">Home Division</label>
                         <select name="division_id" id="profileDivisionSelect" class="glass-input">
                             <option value="">Select Division</option>
                             @foreach ($divisions as $div)
@@ -469,7 +469,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="form-label">District</label>
+                        <label class="form-label">Home District</label>
                         <select name="district_id" id="profileDistrictSelect" class="glass-input">
                             <option value="">Select District</option>
                             @foreach ($districts as $dst)
@@ -478,13 +478,39 @@
                         </select>
                     </div>
                     <div>
-                        <label class="form-label">Primary Thana / Area</label>
+                        <label class="form-label">Home Thana / Area</label>
                         <select name="area_id" id="profileAreaSelect" class="glass-input">
                             <option value="">Select Area</option>
                             @foreach ($areas as $a)
                                 <option value="{{ $a->id }}" data-district-id="{{ $a->parent_id }}" {{ old('area_id', $caregiver->area_id) == $a->id ? 'selected' : '' }}>{{ $a->name }}</option>
                             @endforeach
                         </select>
+                    </div>
+                </div>
+
+                @php
+                    $profileServiceAreaIds = old('service_area_ids', $caregiver->serviceAreas->pluck('id')->toArray());
+                @endphp
+                <div style="background: rgba(13, 148, 136, 0.05); border: 1.5px solid rgba(13, 148, 136, 0.25); border-radius: 14px; padding: 1rem;">
+                    <input type="hidden" name="service_areas_submitted" value="1">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem; gap: 0.5rem;">
+                        <label class="form-label" style="margin: 0; color: #0a394a; font-weight: 800;">📍 Preferred Service Areas (Where You Provide Care)</label>
+                        <span style="font-size: 0.72rem; font-weight: 800; color: #0f766e;">{{ count((array) $profileServiceAreaIds) }} selected</span>
+                    </div>
+                    <p style="font-size: 0.75rem; color: #64748b; margin: 0 0 0.65rem 0;">Choose all areas/districts where you are available to travel for care shifts.</p>
+                    <div style="max-height: 185px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.4rem;">
+                        @foreach ($areas as $ar)
+                            <label style="display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.55rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 9px; font-size: 0.78rem; font-weight: 600; cursor: pointer;">
+                                <input type="checkbox" name="service_area_ids[]" value="{{ $ar->id }}" {{ in_array($ar->id, (array) $profileServiceAreaIds) ? 'checked' : '' }} style="accent-color: #0d9488;">
+                                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $ar->name }}</span>
+                            </label>
+                        @endforeach
+                        @foreach ($districts as $dst)
+                            <label style="display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.55rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 9px; font-size: 0.78rem; font-weight: 600; cursor: pointer;">
+                                <input type="checkbox" name="service_area_ids[]" value="{{ $dst->id }}" {{ in_array($dst->id, (array) $profileServiceAreaIds) ? 'checked' : '' }} style="accent-color: #0d9488;">
+                                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $dst->name }}</span>
+                            </label>
+                        @endforeach
                     </div>
                 </div>
             </div>

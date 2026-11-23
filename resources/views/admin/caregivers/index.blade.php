@@ -34,7 +34,7 @@
                         <th style="width: 110px; text-align: center;">Order / Seq</th>
                         <th>Caregiver / Nurse</th>
                         <th>Care Specialty</th>
-                        <th>City / Area</th>
+                        <th>Service Areas</th>
                         <th>Rating</th>
                         <th>Daily Rate</th>
                         <th style="text-align: center;">Featured</th>
@@ -86,8 +86,15 @@
                                 <div style="font-size: 0.75rem; color: var(--text-muted);">{{ $cg->years_experience }} yrs exp</div>
                             </td>
 
-                            <!-- City / Area -->
-                            <td style="font-size: 0.88rem;">{{ $cg->area?->name ?? $cg->district?->name ?? $cg->city }}</td>
+                            <!-- Service Areas -->
+                            <td style="font-size: 0.82rem; max-width: 190px;">
+                                @if ($cg->serviceAreas->isNotEmpty())
+                                    <div style="font-weight: 700; color: #0f766e;">📍 {{ $cg->serviceAreas->pluck('name')->take(3)->implode(', ') }}{{ $cg->serviceAreas->count() > 3 ? ' +'.($cg->serviceAreas->count() - 3) : '' }}</div>
+                                    <div style="font-size: 0.72rem; color: #64748b;">Home: {{ $cg->district?->name ?? $cg->city }}</div>
+                                @else
+                                    <div>{{ $cg->area?->name ?? $cg->district?->name ?? $cg->city }}</div>
+                                @endif
+                            </td>
 
                             <!-- Rating -->
                             <td>

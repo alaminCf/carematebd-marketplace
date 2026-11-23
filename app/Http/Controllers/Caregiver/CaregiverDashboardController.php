@@ -503,7 +503,7 @@ class CaregiverDashboardController extends Controller
 
     public function profile(): View
     {
-        $caregiver = $this->getOrCreateCaregiver();
+        $caregiver = $this->getOrCreateCaregiver()->load('serviceAreas');
         $divisions = Location::where('type', 'division')->where('is_active', true)->orderBy('name')->get();
         $districts = Location::where('type', 'district')->where('is_active', true)->orderBy('name')->get();
         $areas = Location::where('type', 'area')->where('is_active', true)->orderBy('name')->get();
@@ -553,6 +553,8 @@ class CaregiverDashboardController extends Controller
             'division_id' => ['nullable', 'exists:locations,id'],
             'district_id' => ['nullable', 'exists:locations,id'],
             'area_id' => ['nullable', 'exists:locations,id'],
+            'service_area_ids' => ['nullable', 'array'],
+            'service_area_ids.*' => ['exists:locations,id'],
             'city' => ['nullable', 'string', 'max:80'],
             'present_address' => ['nullable', 'string', 'max:255'],
             'permanent_address' => ['nullable', 'string', 'max:255'],
@@ -615,6 +617,10 @@ class CaregiverDashboardController extends Controller
             $caregiver->services()->sync($request->input('service_ids', []));
         } elseif ($request->has('service_categories')) {
             $caregiver->services()->sync($request->input('service_categories', []));
+        }
+
+        if ($request->has('service_area_ids') || $request->has('service_areas_submitted')) {
+            $caregiver->serviceAreas()->sync($request->input('service_area_ids', []));
         }
 
         return back()->with('success', 'Caregiver profile, service rates, and details updated successfully.');

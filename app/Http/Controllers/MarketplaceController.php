@@ -18,9 +18,9 @@ class MarketplaceController extends Controller
 
     public function index(Request $request): View
     {
-        $query = Caregiver::publiclyVisible()->with(['user', 'services', 'district', 'area']);
+        $query = Caregiver::publiclyVisible()->with(['user', 'services', 'district', 'area', 'serviceAreas']);
 
-        // Search term (name, skills, bio, city)
+        // Search term (name, skills, bio, city, service areas)
         if ($search = $request->input('search')) {
             $query->where(function (Builder $q) use ($search): void {
                 $q->whereHas('user', fn ($u) => $u->where('name', 'like', "%{$search}%"))
@@ -28,6 +28,7 @@ class MarketplaceController extends Controller
                     ->orWhere('caregiver_type', 'like', "%{$search}%")
                     ->orWhere('skills', 'like', "%{$search}%")
                     ->orWhere('about', 'like', "%{$search}%")
+                    ->orWhereHas('serviceAreas', fn ($sa) => $sa->where('name', 'like', "%{$search}%"))
                     ->orWhereHas('district', fn ($d) => $d->where('name', 'like', "%{$search}%"))
                     ->orWhereHas('area', fn ($a) => $a->where('name', 'like', "%{$search}%"));
             });
@@ -38,14 +39,27 @@ class MarketplaceController extends Controller
             $query->whereHas('services', fn ($q) => $q->where('services.slug', $serviceSlug));
         }
 
-        // Filter by Division
+        // Filter by Division (matches either assigned service areas in that division or home division)
         if ($divisionId = $request->input('division_id')) {
-            $query->where('division_id', $divisionId);
+            $query->where(function (Builder $q) use ($divisionId): void {
+                $q->where('division_id', $divisionId)
+                    ->orWhereHas('serviceAreas', function (Builder $sa) use ($divisionId): void {
+                        $sa->where('locations.id', $divisionId)
+                            ->orWhere('locations.parent_id', $divisionId)
+                            ->orWhereHas('parent', fn (Builder $p) => $p->where('parent_id', $divisionId));
+                    });
+            });
         }
 
-        // Filter by District
+        // Filter by District (matches either assigned service areas in that district or home district)
         if ($districtId = $request->input('district_id')) {
-            $query->where('district_id', $districtId);
+            $query->where(function (Builder $q) use ($districtId): void {
+                $q->where('district_id', $districtId)
+                    ->orWhereHas('serviceAreas', function (Builder $sa) use ($districtId): void {
+                        $sa->where('locations.id', $districtId)
+                            ->orWhere('locations.parent_id', $districtId);
+                    });
+            });
         }
 
         // Filter by Gender
@@ -117,6 +131,7 @@ class MarketplaceController extends Controller
                 'division',
                 'district',
                 'area',
+                'serviceAreas',
                 'experiences',
                 'availabilities',
                 'certificates' => fn ($c) => $c->where('is_public', true),

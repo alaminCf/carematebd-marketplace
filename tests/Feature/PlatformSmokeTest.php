@@ -190,6 +190,7 @@ class PlatformSmokeTest extends TestCase
 
         $barishalDiv = Location::where('type', LocationType::Division)->where('name', 'Barishal')->firstOrFail();
         $bholaDist = Location::where('type', LocationType::District)->where('name', 'Bhola')->firstOrFail();
+        $dhakaDist = Location::where('type', LocationType::District)->where('name', 'Dhaka')->firstOrFail();
         $this->assertEquals($barishalDiv->id, $bholaDist->parent_id);
 
         $caregiverUser = User::where('role', 'caregiver')->firstOrFail();
@@ -203,6 +204,7 @@ class PlatformSmokeTest extends TestCase
                 'division_id' => $barishalDiv->id,
                 'district_id' => $bholaDist->id,
                 'city' => 'Bhola Sadar',
+                'service_area_ids' => [$dhakaDist->id],
                 'emergency_contact_name' => 'Alamin',
                 'emergency_contact_phone' => '+8801766341730',
                 'emergency_contact_relationship' => 'Brother',
@@ -211,10 +213,12 @@ class PlatformSmokeTest extends TestCase
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('caregiver.register', ['step' => 4]));
 
-        $caregiver = $caregiverUser->caregiver->fresh();
+        $caregiver = $caregiverUser->caregiver->fresh(['serviceAreas']);
         $this->assertEquals($barishalDiv->id, $caregiver->division_id);
         $this->assertEquals($bholaDist->id, $caregiver->district_id);
         $this->assertEquals('bhola, barishal', $caregiver->permanent_address);
+        $this->assertTrue($caregiver->serviceAreas->contains('id', $dhakaDist->id));
+        $this->assertEquals('Dhaka', $caregiver->serviceAreaSummary());
     }
 
     public function test_admin_can_view_edit_and_set_caregiver_sort_order(): void

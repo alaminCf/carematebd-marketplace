@@ -29,9 +29,11 @@ class PrivacyFilterService
                 'city' => $caregiver->city,
                 'district' => $caregiver->district?->name,
                 'division' => $caregiver->division?->name,
-                'summary' => $caregiver->locationSummary(),
+                'summary' => $caregiver->serviceAreaSummary(),
+                'service_areas' => $caregiver->serviceAreas->pluck('name')->values()->all(),
             ],
-            'location_summary' => $caregiver->locationSummary(),
+            'location_summary' => $caregiver->serviceAreaSummary(),
+            'service_areas' => $caregiver->serviceAreas->pluck('name')->values()->all(),
             'rates' => [
                 'hourly' => $caregiver->hourly_rate,
                 'daily' => $caregiver->daily_rate,

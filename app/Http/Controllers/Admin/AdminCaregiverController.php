@@ -29,7 +29,7 @@ class AdminCaregiverController extends Controller
     {
         $status = $request->input('status', 'all');
 
-        $query = Caregiver::with(['user', 'services', 'district', 'area', 'reviewer', 'adminActions.admin']);
+        $query = Caregiver::with(['user', 'services', 'district', 'area', 'serviceAreas', 'reviewer', 'adminActions.admin']);
 
         if ($status === 'all') {
             $query->whereIn('status', [CaregiverStatus::PendingVerification, CaregiverStatus::UnderReview, CaregiverStatus::ChangesRequired]);
@@ -50,6 +50,7 @@ class AdminCaregiverController extends Controller
             'division',
             'district',
             'area',
+            'serviceAreas',
             'documents',
             'certificates',
             'experiences',
@@ -290,7 +291,7 @@ class AdminCaregiverController extends Controller
         $search = $request->input('search');
         $status = $request->input('status');
 
-        $query = Caregiver::with(['user', 'services', 'district', 'area', 'reviewer', 'adminActions.admin']);
+        $query = Caregiver::with(['user', 'services', 'district', 'area', 'serviceAreas', 'reviewer', 'adminActions.admin']);
 
         if ($search) {
             $query->whereHas('user', fn ($u) => $u->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%"))
@@ -318,6 +319,7 @@ class AdminCaregiverController extends Controller
             'division',
             'district',
             'area',
+            'serviceAreas',
             'documents',
             'certificates',
             'experiences',
@@ -340,6 +342,7 @@ class AdminCaregiverController extends Controller
             'division',
             'district',
             'area',
+            'serviceAreas',
             'reviewer',
             'adminActions.admin',
         ]);
@@ -386,10 +389,12 @@ class AdminCaregiverController extends Controller
             'preferred_hours' => ['nullable', 'string', 'max:100'],
             'is_available' => ['nullable', 'boolean'],
 
-            // Location
+            // Location & Service Areas
             'division_id' => ['nullable', 'exists:locations,id'],
             'district_id' => ['nullable', 'exists:locations,id'],
             'area_id' => ['nullable', 'exists:locations,id'],
+            'service_area_ids' => ['nullable', 'array'],
+            'service_area_ids.*' => ['exists:locations,id'],
             'city' => ['nullable', 'string', 'max:100'],
             'present_address' => ['nullable', 'string', 'max:255'],
             'permanent_address' => ['nullable', 'string', 'max:255'],
@@ -441,6 +446,7 @@ class AdminCaregiverController extends Controller
             'status' => $prevStatus,
             'is_featured' => (bool) $caregiver->is_featured,
             'sort_order' => (int) $caregiver->sort_order,
+            'service_areas' => $caregiver->serviceAreas()->orderBy('name')->pluck('name')->implode(', '),
         ];
 
         DB::transaction(function () use ($caregiver, $request, $validated, $admin, $prevStatus, $oldSnapshot): void {
@@ -532,6 +538,11 @@ class AdminCaregiverController extends Controller
                 $caregiver->services()->sync($syncData);
             }
 
+            // Sync service areas
+            if ($request->has('service_area_ids') || $request->has('service_areas_submitted')) {
+                $caregiver->serviceAreas()->sync($request->input('service_area_ids', []));
+            }
+
             // Sync user suspension if status is suspended
             if ($newStatus === CaregiverStatus::Suspended) {
                 $caregiver->user->update([
@@ -565,6 +576,7 @@ class AdminCaregiverController extends Controller
                 'status' => $newStatus->value,
                 'is_featured' => $request->boolean('is_featured'),
                 'sort_order' => (int) ($validated['sort_order'] ?? 0),
+                'service_areas' => $caregiver->serviceAreas()->orderBy('name')->pluck('name')->implode(', '),
             ];
 
             $prevDiff = [];

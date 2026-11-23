@@ -318,10 +318,55 @@
                     </div>
                 </div>
 
+                <!-- Service Areas (Where Caregiver Provides Care) -->
+                @php
+                    $adminSelectedServiceAreas = old('service_area_ids', $caregiver->serviceAreas->pluck('id')->toArray());
+                @endphp
+                <div class="glass-card" style="padding: 1.75rem; border: 1.5px solid rgba(13, 148, 136, 0.3);">
+                    <input type="hidden" name="service_areas_submitted" value="1">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; gap: 0.5rem;">
+                        <h3 style="font-size: 1.12rem; font-weight: 800; color: #0a394a; margin: 0;">
+                            📍 Service Areas
+                        </h3>
+                        <span id="adminServiceAreaCount" style="font-size: 0.72rem; font-weight: 800; background: #0d9488; color: #ffffff; padding: 0.18rem 0.55rem; border-radius: 999px;">
+                            {{ count((array) $adminSelectedServiceAreas) }} selected
+                        </span>
+                    </div>
+                    <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0 0 0.85rem 0;">
+                        Select the Areas / Districts where this caregiver serves families (independent of permanent home address).
+                    </p>
+
+                    <input type="text" id="adminServiceAreaSearch" placeholder="🔍 Search area or district..." class="glass-input" style="font-size: 0.82rem; padding: 0.45rem 0.75rem; margin-bottom: 0.75rem;">
+
+                    <div style="max-height: 220px; overflow-y: auto; border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 12px; padding: 0.65rem; background: #f8fafc;">
+                        @if ($areas->isNotEmpty())
+                            <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; color: #0f766e; margin-bottom: 0.35rem;">Areas / Thanas</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem; margin-bottom: 0.75rem;">
+                                @foreach ($areas as $ar)
+                                    <label class="admin-sa-item" data-name="{{ strtolower($ar->name) }}" style="display: flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.5rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.76rem; font-weight: 600; cursor: pointer;">
+                                        <input type="checkbox" name="service_area_ids[]" value="{{ $ar->id }}" class="admin-sa-cb" {{ in_array($ar->id, (array) $adminSelectedServiceAreas) ? 'checked' : '' }} style="accent-color: #0d9488;">
+                                        <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $ar->name }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        @endif
+
+                        <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; color: #0a394a; margin-bottom: 0.35rem;">Districts</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem;">
+                            @foreach ($districts as $dst)
+                                <label class="admin-sa-item" data-name="{{ strtolower($dst->name) }}" style="display: flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.5rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.76rem; font-weight: 600; cursor: pointer;">
+                                    <input type="checkbox" name="service_area_ids[]" value="{{ $dst->id }}" class="admin-sa-cb" {{ in_array($dst->id, (array) $adminSelectedServiceAreas) ? 'checked' : '' }} style="accent-color: #0d9488;">
+                                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $dst->name }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Geographic Location (Cascading Selects) -->
                 <div class="glass-card" style="padding: 1.75rem;">
                     <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(226, 232, 240, 0.8); padding-bottom: 0.5rem;">
-                        Location & Address
+                        Home Residence & Address
                     </h3>
 
                     <div style="margin-bottom: 1rem;">
@@ -469,6 +514,29 @@
             if (divisionSelect.value) {
                 filterDistricts(false);
             }
+        }
+
+        // Service Area Search & Counter in Admin Edit
+        const adminSaSearch = document.getElementById('adminServiceAreaSearch');
+        const adminSaItems = document.querySelectorAll('.admin-sa-item');
+        const adminSaCbs = document.querySelectorAll('.admin-sa-cb');
+        const adminSaCount = document.getElementById('adminServiceAreaCount');
+        if (adminSaSearch && adminSaItems.length) {
+            adminSaSearch.addEventListener('input', function () {
+                const q = this.value.trim().toLowerCase();
+                adminSaItems.forEach(function (el) {
+                    const nm = el.getAttribute('data-name') || '';
+                    el.style.display = (!q || nm.includes(q)) ? 'flex' : 'none';
+                });
+            });
+        }
+        if (adminSaCbs.length && adminSaCount) {
+            const updateAdminSaCount = () => {
+                const checked = Array.from(adminSaCbs).filter(c => c.checked).length;
+                adminSaCount.textContent = checked + ' selected';
+            };
+            adminSaCbs.forEach(cb => cb.addEventListener('change', updateAdminSaCount));
+            updateAdminSaCount();
         }
     });
     </script>

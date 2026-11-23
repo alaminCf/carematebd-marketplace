@@ -200,24 +200,24 @@
                         </div>
 
                     @elseif ($step === 3)
-                        <!-- STEP 3: ADDRESS & EMERGENCY -->
-                        <h3 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 1.5rem;">Step 3: Residence & Emergency Contact</h3>
+                        <!-- STEP 3: ADDRESS, SERVICE AREAS & EMERGENCY -->
+                        <h3 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem;">Step 3: Residence, Service Areas & Emergency Contact</h3>
 
-                        <div style="margin-bottom: 1.25rem;">
-                            <label class="form-label">Present Address (Where you currently live in Bangladesh) <span style="color: #ef4444;">*</span></label>
+                        <div style="margin-bottom: 1.15rem;">
+                            <label class="form-label">Present Address (Where you currently live — Private) <span style="color: #ef4444;">*</span></label>
                             <input type="text" id="input_present_address" name="present_address" value="{{ old('present_address', $caregiver?->present_address) }}" required placeholder="House, Road, Area..." class="glass-input">
                             @error('present_address') <span class="form-error">{{ $message }}</span> @enderror
                         </div>
 
-                        <div style="margin-bottom: 1.25rem;">
-                            <label class="form-label">Permanent Address (Village/Thana as per NID) <span style="color: #ef4444;">*</span></label>
-                            <input type="text" id="input_permanent_address" name="permanent_address" value="{{ old('permanent_address', $caregiver?->permanent_address) }}" required placeholder="Permanent address..." class="glass-input">
+                        <div style="margin-bottom: 1.15rem;">
+                            <label class="form-label">Permanent Address (Home/NID Address — Private) <span style="color: #ef4444;">*</span></label>
+                            <input type="text" id="input_permanent_address" name="permanent_address" value="{{ old('permanent_address', $caregiver?->permanent_address) }}" required placeholder="Permanent address as per NID..." class="glass-input">
                             @error('permanent_address') <span class="form-error">{{ $message }}</span> @enderror
                         </div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                             <div>
-                                <label class="form-label">Division <span style="color: #ef4444;">*</span></label>
+                                <label class="form-label">Home Division <span style="color: #ef4444;">*</span></label>
                                 <select name="division_id" id="divisionSelect" required class="glass-input">
                                     <option value="">Select Division</option>
                                     @foreach ($divisions as $div)
@@ -227,7 +227,7 @@
                                 @error('division_id') <span class="form-error">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="form-label">District <span style="color: #ef4444;">*</span></label>
+                                <label class="form-label">Home District <span style="color: #ef4444;">*</span></label>
                                 <select name="district_id" id="districtSelect" required class="glass-input">
                                     <option value="">Select District</option>
                                     @foreach ($districts as $dst)
@@ -237,10 +237,53 @@
                                 @error('district_id') <span class="form-error">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="form-label">Primary City / Thana</label>
+                                <label class="form-label">Home City / Thana</label>
                                 <input type="text" name="city" value="{{ old('city', $caregiver?->city ?? 'Dhaka') }}" placeholder="e.g. Dhaka, Bhola Sadar..." class="glass-input">
                                 @error('city') <span class="form-error">{{ $message }}</span> @enderror
                             </div>
+                        </div>
+
+                        <!-- Dedicated Service Areas Selector (Distinct from Permanent Address) -->
+                        @php
+                            $selectedServiceAreaIds = old('service_area_ids', $caregiver ? $caregiver->serviceAreas()->pluck('locations.id')->toArray() : []);
+                        @endphp
+                        <div style="background: rgba(13, 148, 136, 0.06); border: 1.5px solid rgba(13, 148, 136, 0.28); border-radius: 16px; padding: 1.25rem; margin-bottom: 1.5rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <div>
+                                    <h4 style="font-size: 1rem; font-weight: 800; color: #0a394a; margin: 0;">📍 Service Areas (Where You Will Provide Care) <span style="color: #ef4444;">*</span></h4>
+                                    <p style="font-size: 0.78rem; color: #475569; margin: 0.15rem 0 0 0;">Select one or more Areas / Districts where you are willing to travel and serve families (can be different from your permanent home).</p>
+                                </div>
+                                <span id="regServiceAreaCount" style="font-size: 0.74rem; font-weight: 800; background: #0d9488; color: #ffffff; padding: 0.2rem 0.65rem; border-radius: 999px;">
+                                    {{ count((array) $selectedServiceAreaIds) }} selected
+                                </span>
+                            </div>
+
+                            <input type="text" id="regServiceAreaSearch" placeholder="🔍 Search area or district (e.g. Dhanmondi, Gulshan, Uttara, Dhaka, Chattogram)..." class="glass-input" style="font-size: 0.84rem; padding: 0.5rem 0.85rem; margin: 0.65rem 0 0.85rem 0; background: #ffffff;">
+
+                            <div id="regServiceAreaGrid" style="max-height: 230px; overflow-y: auto; padding-right: 0.25rem;">
+                                @if ($areas->isNotEmpty())
+                                    <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #0f766e; margin-bottom: 0.4rem;">Popular Care Areas / Thanas</div>
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 0.45rem; margin-bottom: 0.9rem;">
+                                        @foreach ($areas as $ar)
+                                            <label class="reg-service-area-item" data-name="{{ strtolower($ar->name) }}" style="display: flex; align-items: center; gap: 0.45rem; padding: 0.45rem 0.65rem; background: #ffffff; border: 1px solid rgba(203, 213, 225, 0.9); border-radius: 10px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
+                                                <input type="checkbox" name="service_area_ids[]" value="{{ $ar->id }}" class="reg-service-area-cb" {{ in_array($ar->id, (array) $selectedServiceAreaIds) ? 'checked' : '' }} style="accent-color: #0d9488;">
+                                                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $ar->name }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                @endif
+
+                                <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #0a394a; margin-bottom: 0.4rem;">All Districts (64 Districts)</div>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 0.45rem;">
+                                    @foreach ($districts as $dst)
+                                        <label class="reg-service-area-item" data-name="{{ strtolower($dst->name) }}" style="display: flex; align-items: center; gap: 0.45rem; padding: 0.45rem 0.65rem; background: #ffffff; border: 1px solid rgba(203, 213, 225, 0.9); border-radius: 10px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
+                                            <input type="checkbox" name="service_area_ids[]" value="{{ $dst->id }}" class="reg-service-area-cb" {{ in_array($dst->id, (array) $selectedServiceAreaIds) ? 'checked' : '' }} style="accent-color: #0d9488;">
+                                            <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $dst->name }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @error('service_area_ids') <span class="form-error" style="display: block; margin-top: 0.4rem;">{{ $message }}</span> @enderror
                         </div>
 
                         <div style="border-top: 1px solid rgba(226, 232, 240, 0.8); padding-top: 1.25rem; margin-bottom: 1.5rem;">
@@ -586,6 +629,29 @@
             if (divisionSelect.value) {
                 filterDistricts(false);
             }
+        }
+
+        // Service Area Search & Counter in Step 3
+        const saSearch = document.getElementById('regServiceAreaSearch');
+        const saItems = document.querySelectorAll('.reg-service-area-item');
+        const saCbs = document.querySelectorAll('.reg-service-area-cb');
+        const saCount = document.getElementById('regServiceAreaCount');
+        if (saSearch && saItems.length) {
+            saSearch.addEventListener('input', function () {
+                const q = this.value.trim().toLowerCase();
+                saItems.forEach(function (el) {
+                    const nm = el.getAttribute('data-name') || '';
+                    el.style.display = (!q || nm.includes(q)) ? 'flex' : 'none';
+                });
+            });
+        }
+        if (saCbs.length && saCount) {
+            const updateCount = () => {
+                const checked = Array.from(saCbs).filter(c => c.checked).length;
+                saCount.textContent = checked + ' selected';
+            };
+            saCbs.forEach(cb => cb.addEventListener('change', updateCount));
+            updateCount();
         }
     });
     </script>
