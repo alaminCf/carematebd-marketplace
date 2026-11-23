@@ -283,6 +283,12 @@
                                     @endforeach
                                 </div>
                             </div>
+
+                            <div style="margin-top: 0.9rem; padding-top: 0.75rem; border-top: 1px dashed rgba(13, 148, 136, 0.3);">
+                                <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #0a394a;">✍️ Or Type Your Service Area(s) Manually (Comma-separated)</label>
+                                <input type="text" name="custom_service_areas" value="{{ old('custom_service_areas') }}" placeholder="e.g. Bashundhara R/A, Aftabnagar, Banasree, Savar, Gazipur" class="glass-input" style="font-size: 0.85rem; background: #ffffff;">
+                                <span style="font-size: 0.73rem; color: #475569; display: block; margin-top: 0.25rem;">You can select from the list above, type your own service areas here, or do both.</span>
+                            </div>
                             @error('service_area_ids') <span class="form-error" style="display: block; margin-top: 0.4rem;">{{ $message }}</span> @enderror
                         </div>
 

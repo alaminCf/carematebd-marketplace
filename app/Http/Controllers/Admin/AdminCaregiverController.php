@@ -395,6 +395,7 @@ class AdminCaregiverController extends Controller
             'area_id' => ['nullable', 'exists:locations,id'],
             'service_area_ids' => ['nullable', 'array'],
             'service_area_ids.*' => ['exists:locations,id'],
+            'custom_service_areas' => ['nullable', 'string', 'max:500'],
             'city' => ['nullable', 'string', 'max:100'],
             'present_address' => ['nullable', 'string', 'max:255'],
             'permanent_address' => ['nullable', 'string', 'max:255'],
@@ -538,9 +539,12 @@ class AdminCaregiverController extends Controller
                 $caregiver->services()->sync($syncData);
             }
 
-            // Sync service areas
-            if ($request->has('service_area_ids') || $request->has('service_areas_submitted')) {
-                $caregiver->serviceAreas()->sync($request->input('service_area_ids', []));
+            // Sync service areas (selected checkboxes + any custom typed areas)
+            if ($request->has('service_area_ids') || $request->has('service_areas_submitted') || $request->filled('custom_service_areas')) {
+                $caregiver->resolveAndSyncServiceAreas(
+                    $request->input('service_area_ids', []),
+                    $request->input('custom_service_areas')
+                );
             }
 
             // Sync user suspension if status is suspended

@@ -302,24 +302,30 @@ class CaregiverRegistrationController extends Controller
             'district_id' => ['required', 'exists:locations,id'],
             'area_id' => ['nullable', 'exists:locations,id'],
             'city' => ['nullable', 'string', 'max:80'],
-            'service_area_ids' => ['required', 'array', 'min:1'],
+            'service_area_ids' => ['nullable', 'array'],
             'service_area_ids.*' => ['exists:locations,id'],
+            'custom_service_areas' => ['nullable', 'string', 'max:500'],
             'emergency_contact_name' => ['required', 'string', 'max:100'],
             'emergency_contact_phone' => ['required', 'string', 'max:20'],
             'emergency_contact_relationship' => ['required', 'string', 'max:60'],
-        ], [
-            'service_area_ids.required' => 'Please select at least one Service Area where you can provide care.',
-            'service_area_ids.min' => 'Please select at least one Service Area where you can provide care.',
         ]);
 
-        $serviceAreaIds = $validated['service_area_ids'];
-        unset($validated['service_area_ids']);
+        $serviceAreaIds = $validated['service_area_ids'] ?? [];
+        $customServiceAreas = trim((string) ($validated['custom_service_areas'] ?? ''));
+
+        if (empty($serviceAreaIds) && $customServiceAreas === '') {
+            return back()->withErrors([
+                'service_area_ids' => 'Please select at least one Service Area or type your service area(s) below.',
+            ])->withInput();
+        }
+
+        unset($validated['service_area_ids'], $validated['custom_service_areas']);
 
         $caregiver->update(array_merge($validated, [
             'application_step' => max(4, $caregiver->application_step),
         ]));
 
-        $caregiver->serviceAreas()->sync($serviceAreaIds);
+        $caregiver->resolveAndSyncServiceAreas($serviceAreaIds, $customServiceAreas);
 
         return redirect()->route('caregiver.register', ['step' => 4])
             ->with('success', 'Step 3 completed: Residence, service areas & emergency contact saved.');

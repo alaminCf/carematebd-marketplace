@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Setting;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::defaultView('vendor.pagination.caremate');
+        Paginator::defaultSimpleView('vendor.pagination.caremate');
+
         View::composer('*', function ($view): void {
             $view->with('siteSettings', Setting::contactInfo());
         });

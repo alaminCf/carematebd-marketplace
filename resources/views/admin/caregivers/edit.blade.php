@@ -361,6 +361,12 @@
                             @endforeach
                         </div>
                     </div>
+
+                    <div style="margin-top: 0.85rem;">
+                        <label class="form-label" style="font-size: 0.78rem; font-weight: 700; color: #0a394a;">✍️ Or Type Custom Service Areas (Comma-separated)</label>
+                        <input type="text" name="custom_service_areas" value="{{ old('custom_service_areas') }}" placeholder="e.g. Bashundhara R/A, Aftabnagar, Savar, Tongi" class="glass-input" style="font-size: 0.82rem; padding: 0.45rem 0.75rem;">
+                        <span style="font-size: 0.71rem; color: var(--text-muted); display: block; margin-top: 0.25rem;">Type any area not listed above — it will be added & saved automatically.</span>
+                    </div>
                 </div>
 
                 <!-- Geographic Location (Cascading Selects) -->

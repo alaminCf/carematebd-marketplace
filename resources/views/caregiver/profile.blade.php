@@ -512,6 +512,11 @@
                             </label>
                         @endforeach
                     </div>
+
+                    <div style="margin-top: 0.85rem;">
+                        <label class="form-label" style="font-size: 0.78rem; font-weight: 700; color: #0a394a;">✍️ Or Type Custom Service Area(s) (Comma-separated)</label>
+                        <input type="text" name="custom_service_areas" value="{{ old('custom_service_areas') }}" placeholder="e.g. Bashundhara R/A, Aftabnagar, Savar" class="glass-input" style="font-size: 0.84rem; background: #ffffff;">
+                    </div>
                 </div>
             </div>
 

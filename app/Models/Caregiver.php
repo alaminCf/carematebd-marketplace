@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\CaregiverStatus;
+use App\Enums\LocationType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -383,6 +384,51 @@ class Caregiver extends Model
         $parts = array_filter([$this->area?->name, $this->district?->name, $this->division?->name]);
 
         return count($parts) ? implode(', ', $parts) : ($this->city ?? 'Bangladesh');
+    }
+
+    /**
+     * Sync selected Location IDs plus any newly typed comma-separated custom service area names.
+     *
+     * @param  array<int, int|string>  $selectedIds
+     */
+    public function resolveAndSyncServiceAreas(array $selectedIds, ?string $customAreasText = null): void
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $selectedIds))));
+
+        if (! empty($customAreasText)) {
+            $customNames = array_values(array_filter(array_map('trim', explode(',', $customAreasText))));
+
+            foreach ($customNames as $areaName) {
+                if ($areaName === '') {
+                    continue;
+                }
+
+                $existing = Location::whereRaw('LOWER(name) = ?', [mb_strtolower($areaName)])->first();
+                if ($existing) {
+                    $ids[] = $existing->id;
+                } else {
+                    $slugBase = Str::slug($areaName) ?: 'area';
+                    $slug = $slugBase;
+                    $counter = 1;
+                    while (Location::where('slug', $slug)->exists()) {
+                        $slug = $slugBase.'-'.$counter++;
+                    }
+
+                    $created = Location::create([
+                        'name' => Str::limit($areaName, 95, ''),
+                        'slug' => $slug,
+                        'type' => LocationType::Area,
+                        'parent_id' => $this->district_id ?: Location::where('type', 'district')->where('name', 'Dhaka')->value('id'),
+                        'is_active' => true,
+                        'sort_order' => 99,
+                    ]);
+
+                    $ids[] = $created->id;
+                }
+            }
+        }
+
+        $this->serviceAreas()->sync(array_values(array_unique($ids)));
     }
 
     public function recalculateRating(): void

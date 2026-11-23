@@ -555,6 +555,7 @@ class CaregiverDashboardController extends Controller
             'area_id' => ['nullable', 'exists:locations,id'],
             'service_area_ids' => ['nullable', 'array'],
             'service_area_ids.*' => ['exists:locations,id'],
+            'custom_service_areas' => ['nullable', 'string', 'max:500'],
             'city' => ['nullable', 'string', 'max:80'],
             'present_address' => ['nullable', 'string', 'max:255'],
             'permanent_address' => ['nullable', 'string', 'max:255'],
@@ -619,8 +620,11 @@ class CaregiverDashboardController extends Controller
             $caregiver->services()->sync($request->input('service_categories', []));
         }
 
-        if ($request->has('service_area_ids') || $request->has('service_areas_submitted')) {
-            $caregiver->serviceAreas()->sync($request->input('service_area_ids', []));
+        if ($request->has('service_area_ids') || $request->has('service_areas_submitted') || $request->filled('custom_service_areas')) {
+            $caregiver->resolveAndSyncServiceAreas(
+                $request->input('service_area_ids', []),
+                $request->input('custom_service_areas')
+            );
         }
 
         return back()->with('success', 'Caregiver profile, service rates, and details updated successfully.');
