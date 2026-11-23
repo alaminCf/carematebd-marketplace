@@ -493,6 +493,88 @@
         </div>
     </section>
 
+    <!-- Featured Verified Caregivers -->
+    <section style="margin-bottom: 4.5rem; position: relative; z-index: 1;">
+        <div class="container">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-primary);">
+                        Available In Dhaka & Nationwide
+                    </span>
+                    <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-top: 0.35rem;">
+                        Meet Top-Rated Verified Caregivers
+                    </h2>
+                </div>
+                <a href="{{ route('marketplace.index') }}" class="btn btn-secondary" style="font-size: 0.92rem;">
+                    <span>View All Caregivers</span>
+                    <span>→</span>
+                </a>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;" class="caregivers-grid">
+                @forelse ($featuredCaregivers as $caregiver)
+                    <div class="glass-card glass-card-hover" style="display: flex; flex-direction: column;">
+                        <div style="display: flex; align-items: flex-start; gap: 1.25rem; margin-bottom: 1.25rem;">
+                            <div style="position: relative;">
+                                <img src="{{ $caregiver->avatarUrl() }}" alt="{{ $caregiver->user->name }}" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
+                                <div style="position: absolute; bottom: 0; right: 0; width: 22px; height: 22px; border-radius: 50%; background: #10b981; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px;" title="Verified Caregiver">
+                                    ✓
+                                </div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <h4 style="font-size: 1.15rem; font-weight: 700; color: #0f172a;">{{ $caregiver->user->name }}</h4>
+                                    <x-badge tone="success">Verified</x-badge>
+                                </div>
+                                <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">
+                                    📍 {{ $caregiver->locationSummary() }}
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem;">
+                                    <x-star-rating :rating="$caregiver->rating_avg" />
+                                    <span style="font-size: 0.8rem; font-weight: 700; color: #0f172a;">{{ number_format($caregiver->rating_avg, 1) }}</span>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">({{ $caregiver->rating_count }} reviews)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Services & Experience Tags -->
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem;">
+                            @foreach ($caregiver->services->take(2) as $s)
+                                <span style="font-size: 0.75rem; background: rgba(10, 57, 74, 0.07); color: #0a394a; padding: 0.2rem 0.55rem; border-radius: var(--radius-sm); font-weight: 600;">
+                                    {{ $s->name }}
+                                </span>
+                            @endforeach
+                            <span style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.08); color: #065f46; padding: 0.2rem 0.55rem; border-radius: var(--radius-sm); font-weight: 600;">
+                                {{ $caregiver->years_experience }} Yrs Experience
+                            </span>
+                        </div>
+
+                        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.5rem; flex: 1;">
+                            {{ Str::limit($caregiver->about, 90) }}
+                        </p>
+
+                        <!-- Rates & Action -->
+                        <div style="border-top: 1px solid rgba(226, 232, 240, 0.7); padding-top: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Daily Rate</div>
+                                <div style="font-size: 1.15rem; font-weight: 800; color: #0f172a;">
+                                    ৳{{ number_format($caregiver->daily_rate) }}<span style="font-size: 0.75rem; font-weight: 500; color: var(--text-muted);">/day</span>
+                                </div>
+                            </div>
+                            <a href="{{ route('marketplace.show', $caregiver->slug) }}" class="btn btn-primary btn-sm">
+                                View Profile
+                            </a>
+                        </div>
+                    </div>
+                @empty
+                    <div style="grid-column: span 3; text-align: center; padding: 3rem;">
+                        <p style="color: var(--text-muted);">No verified caregivers available currently.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </section>
+
     <!-- Stats Bar -->
     <section style="margin-bottom: 4rem; position: relative; z-index: 1;">
         <div class="container">
@@ -636,88 +718,6 @@
                         </p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Featured Verified Caregivers -->
-    <section style="margin-bottom: 5rem;">
-        <div class="container">
-            <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
-                <div>
-                    <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-primary);">
-                        Available In Dhaka & Nationwide
-                    </span>
-                    <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-top: 0.35rem;">
-                        Meet Top-Rated Verified Caregivers
-                    </h2>
-                </div>
-                <a href="{{ route('marketplace.index') }}" class="btn btn-secondary" style="font-size: 0.92rem;">
-                    <span>View All Caregivers</span>
-                    <span>→</span>
-                </a>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;" class="caregivers-grid">
-                @forelse ($featuredCaregivers as $caregiver)
-                    <div class="glass-card glass-card-hover" style="display: flex; flex-direction: column;">
-                        <div style="display: flex; align-items: flex-start; gap: 1.25rem; margin-bottom: 1.25rem;">
-                            <div style="position: relative;">
-                                <img src="{{ $caregiver->avatarUrl() }}" alt="{{ $caregiver->user->name }}" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
-                                <div style="position: absolute; bottom: 0; right: 0; width: 22px; height: 22px; border-radius: 50%; background: #10b981; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px;" title="Verified Caregiver">
-                                    ✓
-                                </div>
-                            </div>
-                            <div style="flex: 1;">
-                                <div style="display: flex; align-items: center; justify-content: space-between;">
-                                    <h4 style="font-size: 1.15rem; font-weight: 700; color: #0f172a;">{{ $caregiver->user->name }}</h4>
-                                    <x-badge tone="success">Verified</x-badge>
-                                </div>
-                                <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">
-                                    📍 {{ $caregiver->locationSummary() }}
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem;">
-                                    <x-star-rating :rating="$caregiver->rating_avg" />
-                                    <span style="font-size: 0.8rem; font-weight: 700; color: #0f172a;">{{ number_format($caregiver->rating_avg, 1) }}</span>
-                                    <span style="font-size: 0.75rem; color: var(--text-muted);">({{ $caregiver->rating_count }} reviews)</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Services & Experience Tags -->
-                        <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem;">
-                            @foreach ($caregiver->services->take(2) as $s)
-                                <span style="font-size: 0.75rem; background: rgba(10, 57, 74, 0.07); color: #0a394a; padding: 0.2rem 0.55rem; border-radius: var(--radius-sm); font-weight: 600;">
-                                    {{ $s->name }}
-                                </span>
-                            @endforeach
-                            <span style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.08); color: #065f46; padding: 0.2rem 0.55rem; border-radius: var(--radius-sm); font-weight: 600;">
-                                {{ $caregiver->years_experience }} Yrs Experience
-                            </span>
-                        </div>
-
-                        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.5rem; flex: 1;">
-                            {{ Str::limit($caregiver->about, 90) }}
-                        </p>
-
-                        <!-- Rates & Action -->
-                        <div style="border-top: 1px solid rgba(226, 232, 240, 0.7); padding-top: 1rem; display: flex; align-items: center; justify-content: space-between;">
-                            <div>
-                                <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Daily Rate</div>
-                                <div style="font-size: 1.15rem; font-weight: 800; color: #0f172a;">
-                                    ৳{{ number_format($caregiver->daily_rate) }}<span style="font-size: 0.75rem; font-weight: 500; color: var(--text-muted);">/day</span>
-                                </div>
-                            </div>
-                            <a href="{{ route('marketplace.show', $caregiver->slug) }}" class="btn btn-primary btn-sm">
-                                View Profile
-                            </a>
-                        </div>
-                    </div>
-                @empty
-                    <div style="grid-column: span 3; text-align: center; padding: 3rem;">
-                        <p style="color: var(--text-muted);">No verified caregivers available currently.</p>
-                    </div>
-                @endforelse
             </div>
         </div>
     </section>
