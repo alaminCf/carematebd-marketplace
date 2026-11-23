@@ -21,7 +21,7 @@ class ServiceController extends Controller
 
         $caregivers = Caregiver::publiclyVisible()
             ->whereHas('services', fn ($q) => $q->where('services.id', $service->id))
-            ->with(['user', 'services', 'district', 'area'])
+            ->with(['user', 'services', 'district', 'area', 'serviceAreas'])
             ->orderByDesc('rating_avg')
             ->paginate(9);
 

@@ -150,7 +150,7 @@ class MarketplaceController extends Controller
         $similarCaregivers = Caregiver::publiclyVisible()
             ->where('id', '!=', $caregiver->id)
             ->whereHas('services', fn ($q) => $q->whereIn('services.id', $caregiver->services->pluck('id')))
-            ->with(['user', 'services', 'district', 'area'])
+            ->with(['user', 'services', 'district', 'area', 'serviceAreas'])
             ->take(3)
             ->get();
 

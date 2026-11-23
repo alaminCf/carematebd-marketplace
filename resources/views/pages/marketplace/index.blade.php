@@ -232,7 +232,7 @@
                                             <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a;">{{ $caregiver->user->name }}</h3>
                                         </div>
                                         <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
-                                            📍 {{ $caregiver->area?->name ?? $caregiver->city }}, {{ $caregiver->district?->name }}
+                                            📍 {{ $caregiver->locationSummary() }}
                                         </div>
                                         <div style="display: flex; align-items: center; gap: 0.4rem; margin-top: 0.35rem;">
                                             <x-star-rating :rating="$caregiver->rating_avg" />

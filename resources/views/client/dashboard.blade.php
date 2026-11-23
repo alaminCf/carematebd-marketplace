@@ -153,7 +153,7 @@
                         <img src="{{ $cg->avatarUrl() }}" alt="{{ $cg->user->name }}" style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover;">
                         <div style="flex: 1;">
                             <div style="font-weight: 800; font-size: 1.05rem; color: #0f172a;">{{ $cg->user->name }}</div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted);">📍 {{ $cg->area?->name ?? $cg->city }}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">📍 {{ $cg->locationSummary() }}</div>
                             <div style="display: flex; align-items: center; gap: 0.35rem; margin-top: 0.25rem;">
                                 <x-star-rating :rating="$cg->rating_avg" />
                                 <span style="font-size: 0.8rem; font-weight: 700;">{{ number_format($cg->rating_avg, 1) }}</span>

@@ -174,7 +174,7 @@
                     <div>
                         <div style="font-weight: 800; font-size: 1.1rem; color: #0f172a;">{{ $caregiver->user->name }}</div>
                         <div style="font-size: 0.82rem; color: var(--text-muted);">
-                            📍 {{ $caregiver->area?->name ?? $caregiver->city }}, {{ $caregiver->district?->name }}
+                            📍 {{ $caregiver->serviceAreaSummary() }}
                         </div>
                         <x-badge tone="success" style="margin-top: 0.25rem;">Verified Staff</x-badge>
                     </div>

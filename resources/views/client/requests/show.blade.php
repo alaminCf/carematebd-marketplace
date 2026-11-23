@@ -110,7 +110,7 @@
                         <img src="{{ $request->caregiver->avatarUrl() }}" alt="" style="width: 52px; height: 52px; border-radius: 50%; object-fit: cover;">
                         <div>
                             <div style="font-weight: 800; font-size: 1.05rem; color: #0f172a;">{{ $request->caregiver->user->name }}</div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted);">📍 {{ $request->caregiver->area?->name ?? $request->caregiver->city }}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">📍 {{ $request->caregiver->serviceAreaSummary() }}</div>
                         </div>
                     </div>
 

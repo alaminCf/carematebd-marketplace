@@ -84,7 +84,7 @@ class ClientDashboardController extends Controller
             ->get();
 
         $recommendedCaregivers = Caregiver::publiclyVisible()
-            ->with(['user', 'area', 'district'])
+            ->with(['user', 'area', 'district', 'serviceAreas'])
             ->orderByDesc('rating_avg')
             ->take(3)
             ->get();
@@ -233,7 +233,7 @@ class ClientDashboardController extends Controller
     {
         $client = Auth::user()->client;
         $favorites = $client->favoriteCaregivers()
-            ->with(['user', 'services', 'district', 'area'])
+            ->with(['user', 'services', 'district', 'area', 'serviceAreas'])
             ->paginate(9);
 
         return view('client.favorites', compact('favorites'));

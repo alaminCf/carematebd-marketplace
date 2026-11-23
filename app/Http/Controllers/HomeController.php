@@ -30,14 +30,14 @@ class HomeController extends Controller
         $services = Service::where('is_active', true)->orderBy('sort_order')->get();
 
         $featuredCaregivers = Caregiver::publiclyVisible()
-            ->with(['user', 'services', 'district', 'area'])
+            ->with(['user', 'services', 'district', 'area', 'serviceAreas'])
             ->where('is_featured', true)
             ->take(6)
             ->get();
 
         if ($featuredCaregivers->isEmpty()) {
             $featuredCaregivers = Caregiver::publiclyVisible()
-                ->with(['user', 'services', 'district', 'area'])
+                ->with(['user', 'services', 'district', 'area', 'serviceAreas'])
                 ->orderByDesc('rating_avg')
                 ->take(6)
                 ->get();

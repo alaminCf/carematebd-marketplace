@@ -361,9 +361,13 @@ class Caregiver extends Model
 
     public function locationSummary(): string
     {
-        if ($this->relationLoaded('serviceAreas') && $this->serviceAreas->isNotEmpty()) {
-            return $this->serviceAreas->pluck('name')->take(4)->implode(', ')
-                .($this->serviceAreas->count() > 4 ? ' +'.($this->serviceAreas->count() - 4).' more' : '');
+        $areas = $this->relationLoaded('serviceAreas')
+            ? $this->serviceAreas
+            : $this->serviceAreas()->get();
+
+        if ($areas->isNotEmpty()) {
+            return $areas->pluck('name')->take(4)->implode(', ')
+                .($areas->count() > 4 ? ' +'.($areas->count() - 4).' more' : '');
         }
 
         $parts = array_filter([$this->area?->name, $this->district?->name, $this->division?->name]);

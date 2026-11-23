@@ -674,7 +674,7 @@
                                     <x-badge tone="success">Verified</x-badge>
                                 </div>
                                 <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">
-                                    📍 {{ $caregiver->area?->name ?? $caregiver->city }}, {{ $caregiver->district?->name }}
+                                    📍 {{ $caregiver->locationSummary() }}
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem;">
                                     <x-star-rating :rating="$caregiver->rating_avg" />

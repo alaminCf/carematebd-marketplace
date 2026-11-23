@@ -21,7 +21,7 @@
                                     </form>
                                 </div>
                                 <div style="font-size: 0.8rem; color: var(--text-muted);">
-                                    📍 {{ $cg->area?->name ?? $cg->city }}
+                                    📍 {{ $cg->locationSummary() }}
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 0.35rem; margin-top: 0.25rem;">
                                     <x-star-rating :rating="$cg->rating_avg" />
